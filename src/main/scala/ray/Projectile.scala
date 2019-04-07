@@ -1,28 +1,34 @@
 package ray
 
-// A projectile has a position (a point) and a velocity (a vector).
-// An environment has gravity (a vector) and wind (a vector).
+object Main {
 
-class Projectile(val position: Point, val velocity: Vector) {
+  type Vector = Tuple
+  type Point = Tuple
 
-  def tick(env: Environment): Projectile = {
-    val pos: Tuple = position + velocity
-    val vel: Tuple = velocity + env.gravity + env.wind
-    return new Projectile(pos, vel)
+  class Environment(val gravity: Vector, val wind: Vector)
+
+  class Projectile(val position: Point, val velocity: Vector) {
+
+    def tick(env: Environment): Projectile =
+      new Projectile(
+        position + velocity,
+        velocity + env.gravity + env.wind)
+
+  }
+
+  def main(args: Array[String]): Unit = {
+    val environment = new Environment(Vector(0, -0.1, 0), Vector(-0.01, 0, 0))
+    var projectile = new Projectile(Point(0, 1, 0), Vector(1, 1, 0).normalize)
+    do {
+      projectile = projectile.tick(environment)
+
+      println(projectile.position)
+      Thread.sleep(500)
+    } while (projectile.position.y > 0)
+
   }
 
 }
 
-class Environment(val gravity: Vector, val wind: Vector)
 
 
-object Asdf {
-
-  //  ​ 	​function​ tick(env, proj)
-  //  ​ 	  position ← proj.position + proj.velocity
-  //  ​ 	  velocity ← proj.velocity + env.gravity + env.wind
-  //  ​ 	  ​return​ projectile(position, velocity)
-  //  ​ 	​end​ ​function​
-
-
-}

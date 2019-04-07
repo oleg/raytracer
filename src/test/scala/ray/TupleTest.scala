@@ -2,7 +2,7 @@ package ray
 
 import org.scalatest.FunSuite
 
-class TuplePointVectorTest extends FunSuite {
+class TupleTest extends FunSuite {
 
   test("A tuple equal to another tuple") {
     val t = Tuple(4.3, -4.2, 3.1, 1.0)
@@ -16,6 +16,8 @@ class TuplePointVectorTest extends FunSuite {
     assert(t.y == -4.2)
     assert(t.z == 3.1)
     assert(t.w == 1.0)
+    assert(t.isPoint)
+    assert(!t.isVector)
   }
 
   test("A tuple with w=0 is a vector") {
@@ -24,6 +26,8 @@ class TuplePointVectorTest extends FunSuite {
     assert(t.y == -4.2)
     assert(t.z == 3.1)
     assert(t.w == 0.0)
+    assert(t.isVector)
+    assert(!t.isPoint)
   }
 
   test("point() creates tuples with w=1") {
