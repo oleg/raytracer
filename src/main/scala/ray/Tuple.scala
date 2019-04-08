@@ -35,10 +35,10 @@ class Tuple(val x: Double, val y: Double, val z: Double, val w: Double) {
     0.0)
 
 
-  def mergeScalar(scalar: Double, f: (Double, Double) => Double): Tuple =
+  private def mergeScalar(scalar: Double, f: (Double, Double) => Double): Tuple =
     new Tuple(f(x, scalar), f(y, scalar), f(z, scalar), f(w, scalar)) //merge(new Tuple(scalar, scalar, scalar, scalar), f)
 
-  def merge(other: Tuple, f: (Double, Double) => Double): Tuple =
+  private def merge(other: Tuple, f: (Double, Double) => Double): Tuple =
     new Tuple(f(x, other.x), f(y, other.y), f(z, other.z), f(w, other.w))
 
 
