@@ -132,7 +132,7 @@ class TupleTest extends FunSuite {
   test("Normalizing vector(1, 2, 3)") {
     val v = Vector(1, 2, 3)
     //vector(1/√14,   2/√14,   3/√14)​
-    assert(v.normalize == Vector(0.2672612419124244, 0.5345224838248488, 0.8017837257372732))
+    assert(v.normalize ==~ Vector(0.26726, 0.53452, 0.80178))
   }
 
   test("The magnitude of a normalized vector") {
