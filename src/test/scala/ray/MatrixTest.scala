@@ -1,6 +1,7 @@
 package ray
 
 import org.scalatest.FunSuite
+import ray.Matrix.IdentityMatrix4x4
 
 class MatrixTest extends FunSuite {
 
@@ -131,7 +132,7 @@ class MatrixTest extends FunSuite {
         | 9 | 8 | 7 | 6 |
         | 5 | 4 | 3 | 2 |
       """))
-    assert(ma == mb)
+    assert(ma ==~ mb)
   }
 
   test("Matrix equality with different matrices") {
@@ -149,7 +150,7 @@ class MatrixTest extends FunSuite {
         | 8 | 7 | 6 | 5 |
         | 4 | 3 | 2 | 1 |
       """))
-    assert(ma != mb)
+    assert(ma !==~ mb)
   }
 
   test("Multiplying two matrices") {
@@ -169,7 +170,7 @@ class MatrixTest extends FunSuite {
         |  1 | 2 | 7 |  8 |
       """))
 
-    assert(ma * mb == Matrix(DoubleArray(
+    assert(ma * mb ==~ Matrix(DoubleArray(
       """
         | 20|  22 |  50 |  48 |
         | 44|  54 | 114 | 108 |
@@ -192,7 +193,7 @@ class MatrixTest extends FunSuite {
         | 5 | 6 | 7 | 8 |
       """))
 
-    assert(ma * mb == Matrix(DoubleArray(
+    assert(ma * mb ==~ Matrix(DoubleArray(
       """
         |  3 |   2 |  1 |  0 |
         | 13 |  18 | 23 | 28 |
@@ -211,10 +212,260 @@ class MatrixTest extends FunSuite {
 
     val b = Tuple(1, 2, 3, 1)
 
-    assert(ma * b == Tuple(18, 24, 33, 1))
+    assert(ma * b ==~ Tuple(18, 24, 33, 1))
   }
-}
 
+  test("Multiplying a matrix by the identity matrix") {
+    val ma = Matrix(DoubleArray(
+      """
+        | 0 | 1 |  2 |  4 |
+        | 1 | 2 |  4 |  8 |
+        | 2 | 4 |  8 | 16 |
+        | 4 | 8 | 16 | 32 |
+      """))
+
+    assert(ma * IdentityMatrix4x4 ==~ ma)
+  }
+
+  test("Multiplying the identity matrix by a tuple") {
+    val a = Tuple(1, 2, 3, 4)
+
+    assert(IdentityMatrix4x4 * a ==~ a)
+  }
+
+  test("Transposing a matrix") {
+    val ma = Matrix(DoubleArray(
+      """
+        | 0 | 9 | 3 | 0 |
+        | 9 | 8 | 0 | 8 |
+        | 1 | 8 | 5 | 3 |
+        | 0 | 0 | 5 | 8 |
+      """))
+
+    assert(ma.transpose ==~ Matrix(DoubleArray(
+      """
+        | 0 | 9 | 1 | 0 |
+        | 9 | 8 | 8 | 0 |
+        | 3 | 0 | 5 | 5 |
+        | 0 | 8 | 3 | 8 |
+      """)))
+  }
+
+  test("Transposing the identity matrix") {
+    assert(IdentityMatrix4x4.transpose ==~ IdentityMatrix4x4)
+  }
+
+  test("Calculating the determinant of a 2x2 matrix") {
+    val ma = Matrix(DoubleArray(
+      """
+        |  1 | 5 |
+        | -3 | 2 |
+      """))
+
+    assert(ma.determinant == 17)
+  }
+
+  test("A submatrix of a 3x3 matrix is a 2x2 matrix") {
+    val ma = Matrix(DoubleArray(
+      """
+        |  1 | 5 |  0 |
+        | -3 | 2 |  7 |
+        |  0 | 6 | -3 |
+      """))
+    assert(ma.submatrix(0, 2) ==~ Matrix(DoubleArray(
+      """
+        | -3 | 2 |
+        |  0 | 6 |
+      """
+    )))
+  }
+
+  test("A submatrix of a 4x4 matrix is a 3x3 matrix") {
+    val ma = Matrix(DoubleArray(
+      """
+        | -6 |  1 |  1 |  6 |
+        | -8 |  5 |  8 |  6 |
+        | -1 |  0 |  8 |  2 |
+        | -7 |  1 | -1 |  1 |
+      """))
+    assert(ma.submatrix(2, 1) ==~ Matrix(DoubleArray(
+      """
+        | -6 |  1 | 6 |
+        | -8 |  8 | 6 |
+        | -7 | -1 | 1 |
+      """
+    )))
+  }
+
+  test("Calculating a minor of a 3x3 matrix") {
+    val ma = Matrix(DoubleArray(
+      """
+        |  3 |  5 |  0 |
+        |  2 | -1 | -7 |
+        |  6 | -1 |  5 |
+      """))
+
+    val mb = ma.submatrix(1, 0)
+    assert(mb.determinant == 25)
+    assert(ma.minor(1, 0) == 25)
+  }
+
+  test("Calculating a cofactor of a 3x3 matrix") {
+    val ma = Matrix(DoubleArray(
+      """
+        |  3 |  5 |  0 |
+        |  2 | -1 | -7 |
+        |  6 | -1 |  5 |
+      """))
+
+    assert(ma.minor(0, 0) == -12)
+    assert(ma.cofactor(0, 0) == -12)
+    assert(ma.minor(1, 0) == 25)
+    assert(ma.cofactor(1, 0) == -25)
+  }
+
+  test("Calculating the determinant of a 3x3 matrix") {
+    val ma = Matrix(DoubleArray(
+      """
+        |  1 |  2 |  6 |
+        | -5 |  8 | -4 |
+        |  2 |  6 |  4 |
+      """))
+
+    assert(ma.cofactor(0, 0) == 56)
+    assert(ma.cofactor(0, 1) == 12)
+    assert(ma.cofactor(0, 2) == -46)
+    assert(ma.determinant == -196)
+  }
+
+  test("Calculating the determinant of a 4x4 matrix") {
+    val ma = Matrix(DoubleArray(
+      """
+        | -2 | -8 |  3 |  5 |
+        | -3 |  1 |  7 |  3 |
+        |  1 |  2 | -9 |  6 |
+        | -6 |  7 |  7 | -9 |
+      """))
+
+    assert(ma.cofactor(0, 0) == 690)
+    assert(ma.cofactor(0, 1) == 447)
+    assert(ma.cofactor(0, 2) == 210)
+    assert(ma.cofactor(0, 3) == 51)
+    assert(ma.determinant == -4071)
+  }
+
+  test("Testing an invertible matrix for invertibility") {
+    val ma = Matrix(DoubleArray(
+      """
+        |  6 |  4 |  4 |  4 |
+        |  5 |  5 |  7 |  6 |
+        |  4 | -9 |  3 | -7 |
+        |  9 |  1 |  7 | -6 |
+      """))
+
+    assert(ma.determinant == -2120)
+    assert(ma.isInvertible)
+  }
+
+  test("Testing a noninvertible matrix for invertibility") {
+    val ma = Matrix(DoubleArray(
+      """
+        | -4 |  2 | -2 | -3 |
+        |  9 |  6 |  2 |  6 |
+        |  0 | -5 |  1 | -5 |
+        |  0 |  0 |  0 |  0 |
+      """))
+
+    assert(ma.determinant == 0)
+    assert(!ma.isInvertible)
+  }
+
+  test("Calculating the inverse of a matrix") {
+    val ma = Matrix(DoubleArray(
+      """
+        | -5 |  2 |  6 | -8 |
+        |  1 | -5 |  1 |  8 |
+        |  7 |  7 | -6 | -7 |
+        |  1 | -3 |  7 |  4 |
+      """))
+
+    val mb = ma.inverse
+
+    assert(ma.cofactor(2, 3) == -160)
+    assert(mb(3, 2) == (-160.0 / 532.0))
+    assert(ma.cofactor(3, 2) == 105)
+    assert(mb(2, 3) == (105.0 / 532.0))
+    assert(mb ==~ Matrix(DoubleArray(
+      """
+        |  0.21804 |  0.45112 |  0.24060 | -0.04511 |
+        | -0.80827 | -1.45676 | -0.44360 |  0.52067 |
+        | -0.07894 | -0.22368 | -0.05263 |  0.19736 |
+        | -0.52255 | -0.81390 | -0.30075 |  0.30639 |
+      """)))
+  }
+
+  test("Calculating the inverse of another matrix") {
+    val ma = Matrix(DoubleArray(
+      """
+        |  8 | -5 |  9 |  2 |
+        |  7 |  5 |  6 |  1 |
+        | -6 |  0 |  9 |  6 |
+        | -3 |  0 | -9 | -4 |
+      """))
+
+    val mb = ma.inverse
+
+    assert(mb ==~ Matrix(DoubleArray(
+      """
+        | -0.15384 | -0.15384 | -0.28205 | -0.53846 |
+        | -0.07692 |  0.12307 |  0.02564 |  0.03076 |
+        |  0.35897 |  0.35897 |  0.43589 |  0.92307 |
+        | -0.69230 | -0.69230 | -0.76923 | -1.92307 |
+      """)))
+  }
+
+  test("Calculating the inverse of a third matrix") {
+    val ma = Matrix(DoubleArray(
+      """
+        |  9 |  3 |  0 |  9 |
+        | -5 | -2 | -6 | -3 |
+        | -4 |  9 |  6 |  4 |
+        | -7 |  6 |  6 |  2 |
+      """))
+
+    val mb = ma.inverse
+
+    assert(mb ==~ Matrix(DoubleArray(
+      """
+        | -0.04074 | -0.07777 |  0.14444 | -0.22222 |
+        | -0.07777 |  0.03333 |  0.36666 | -0.33333 |
+        | -0.02901 | -0.14629 | -0.10925 |  0.12962 |
+        |  0.17777 |  0.06666 | -0.26666 |  0.33333 |
+      """)))
+  }
+
+  test("Multiplying a product by its inverse") {
+    val ma = Matrix(DoubleArray(
+      """
+        |  3 | -9 |  7 |  3 |
+        |  3 | -8 |  2 | -9 |
+        | -4 |  4 |  4 |  1 |
+        | -6 |  5 | -1 |  1 |
+      """))
+
+    val mb = Matrix(DoubleArray(
+      """
+        |  8 |  2 |  2 |  2 |
+        |  3 | -1 |  7 |  0 |
+        |  7 |  0 |  5 |  4 |
+        |  6 | -2 |  0 |  5 |
+      """))
+
+    val mc = ma * mb
+    assert(mc * mb.inverse ==~ ma)
+  }
+
+}
 
 object DoubleArray {
 

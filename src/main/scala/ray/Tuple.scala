@@ -54,6 +54,19 @@ class Tuple(val x: Double, val y: Double, val z: Double, val w: Double) {
     case _ => false
   }
 
+  //TODO Implement via implicits!!!
+  def ==~(other: Tuple): Boolean = {
+    //(asList zip other.asList).forall(b => eql(b._1, b._2))
+    val epsilon = 0.00001
+
+    def eql = (a: Double, b: Double) => math.abs(a - b) < epsilon
+
+    eql(x, other.x) &&
+      eql(y, other.y) &&
+      eql(z, other.z) &&
+      eql(w, other.w)
+  }
+
   override def hashCode: Int = (x, y, z, w).##
 
   override def toString: String = s"Tuple($x $y $z $w)"
