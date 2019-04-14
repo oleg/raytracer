@@ -1,11 +1,21 @@
 package ray
 
 class Canvas(val width: Int, val height: Int, initialColor: Color) {
-  val pixels: Array[Array[Color]] = Array.fill(width, height)(initialColor)
+  private val pixels: Array[Array[Color]] = Array.fill(width, height)(initialColor)
 
   def toPpm(): String = {
     ppmHeader + ppmLines + "\n"
   }
+
+  def update(i: Int, j: Int, color: Color): Unit =
+    if ((0 until width).contains(i) &&
+      (0 until height).contains(j)) {
+      pixels(i)(j) = color
+    } else {
+      println(s"unexpected params $i, $j")
+    }
+
+  def apply(i: Int, j: Int): Color = pixels(i)(j)
 
   private def ppmLines = pixels.transpose.map(ppmLine).flatMap(splitLongLines).mkString("\n")
 
