@@ -2,4 +2,5 @@
 Photorealistic 3D renderer implemented in Scala
 
 Step 1
-![Projectile](projectile.jpg)
+![Projectile](projectile.png)
+![Clock](clock.png)
