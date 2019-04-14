@@ -10,16 +10,19 @@ class CanvasTest extends FunSuite {
     assert(c.width == 10)
     assert(c.height == 20)
 
-    assert(c.pixels.flatten.forall(_ == Color(0.0, 0.0, 0.0)))
+    for {
+      i <- 0 until c.width
+      j <- 0 until c.height
+    } assert(c(i, j) == Color(0.0, 0.0, 0.0))
   }
 
   test("Writing pixels to a canvas") {
     val c = Canvas(10, 20)
     val red = Color(1, 0, 0)
 
-    c.pixels(2)(3) = red
+    c(2, 3) = red
 
-    assert(c.pixels(2)(3) == red)
+    assert(c(2, 3) == red)
   }
 
   //todo move to separate class?
@@ -43,9 +46,9 @@ class CanvasTest extends FunSuite {
     val c2 = Color(0, 0.5, 0)
     val c3 = Color(-0.5, 0, 1)
 
-    c.pixels(0)(0) = c1
-    c.pixels(2)(1) = c2
-    c.pixels(4)(2) = c3
+    c(0, 0) = c1
+    c(2, 1) = c2
+    c(4, 2) = c3
 
     val ppm = c.toPpm()
 
