@@ -1,6 +1,8 @@
-package ray
+package ray.sample
 
 import java.io.PrintWriter
+
+import ray._
 
 object Main {
 
