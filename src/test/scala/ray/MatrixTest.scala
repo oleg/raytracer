@@ -1,7 +1,6 @@
 package ray
 
 import org.scalatest.FunSuite
-import ray.Matrix.IdentityMatrix4x4
 
 class MatrixTest extends FunSuite {
 
@@ -201,38 +200,6 @@ class MatrixTest extends FunSuite {
       """)))
   }
 
-  test("A matrix multiplied by a tuple") {
-    val ma = Matrix(DoubleArray(
-      """
-        | 1 | 2 | 3 | 4 |
-        | 2 | 4 | 4 | 2 |
-        | 8 | 6 | 4 | 1 |
-        | 0 | 0 | 0 | 1 |
-      """))
-
-    val b = Tuple(1, 2, 3, 1)
-
-    assert(ma * b ==~ Tuple(18, 24, 33, 1))
-  }
-
-  test("Multiplying a matrix by the identity matrix") {
-    val ma = Matrix(DoubleArray(
-      """
-        | 0 | 1 |  2 |  4 |
-        | 1 | 2 |  4 |  8 |
-        | 2 | 4 |  8 | 16 |
-        | 4 | 8 | 16 | 32 |
-      """))
-
-    assert(ma * IdentityMatrix4x4 ==~ ma)
-  }
-
-  test("Multiplying the identity matrix by a tuple") {
-    val a = Tuple(1, 2, 3, 4)
-
-    assert(IdentityMatrix4x4 * a ==~ a)
-  }
-
   test("Transposing a matrix") {
     val ma = Matrix(DoubleArray(
       """
@@ -249,10 +216,6 @@ class MatrixTest extends FunSuite {
         | 3 | 0 | 5 | 5 |
         | 0 | 8 | 3 | 8 |
       """)))
-  }
-
-  test("Transposing the identity matrix") {
-    assert(IdentityMatrix4x4.transpose ==~ IdentityMatrix4x4)
   }
 
   test("Calculating the determinant of a 2x2 matrix") {
@@ -464,19 +427,5 @@ class MatrixTest extends FunSuite {
     val mc = ma * mb
     assert(mc * mb.inverse ==~ ma)
   }
-
-}
-
-object DoubleArray {
-
-  def apply(str: String): Array[Array[Double]] =
-    str.split("\n")
-      .map(_.trim)
-      .filterNot(_.isEmpty)
-      .map(
-        _.split("\\|")
-          .map(_.trim)
-          .filterNot(_.isEmpty)
-          .map(_.toDouble))
 
 }
