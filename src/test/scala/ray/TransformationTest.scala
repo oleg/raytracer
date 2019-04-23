@@ -4,7 +4,7 @@ import org.scalatest.FunSuite
 
 import scala.math.{Pi, sqrt}
 
-class TransformationsTest extends FunSuite {
+class TransformationTest extends FunSuite {
 
   test("Multiplying by a translation matrix") {
     val transform = Matrix4x4.Translation(5, -3, 2)
