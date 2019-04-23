@@ -1,0 +1,101 @@
+package ray
+
+import org.scalatest.FunSuite
+
+class SphereTest extends FunSuite {
+
+  test("A ray intersects a sphere at two points") {
+    val ray = Ray(Point(0, 0, -5), Vector(0, 0, 1))
+    val sphere = Sphere()
+
+    val data = ray.intersect(sphere)
+    assert(data.length == 2)
+    assert(data(0).t == 4.0)
+    assert(data(1).t == 6.0)
+  }
+
+  test("A ray intersects a sphere at a tangent") {
+    val ray = Ray(Point(0, 1, -5), Vector(0, 0, 1))
+    val sphere = Sphere()
+
+    val data = ray.intersect(sphere)
+    assert(data.length == 2)
+    assert(data(0).t == 5.0)
+    assert(data(1).t == 5.0)
+  }
+
+  test("A ray misses a sphere") {
+    val ray = Ray(Point(0, 2, -5), Vector(0, 0, 1))
+    val sphere = Sphere()
+
+    val data = ray.intersect(sphere)
+    assert(data.isEmpty)
+  }
+
+  test("A ray originates inside a sphere") {
+    val ray = Ray(Point(0, 0, 0), Vector(0, 0, 1))
+    val sphere = Sphere()
+
+    val data = ray.intersect(sphere)
+    assert(data.length == 2)
+    assert(data(0).t == -1.0)
+    assert(data(1).t == 1.0)
+  }
+
+  test("A sphere is behind a ray") {
+    val ray = Ray(Point(0, 0, 5), Vector(0, 0, 1))
+    val sphere = Sphere()
+
+    val data = ray.intersect(sphere)
+    assert(data.length == 2)
+    assert(data(0).t == -6.0)
+    assert(data(1).t == -4.0)
+  }
+
+  test("Intersect sets the object on the intersection") {
+    val ray = Ray(Point(0, 0, -5), Vector(0, 0, 1))
+    val sphere = Sphere()
+
+    val data = ray.intersect(sphere)
+    assert(data.length == 2)
+    assert(data(0).obj == sphere)
+    assert(data(1).obj == sphere)
+  }
+
+  test("A sphere's default transformation") {
+    val sphere = Sphere()
+
+    assert(sphere.transform == Matrix4x4.Identity)
+  }
+
+  test("Changing a sphere's transformation") {
+    val sphere = Sphere()
+
+    val t = Matrix4x4.Translation(2, 3, 4)
+    sphere.transform = t
+
+    assert(sphere.transform == t)
+  }
+
+  test("Intersecting a scaled sphere with a ray") {
+    val r = Ray(Point(0, 0, -5), Vector(0, 0, 1))
+    val s = Sphere()
+
+    s.transform = Matrix4x4.Scaling(2, 2, 2)
+
+    val xs = r.intersect(s)
+    assert(xs.length == 2)
+    assert(xs(0).t == 3)
+    assert(xs(1).t == 7)
+  }
+
+  test("Intersecting a translated sphere with a ray") {
+    val r = Ray(Point(0, 0, -5), Vector(0, 0, 1))
+    val s = Sphere()
+
+    s.transform = Matrix4x4.Translation(5, 0, 0)
+
+    val xs = r.intersect(s)
+    assert(xs.isEmpty)
+  }
+}

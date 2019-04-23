@@ -28,6 +28,7 @@ class MatrixTest extends FunSuite {
     assert(m.width == 2)
     assert(m.height == 2)
   }
+
   test("A 4x2 matrix ought to have correct width and height") {
     val m = Matrix(DoubleArray(
       """
