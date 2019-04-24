@@ -1,6 +1,6 @@
 package ray
 
-case class Sphere(var transform: Matrix4x4 = Matrix4x4.Identity) {
+case class Sphere(transform: Matrix4x4 = Matrix4x4.Identity, material: Material = Material()) {
 
   //todo how to make accept only points?
 

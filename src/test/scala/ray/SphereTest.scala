@@ -71,19 +71,15 @@ class SphereTest extends FunSuite {
   }
 
   test("Changing a sphere's transformation") {
-    val sphere = Sphere()
-
     val t = Matrix4x4.Translation(2, 3, 4)
-    sphere.transform = t
+    val sphere = Sphere(transform = t)
 
     assert(sphere.transform == t)
   }
 
   test("Intersecting a scaled sphere with a ray") {
     val r = Ray(Point(0, 0, -5), Vector(0, 0, 1))
-    val s = Sphere()
-
-    s.transform = Matrix4x4.Scaling(2, 2, 2)
+    val s = Sphere(transform = Matrix4x4.Scaling(2, 2, 2))
 
     val xs = r.intersect(s)
     assert(xs.length == 2)
@@ -93,9 +89,7 @@ class SphereTest extends FunSuite {
 
   test("Intersecting a translated sphere with a ray") {
     val r = Ray(Point(0, 0, -5), Vector(0, 0, 1))
-    val s = Sphere()
-
-    s.transform = Matrix4x4.Translation(5, 0, 0)
+    val s = Sphere(transform = Matrix4x4.Translation(5, 0, 0))
 
     val xs = r.intersect(s)
     assert(xs.length == 0)
@@ -138,8 +132,7 @@ class SphereTest extends FunSuite {
   }
 
   test("Computing the normal on a translated sphere") {
-    val s = Sphere()
-    s.transform = Matrix4x4.Translation(0, 1, 0)
+    val s = Sphere(transform = Matrix4x4.Translation(0, 1, 0))
 
     val n = s.normalAt(Point(0, 1.70711, -0.70711))
 
@@ -147,13 +140,24 @@ class SphereTest extends FunSuite {
   }
 
   test("Computing the normal on a transformed sphere") {
-    val s = Sphere()
-    s.transform = Matrix4x4.Scaling(1, 0.5, 1) * Matrix4x4.RotationZ(Pi / 5)
+    val s = Sphere(transform = Matrix4x4.Scaling(1, 0.5, 1) * Matrix4x4.RotationZ(Pi / 5))
     val v = math.sqrt(2) / 2
 
     val n = s.normalAt(Point(0, v, -v))
 
     assert(n ==~ Vector(0, 0.97014, -0.24254))
+  }
+
+  test("A sphere has a default material") {
+    val s = Sphere()
+
+    assert(s.material == Material())
+  }
+
+  test("A sphere may be assigned a material") {
+    val m = Material(ambient = 1)
+    val s = Sphere(material = m)
+    assert(s.material == m)
   }
 
 }
