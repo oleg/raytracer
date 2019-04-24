@@ -17,6 +17,18 @@ class Color(val red: Double, val green: Double, val blue: Double) {
   private def zip(other: Color, f: (Double, Double) => Double): Color =
     new Color(f(red, other.red), f(green, other.green), f(blue, other.blue))
 
+  //TODO Implement via implicits!!!
+  def ==~(other: Color): Boolean = {
+    //(asList zip other.asList).forall(b => eql(b._1, b._2))
+    val epsilon = 0.00001
+
+    def eql = (a: Double, b: Double) => math.abs(a - b) < epsilon
+
+    eql(red, other.red) &&
+      eql(green, other.green) &&
+      eql(blue, other.blue)
+  }
+
   def canEqual(other: Any): Boolean = other.isInstanceOf[Color]
 
   override def equals(other: Any): Boolean = other match {

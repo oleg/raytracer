@@ -24,8 +24,8 @@ object Ball {
     val half = wallSize / 2
     val canvas = Canvas(width, height)
     val white = Color(1, 1, 1)
-    val sphere = Sphere()
-    sphere.transform = Matrix4x4.Shearing(1, 0, 0, 0, 0, 0) * Matrix4x4.Scaling(0.5, 1, 1)
+    val transform = Matrix4x4.Shearing(1, 0, 0, 0, 0, 0) * Matrix4x4.Scaling(0.5, 1, 1)
+    val sphere = Sphere(transform)
 
     for (y <- 0 until canvasPixels) {
       val worldY = half - pixelSize * y
