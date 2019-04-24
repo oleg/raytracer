@@ -1,10 +1,12 @@
 package ray
 
-class Tuple(val x: Double, val y: Double, val z: Double, val w: Double) {
+case class Tuple(x: Double, y: Double, z: Double, w: Double) {
 
   def isVector: Boolean = w == 0.0
 
   def isPoint: Boolean = w == 1.0
+
+  def toVector: Tuple = copy(w = 0.0)
 
   def sum: Double = x + y + z + w //todo: val?
 
@@ -34,25 +36,13 @@ class Tuple(val x: Double, val y: Double, val z: Double, val w: Double) {
     x * other.y - y * other.x,
     0.0)
 
+  def reflect(normal: Tuple): Tuple = this - normal * 2 * (this dot normal)
 
   private def mergeScalar(scalar: Double, f: (Double, Double) => Double): Tuple =
     new Tuple(f(x, scalar), f(y, scalar), f(z, scalar), f(w, scalar)) //merge(new Tuple(scalar, scalar, scalar, scalar), f)
 
   private def merge(other: Tuple, f: (Double, Double) => Double): Tuple =
     new Tuple(f(x, other.x), f(y, other.y), f(z, other.z), f(w, other.w))
-
-
-  def canEqual(other: Any): Boolean = other.isInstanceOf[Tuple]
-
-  override def equals(other: Any): Boolean = other match {
-    case that: Tuple =>
-      (that canEqual this) &&
-        x == that.x &&
-        y == that.y &&
-        z == that.z &&
-        w == that.w
-    case _ => false
-  }
 
   //TODO Implement via implicits!!!
   def ==~(other: Tuple): Boolean = {
@@ -67,9 +57,6 @@ class Tuple(val x: Double, val y: Double, val z: Double, val w: Double) {
       eql(w, other.w)
   }
 
-  override def hashCode: Int = (x, y, z, w).##
-
-  override def toString: String = s"Tuple($x $y $z $w)"
 }
 
 //objects

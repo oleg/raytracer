@@ -19,7 +19,7 @@ class IntersectionTest extends FunSuite {
     val i2 = Intersection(2, sphere)
 
     val xs = Intersections(i1, i2)
-    assert(xs.count == 2)
+    assert(xs.length == 2)
     assert(xs(0).t == 1)
     assert(xs(1).t == 2)
   }
