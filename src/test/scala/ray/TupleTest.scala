@@ -151,8 +151,27 @@ class TupleTest extends FunSuite {
     val a = Vector(1, 2, 3)
     val b = Vector(2, 3, 4)
 
-    assert((a cross b) == Vector(-1, 2, -1))
-    assert((b cross a) == Vector(1, -2, 1))
+    assert((a cross b) ==~ Vector(-1, 2, -1))
+    assert((b cross a) ==~ Vector(1, -2, 1))
+  }
+
+  test("Reflecting a vector approaching at 45 grad") {
+    val v = Vector(1, -1, 0)
+    val n = Vector(0, 1, 0)
+
+    val r = v.reflect(n)
+
+    assert(r ==~ Vector(1, 1, 0))
+  }
+
+  test("Reflecting a vector off a slanted surface") {
+    val v = Vector(0, -1, 0)
+    val p = math.sqrt(2) / 2
+    val n = Vector(p, p, 0)
+
+    val r = v.reflect(n)
+
+    assert(r ==~ Vector(1, 0, 0))
   }
 
 }

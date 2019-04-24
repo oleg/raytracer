@@ -25,6 +25,7 @@ object Ball {
     val canvas = Canvas(width, height)
     val white = Color(1, 1, 1)
     val sphere = Sphere()
+    sphere.transform = Matrix4x4.Shearing(1, 0, 0, 0, 0, 0) * Matrix4x4.Scaling(0.5, 1, 1)
 
     for (y <- 0 until canvasPixels) {
       val worldY = half - pixelSize * y
@@ -32,8 +33,7 @@ object Ball {
         val worldX = -half + pixelSize * x
         val position = Point(worldX, worldY, wallZ)
         val r = Ray(rayOrigin, (position - rayOrigin).normalize)
-        val xs = r.intersect(sphere)
-        Intersections(xs: _*).hit.foreach(_ => canvas(x, y) = white)
+        r.intersect(sphere).hit.foreach(_ => canvas(x, y) = white)
       }
     }
 

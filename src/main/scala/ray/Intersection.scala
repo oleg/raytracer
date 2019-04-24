@@ -7,9 +7,7 @@ object Intersection {
 
 }
 
-class Intersection(val t: Double, val obj: Sphere) {
-
-}
+class Intersection(val t: Double, val obj: Sphere) //todo case class?
 
 
 object Intersections {
@@ -18,14 +16,14 @@ object Intersections {
 
 }
 
-class Intersections(val is: Intersection*) {
+class Intersections(val is: Intersection*) { //todo case class?
 
-  private val ord = Ordering.by((_: Intersection).t)
+  private val vectorOrdering = Ordering.by((_: Intersection).t)
 
   def apply(i: Int): Intersection = is(i)
 
-  def count: Int = is.length
+  def length: Int = is.length
 
-  def hit: Option[Intersection] = is.filter(_.t >= 0).reduceOption(ord.min)
+  def hit: Option[Intersection] = is.filter(_.t >= 0).reduceOption(vectorOrdering.min)
 
 }
