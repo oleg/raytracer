@@ -258,7 +258,41 @@ class MatrixTest extends FunSuite {
         | -8 |  8 | 6 |
         | -7 | -1 | 1 |
       """
-    )))
+    )), "\n" + ma.submatrix(2, 1))
+  }
+
+  test("A submatrix of a 4x4 matrix is a 3x3 matrix column = 3") {
+    val ma = Matrix(DoubleArray(
+      """
+        | -6 |  1 |  1 |  6 |
+        | -8 |  5 |  8 |  6 |
+        | -1 |  0 |  8 |  2 |
+        | -7 |  1 | -1 |  1 |
+      """))
+    assert(ma.submatrix(2, 3) ==~ Matrix(DoubleArray(
+      """
+        | -6 | 1 |  1 |
+        | -8 | 5 |  8 |
+        | -7 | 1 | -1 |
+      """
+    )), "\n" + ma.submatrix(2, 3))
+  }
+
+  test("A submatrix of a 4x4 matrix is a 3x3 matrix column = 0") {
+    val ma = Matrix(DoubleArray(
+      """
+        | -6 |  1 |  1 |  6 |
+        | -8 |  5 |  8 |  6 |
+        | -1 |  0 |  8 |  2 |
+        | -7 |  1 | -1 |  1 |
+      """))
+    assert(ma.submatrix(2, 0) ==~ Matrix(DoubleArray(
+      """
+        | 1 |  1 | 6 |
+        | 5 |  8 | 6 |
+        | 1 | -1 | 1 |
+      """
+    )), "\n" + ma.submatrix(2, 0))
   }
 
   test("Calculating a minor of a 3x3 matrix") {
