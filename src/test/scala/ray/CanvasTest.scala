@@ -29,7 +29,7 @@ class CanvasTest extends FunSuite {
   test("Constructing the PPM header") {
     val c = Canvas(5, 3)
 
-    val ppm = c.toPpm()
+    val ppm = c.toPpm
 
     val lines1to3 = ppm.split("\n").take(3).mkString("\n")
     assert(lines1to3 ==
@@ -50,7 +50,7 @@ class CanvasTest extends FunSuite {
     c(2, 1) = c2
     c(4, 2) = c3
 
-    val ppm = c.toPpm()
+    val ppm = c.toPpm
 
     val lines4to6 = ppm.split("\n").slice(3, 6).mkString("\n")
     assert(lines4to6 ==
@@ -64,7 +64,7 @@ class CanvasTest extends FunSuite {
   test("Splitting long lines in PPM files") {
     val c = Canvas(10, 2, Color(1, 0.8, 0.6))
 
-    val ppm = c.toPpm()
+    val ppm = c.toPpm
 
     val lines4to7 = ppm.split("\n").slice(3, 7).mkString("\n")
     assert(lines4to7 ==
@@ -79,7 +79,7 @@ class CanvasTest extends FunSuite {
   test("PPM files are terminated by a newline character") {
     val c = Canvas(5, 3)
 
-    val ppm = c.toPpm()
+    val ppm = c.toPpm
 
     assert(ppm.last == '\n')
   }

@@ -55,7 +55,7 @@ object Ball3D {
     }
 
     new PrintWriter("ball3d.ppm") {
-      write(canvas.toPpm())
+      write(canvas.toPpm)
       close()
     }
   }

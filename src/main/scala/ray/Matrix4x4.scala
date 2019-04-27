@@ -131,4 +131,18 @@ object Matrix4x4 {
         Array(zx, zy, 1, 0),
         Array(0, 0, 0, 1)))
 
+  def viewTransform(from: Tuple, to: Tuple, up: Tuple): Matrix4x4 = {
+    val forward = (to - from).normalize
+    val left = forward.cross(up.normalize)
+    val trueUp = left.cross(forward)
+
+    val orientation = Matrix4x4(Array(
+      Array(    left.x,     left.y,     left.z, 0),
+      Array(  trueUp.x,   trueUp.y,   trueUp.z, 0),
+      Array(-forward.x, -forward.y, -forward.z, 0),
+      Array(         0,          0,          0, 1)))
+
+    orientation * Translation(-from.x, -from.y, -from.z)
+  }
+
 }

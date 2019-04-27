@@ -1,9 +1,9 @@
 package ray
 
-class Canvas(val width: Int, val height: Int, initialColor: Color) {
+case class Canvas(width: Int, height: Int, initialColor: Color = Color(0, 0, 0)) {
   private val pixels: Array[Array[Color]] = Array.fill(width, height)(initialColor)
 
-  def toPpm(): String = {
+  def toPpm: String = {
     ppmHeader + ppmLines + "\n"
   }
 
@@ -38,13 +38,4 @@ class Canvas(val width: Int, val height: Int, initialColor: Color) {
       .mkString(" ")
 
   private def ppmHeader = s"P3\n$width $height\n255\n"
-}
-
-
-object Canvas {
-
-  def apply(width: Int, height: Int): Canvas = new Canvas(width, height, Color(0, 0, 0))
-
-  def apply(width: Int, height: Int, initialColor: Color): Canvas = new Canvas(width, height, initialColor)
-
 }
