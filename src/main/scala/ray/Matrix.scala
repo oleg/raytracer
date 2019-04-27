@@ -61,21 +61,20 @@ class Matrix(private val points: Array[Array[Double]]) {
     sign(minor(row, column))
   }
 
-
   def minor(row: Int, column: Int): Double = submatrix(row, column).determinant
 
   def submatrix(row: Int, column: Int): Matrix = { //todo add test for 0x0
     val newMatrix = Array.ofDim[Double](height - 1, width - 1)
     var nr: Int = 0
-    var nc: Int = 0
     for (r <- points.indices) {
-      nc = 0
       if (r != row) {
-        for (c <- points(r).indices) {
-          if (c != column) {
-            newMatrix(nr)(nc) = points(r)(c)
-            nc += 1
-          }
+        if (column == 0) {
+          Array.copy(points(r), 1, newMatrix(nr), 0, width - 1)
+        } else if (column == width) {
+          Array.copy(points(r), 0, newMatrix(nr), 0, width - 1)
+        } else {
+          Array.copy(points(r), 0, newMatrix(nr), 0, column)
+          Array.copy(points(r), column + 1, newMatrix(nr), column, width - column - 1)
         }
         nr += 1
       }
