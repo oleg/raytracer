@@ -35,7 +35,7 @@ object Projectile {
     } while (projectile.position.y > 0 && projectile.position.y < canvas.height)
 
     new PrintWriter("projectile.ppm") {
-      write(canvas.toPpm())
+      write(canvas.toPpm)
       close()
     }
   }

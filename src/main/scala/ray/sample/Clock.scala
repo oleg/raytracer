@@ -32,7 +32,7 @@ object Clock {
     }
 
     new PrintWriter("clock.ppm") {
-      write(canvas.toPpm())
+      write(canvas.toPpm)
       close()
     }
   }

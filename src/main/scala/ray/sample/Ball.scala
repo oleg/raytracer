@@ -38,7 +38,7 @@ object Ball {
     }
 
     new PrintWriter("ball.ppm") {
-      write(canvas.toPpm())
+      write(canvas.toPpm)
       close()
     }
   }
