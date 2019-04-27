@@ -1,29 +1,42 @@
 package ray
 
-
-object Intersection {
-
-  def apply(t: Double, obj: Sphere): Intersection = new Intersection(t, obj)
-
-}
-
-class Intersection(val t: Double, val obj: Sphere) //todo case class?
-
-
-object Intersections {
-
-  def apply(is: Intersection*): Intersections = new Intersections(is: _ *)
+case class Computation(t: Double,
+                       obj: Sphere,
+                       point: Tuple,
+                       eyev: Tuple,
+                       normalv: Tuple,
+                       inside: Boolean) {
 
 }
 
-class Intersections(val is: Intersection*) { //todo case class?
+case class Intersection(t: Double,
+                        obj: Sphere) {
 
-  private val vectorOrdering = Ordering.by((_: Intersection).t)
+  def prepareComputations(ray: Ray): Computation = {
+
+    val point = ray.position(t)
+    val eyev = -ray.direction
+    val normalv = obj.normalAt(point)
+    val inside = (normalv dot eyev) < 0
+
+    Computation(t, obj, point, eyev, if (inside) -normalv else normalv, inside)
+  }
+
+}
+
+
+case class Intersections private(is: List[Intersection]) {
 
   def apply(i: Int): Intersection = is(i)
 
   def length: Int = is.length
 
-  def hit: Option[Intersection] = is.filter(_.t >= 0).reduceOption(vectorOrdering.min)
+  def hit: Option[Intersection] = is.find(_.t >= 0)
 
+}
+
+object Intersections {
+  private val vectorOrdering = Ordering.by((_: Intersection).t)
+
+  def apply(is: List[Intersection]): Intersections = new Intersections(is.sorted(vectorOrdering))
 }
