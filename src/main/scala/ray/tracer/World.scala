@@ -1,4 +1,4 @@
-package ray
+package ray.tracer
 
 /**
   * The world object described here supports only a single light source,

@@ -1,4 +1,4 @@
-package ray
+package ray.tracer
 
 case class Sphere(transform: Matrix4x4 = Matrix4x4.Identity, material: Material = Material()) {
 

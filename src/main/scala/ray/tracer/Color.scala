@@ -1,4 +1,4 @@
-package ray
+package ray.tracer
 
 class Color(val red: Double, val green: Double, val blue: Double) {
 

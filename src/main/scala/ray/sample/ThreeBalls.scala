@@ -2,8 +2,8 @@ package ray.sample
 
 import java.io.PrintWriter
 
-import ray.Matrix4x4.Identity
-import ray._
+import ray.tracer.Matrix4x4.Identity
+import ray.tracer._
 
 import scala.math.Pi
 

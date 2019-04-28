@@ -1,4 +1,4 @@
-package ray
+package ray.tracer
 
 /**
   * Matrix4x4 class support and specific for 4x4 matrices operations
