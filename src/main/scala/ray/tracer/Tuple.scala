@@ -47,9 +47,8 @@ case class Tuple(x: Double, y: Double, z: Double, w: Double) {
   //TODO Implement via implicits!!!
   def ==~(other: Tuple): Boolean = {
     //(asList zip other.asList).forall(b => eql(b._1, b._2))
-    val epsilon = 0.00001
 
-    def eql = (a: Double, b: Double) => math.abs(a - b) < epsilon
+    def eql = (a: Double, b: Double) => math.abs(a - b) < EPSILON
 
     eql(x, other.x) &&
       eql(y, other.y) &&

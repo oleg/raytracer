@@ -20,8 +20,9 @@ class MaterialTest extends FunSuite {
     val eyev = Vector(0, 0, -1)
     val normalv = Vector(0, 0, -1)
     val light = PointLight(Point(0, 0, -10), Color(1, 1, 1))
+    val inShadow = false
 
-    val result = material.lighting(light, position, eyev, normalv)
+    val result = material.lighting(light, position, eyev, normalv, inShadow)
 
     assert(result ==~ Color(1.9, 1.9, 1.9), result)
   }
@@ -33,8 +34,9 @@ class MaterialTest extends FunSuite {
     val eyev = Vector(0, v, -v)
     val normalv = Vector(0, 0, -1)
     val light = PointLight(Point(0, 0, -10), Color(1, 1, 1))
+    val inShadow = false
 
-    val result = material.lighting(light, position, eyev, normalv)
+    val result = material.lighting(light, position, eyev, normalv, inShadow)
 
     assert(result ==~ Color(1.0, 1.0, 1.0), result)
   }
@@ -45,8 +47,9 @@ class MaterialTest extends FunSuite {
     val eyev = Vector(0, 0, -1)
     val normalv = Vector(0, 0, -1)
     val light = PointLight(Point(0, 10, -10), Color(1, 1, 1))
+    val inShadow = false
 
-    val result = material.lighting(light, position, eyev, normalv)
+    val result = material.lighting(light, position, eyev, normalv, inShadow)
 
     assert(result ==~ Color(0.7364, 0.7364, 0.7364), result)
   }
@@ -58,8 +61,9 @@ class MaterialTest extends FunSuite {
     val eyev = Vector(0, -v, -v)
     val normalv = Vector(0, 0, -1)
     val light = PointLight(Point(0, 10, -10), Color(1, 1, 1))
+    val inShadow = false
 
-    val result = material.lighting(light, position, eyev, normalv)
+    val result = material.lighting(light, position, eyev, normalv, inShadow)
 
     assert(result ==~ Color(1.6364, 1.6364, 1.6364), result)
   }
@@ -70,8 +74,22 @@ class MaterialTest extends FunSuite {
     val eyev = Vector(0, 0, -1)
     val normalv = Vector(0, 0, -1)
     val light = PointLight(Point(0, 0, 10), Color(1, 1, 1))
+    val inShadow = false
 
-    val result = material.lighting(light, position, eyev, normalv)
+    val result = material.lighting(light, position, eyev, normalv, inShadow)
+
+    assert(result ==~ Color(0.1, 0.1, 0.1), result)
+  }
+
+  test("Lighting with the surface in shadow") {
+    val material = Material()
+    val position = Point(0, 0, 0)
+    val eyev = Vector(0, 0, -1)
+    val normalv = Vector(0, 0, -1)
+    val light = PointLight(Point(0, 0, -10), Color(1, 1, 1))
+    val inShadow = true
+
+    val result = material.lighting(light, position, eyev, normalv, inShadow)
 
     assert(result ==~ Color(0.1, 0.1, 0.1), result)
   }

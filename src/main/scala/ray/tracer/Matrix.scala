@@ -87,9 +87,7 @@ class Matrix(private val points: Array[Array[Double]]) {
   }
 
   def ==~(other: Matrix): Boolean = {
-    val epsilon = 0.00001
-
-    def eql = (a: Double, b: Double) => math.abs(a - b) < epsilon
+    def eql = (a: Double, b: Double) => math.abs(a - b) < EPSILON
 
     height == other.height &&
       width == other.width &&

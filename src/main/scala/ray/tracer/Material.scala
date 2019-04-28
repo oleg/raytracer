@@ -7,7 +7,7 @@ case class Material(color: Color = Color(1, 1, 1),
                     specular: Double = 0.9,
                     shininess: Double = 200.0) {
 
-  def lighting(light: PointLight, point: Tuple, eyev: Tuple, normalv: Tuple): Color = {
+  def lighting(light: PointLight, point: Tuple, eyev: Tuple, normalv: Tuple, inShadow: Boolean): Color = {
     val material = this
 
     // combine the surface color with the light's color/intensity​
@@ -24,7 +24,7 @@ case class Material(color: Color = Color(1, 1, 1),
     // light is on the other side of the surface.​
     val lightDotNormal = lightv dot normalv
 
-    if (lightDotNormal < 0) {
+    if (lightDotNormal < 0 || inShadow) {
       return ambient
     }
     // compute the diffuse contribution​
