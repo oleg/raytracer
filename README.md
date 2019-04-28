@@ -15,3 +15,6 @@ Photorealistic 3D renderer implemented in Scala
 
 # Step 5
 ![ThreeBalls](samples/threeballs.png)
+
+# Step 5
+![ThreeBallsShadow](samples/threeballsshadow.png)

@@ -55,7 +55,21 @@ class WorldTest extends FunSuite {
 
     val comps = i.prepareComputations(r)
     val c = w.shadeHit(comps)
-    assert(c ==~ Color(0.90498, 0.90498, 0.90498))
+
+    assert(c ==~ Color(0.1, 0.1, 0.1), c)
+  }
+
+  test("shade_hit() is given an intersection in shadow") {
+    val s1 = Sphere()
+    val s2 = Sphere(transform = Matrix4x4.Identity.translate(0, 0, 10))
+    val w = World(PointLight(Point(0, 0, -10), Color(1, 1, 1)), s1 :: s2 :: Nil)
+    val r = Ray(Point(0, 0, 5), Vector(0, 0, 1))
+    val i = Intersection(4, s2)
+
+    val comps = i.prepareComputations(r)
+    val c = w.shadeHit(comps)
+
+    assert(c == Color(0.1, 0.1, 0.1))
   }
 
   test("The color when a ray misses") {
@@ -85,6 +99,34 @@ class WorldTest extends FunSuite {
     val c = w.colorAt(r)
 
     assert(c ==~ inner.material.color)
+  }
+
+  test("There is no shadow when nothing is collinear with point and light") {
+    val w = defaultWorld()
+    val p = Point(0, 10, 0)
+
+    assert(w.isShadowed(p) == false)
+  }
+
+  test("The shadow when an object is between the point and the light") {
+    val w = defaultWorld()
+    val p = Point(10, -10, 10)
+
+    assert(w.isShadowed(p))
+  }
+
+  test("There is no shadow when an object is behind the light") {
+    val w = defaultWorld()
+    val p = Point(-20, 20, -20)
+
+    assert(w.isShadowed(p) == false)
+  }
+
+  test("There is no shadow when an object is behind the point") {
+    val w = defaultWorld()
+    val p = Point(-2, 2, -2)
+
+    assert(w.isShadowed(p) == false)
   }
 
   private def defaultWorld(): World = World(

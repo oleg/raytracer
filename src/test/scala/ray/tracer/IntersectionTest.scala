@@ -97,6 +97,17 @@ class IntersectionTest extends FunSuite {
     assert(comps.eyev == Vector(0, 0, -1))
     assert(comps.normalv == Vector(0, 0, -1))
     assert(comps.inside == true)
-
   }
+
+  test("The hit should offset the point") {
+    val r = Ray(Point(0, 0, -5), Vector(0, 0, 1))
+    val shape = Sphere(Matrix4x4.Identity.translate(0, 0, 1))
+    val i = Intersection(5, shape)
+
+    val comps = i.prepareComputations(r)
+
+    assert(comps.overPoint.z < -EPSILON / 2)
+    assert(comps.point.z > comps.overPoint.z)
+  }
+
 }

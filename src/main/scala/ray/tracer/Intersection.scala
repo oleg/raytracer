@@ -3,6 +3,7 @@ package ray.tracer
 case class Computation(t: Double,
                        obj: Sphere,
                        point: Tuple,
+                       overPoint: Tuple,
                        eyev: Tuple,
                        normalv: Tuple,
                        inside: Boolean) {
@@ -18,8 +19,9 @@ case class Intersection(t: Double,
     val eyev = -ray.direction
     val normalv = obj.normalAt(point)
     val inside = (normalv dot eyev) < 0
+    val overPoint = point + normalv * EPSILON
 
-    Computation(t, obj, point, eyev, if (inside) -normalv else normalv, inside)
+    Computation(t, obj, point, overPoint, eyev, if (inside) -normalv else normalv, inside)
   }
 
 }
