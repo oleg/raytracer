@@ -7,18 +7,17 @@ package ray
 class Matrix(private val points: Array[Array[Double]]) {
 
   val height: Int = points.length
-  val width: Int = if (points.nonEmpty) points.map(_.length).max else 0
+  val width: Int = if (points.isEmpty) 0 else points(0).length
 
-  points
-    .map(_.length)
-    .find(_ != width)
-    .map(length => throw new IllegalArgumentException(s"Unequal columns lengths $length != $width"))
+  //  points
+  //    .find(_.length != width) //todo optimization
+  //    .map(length => throw new IllegalArgumentException(s"Unequal columns lengths $length != $width"))
 
   def *(other: Matrix): Matrix = {
     if (width != other.height)
       throw new IllegalArgumentException(s"Multiplication is not possible (left width) $width != ${other.height} (right height)")
 
-    val result = Array.fill(height, other.width)(0.0)
+    val result = Array.ofDim[Double](height, other.width)
     for (row <- 0 until height) {
       for (col <- 0 until other.width) {
         result(row)(col) = (0 until width).map(i => points(row)(i) * other.points(i)(col)).sum
