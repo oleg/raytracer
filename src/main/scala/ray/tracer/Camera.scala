@@ -1,4 +1,4 @@
-package ray
+package ray.tracer
 
 case class Camera(hszie: Int, vsize: Int, fieldOfView: Double, transform: Matrix4x4 = Matrix4x4.Identity) {
 

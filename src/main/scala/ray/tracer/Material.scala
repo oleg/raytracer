@@ -1,4 +1,4 @@
-package ray
+package ray.tracer
 
 //todo add validation for min 0, max 1
 case class Material(color: Color = Color(1, 1, 1),

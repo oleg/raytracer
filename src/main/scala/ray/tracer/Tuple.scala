@@ -1,4 +1,4 @@
-package ray
+package ray.tracer
 
 case class Tuple(x: Double, y: Double, z: Double, w: Double) {
 

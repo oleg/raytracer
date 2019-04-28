@@ -2,7 +2,7 @@ package ray.sample
 
 import java.io.PrintWriter
 
-import ray._
+import ray.tracer._
 
 object Ball3D {
 

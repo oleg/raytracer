@@ -1,4 +1,4 @@
-package ray
+package ray.tracer
 
 case class Computation(t: Double,
                        obj: Sphere,

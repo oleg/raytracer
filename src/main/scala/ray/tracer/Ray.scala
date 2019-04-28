@@ -1,4 +1,4 @@
-package ray
+package ray.tracer
 
 case class Ray(origin: Tuple, direction: Tuple) {
 

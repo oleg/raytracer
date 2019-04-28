@@ -1,4 +1,4 @@
-package ray
+package ray.tracer
 
 /**
   * Matrix class support operations for matrices of any dimensions

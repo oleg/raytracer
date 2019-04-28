@@ -1,4 +1,4 @@
-package ray
+package ray.tracer
 
 import org.scalatest.FunSuite
 
