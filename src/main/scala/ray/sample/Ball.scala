@@ -32,8 +32,8 @@ object Ball {
       for (x <- 0 until canvasPixels) {
         val worldX = -half + pixelSize * x
         val position = Point(worldX, worldY, wallZ)
-        val r = Ray(rayOrigin, (position - rayOrigin).normalize)
-        r.intersect(sphere).hit.foreach(_ => canvas(x, y) = white)
+        val ray = Ray(rayOrigin, (position - rayOrigin).normalize)
+        sphere.intersect(ray).hit.foreach(_ => canvas(x, y) = white)
       }
     }
 

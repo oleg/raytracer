@@ -10,24 +10,27 @@ case class World(light: PointLight, spheres: List[Sphere]) {
 
   def contains(sphere: Sphere): Boolean = spheres.contains(sphere)
 
-  def shadeHit(comps: Computation): Color =
-    comps.obj.material.lighting(light, comps.overPoint, comps.eyev, comps.normalv, isShadowed(comps.overPoint))
-
   def colorAt(r: Ray): Color =
-    r.intersect(this)
+    intersect(r)
       .hit
       .map(i => shadeHit(i.prepareComputations(r)))
       .getOrElse(Color(0, 0, 0))
+
+  def shadeHit(comps: Computation): Color =
+    comps.obj.material.lighting(light, comps.overPoint, comps.eyev, comps.normalv, isShadowed(comps.overPoint))
 
   def isShadowed(point: Tuple): Boolean = {
     val v = light.position - point
     val distance = v.magnitude
     val direction = v.normalize
 
-    Ray(point, direction)
-      .intersect(this)
+    val ray = Ray(point, direction)
+
+    intersect(ray)
       .hit
       .exists(_.t < distance)
   }
+
+  def intersect(r: Ray): Intersections = spheres.foldLeft(Intersections(Nil))((acc, s) => acc ::: s.intersect(r))
 
 }

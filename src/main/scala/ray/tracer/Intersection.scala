@@ -27,13 +27,15 @@ case class Intersection(t: Double,
 }
 
 
-case class Intersections private(is: List[Intersection]) {
+case class Intersections private(private val is: List[Intersection]) {
 
   def apply(i: Int): Intersection = is(i)
 
   def length: Int = is.length
 
   def hit: Option[Intersection] = is.find(_.t >= 0)
+
+  def :::(other: Intersections): Intersections = Intersections(is ::: other.is)
 
 }
 

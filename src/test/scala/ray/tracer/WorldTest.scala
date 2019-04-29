@@ -26,7 +26,7 @@ class WorldTest extends FunSuite {
   test("Intersect a world with a ray") {
     val w = defaultWorld()
     val r = Ray(Point(0, 0, -5), Vector(0, 0, 1))
-    val xs = r.intersect(w)
+    val xs = w.intersect(r)
 
     assert(xs.length == 4)
     assert(xs(0).t == 4)

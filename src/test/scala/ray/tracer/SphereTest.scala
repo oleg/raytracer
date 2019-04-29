@@ -10,7 +10,7 @@ class SphereTest extends FunSuite {
     val ray = Ray(Point(0, 0, -5), Vector(0, 0, 1))
     val sphere = Sphere()
 
-    val data = ray.intersect(sphere)
+    val data = sphere.intersect(ray)
     assert(data.length == 2)
     assert(data(0).t == 4.0)
     assert(data(1).t == 6.0)
@@ -20,7 +20,7 @@ class SphereTest extends FunSuite {
     val ray = Ray(Point(0, 1, -5), Vector(0, 0, 1))
     val sphere = Sphere()
 
-    val data = ray.intersect(sphere)
+    val data = sphere.intersect(ray)
     assert(data.length == 2)
     assert(data(0).t == 5.0)
     assert(data(1).t == 5.0)
@@ -30,7 +30,7 @@ class SphereTest extends FunSuite {
     val ray = Ray(Point(0, 2, -5), Vector(0, 0, 1))
     val sphere = Sphere()
 
-    val data = ray.intersect(sphere)
+    val data = sphere.intersect(ray)
     assert(data.length == 0)
   }
 
@@ -38,7 +38,7 @@ class SphereTest extends FunSuite {
     val ray = Ray(Point(0, 0, 0), Vector(0, 0, 1))
     val sphere = Sphere()
 
-    val data = ray.intersect(sphere)
+    val data = sphere.intersect(ray)
     assert(data.length == 2)
     assert(data(0).t == -1.0)
     assert(data(1).t == 1.0)
@@ -48,7 +48,7 @@ class SphereTest extends FunSuite {
     val ray = Ray(Point(0, 0, 5), Vector(0, 0, 1))
     val sphere = Sphere()
 
-    val data = ray.intersect(sphere)
+    val data = sphere.intersect(ray)
     assert(data.length == 2)
     assert(data(0).t == -6.0)
     assert(data(1).t == -4.0)
@@ -58,7 +58,7 @@ class SphereTest extends FunSuite {
     val ray = Ray(Point(0, 0, -5), Vector(0, 0, 1))
     val sphere = Sphere()
 
-    val data = ray.intersect(sphere)
+    val data = sphere.intersect(ray)
     assert(data.length == 2)
     assert(data(0).obj == sphere)
     assert(data(1).obj == sphere)
@@ -81,7 +81,7 @@ class SphereTest extends FunSuite {
     val r = Ray(Point(0, 0, -5), Vector(0, 0, 1))
     val s = Sphere(transform = Matrix4x4.Scaling(2, 2, 2))
 
-    val xs = r.intersect(s)
+    val xs = s.intersect(r)
     assert(xs.length == 2)
     assert(xs(0).t == 3)
     assert(xs(1).t == 7)
@@ -91,7 +91,7 @@ class SphereTest extends FunSuite {
     val r = Ray(Point(0, 0, -5), Vector(0, 0, 1))
     val s = Sphere(transform = Matrix4x4.Translation(5, 0, 0))
 
-    val xs = r.intersect(s)
+    val xs = s.intersect(r)
     assert(xs.length == 0)
   }
 

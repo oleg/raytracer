@@ -1,20 +1,24 @@
 # Ray Tracer in Scala
 Photorealistic 3D renderer implemented in Scala
 
-# Step 1
+Implemented by following the book [The Ray Tracer Challenge
+ A Test-Driven Guide to Your First 3D Renderer](https://pragprog.com/book/jbtracer/the-ray-tracer-challenge) by Jamis Buck
+
+
+## 2. Drawing on a Canvas
 ![Projectile](samples/projectile.png)
 
-# Step 2
+## 4. Matrix Transformations
 ![Clock](samples/clock.png)
 
-# Step 3
+## 5. Ray-Sphere Intersections
 ![Ball](samples/ball.png)
 
-# Step 4
+## 6. Light and Shading
 ![Ball3D](samples/ball3d.png)
 
-# Step 5
+## 7. Making a Scene
 ![ThreeBalls](samples/threeballs.png)
 
-# Step 5
+## 8. Shadows
 ![ThreeBallsShadow](samples/threeballsshadow.png)
