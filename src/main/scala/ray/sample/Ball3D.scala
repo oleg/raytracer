@@ -40,7 +40,7 @@ object Ball3D {
 
         val ray = Ray(rayOrigin, (position - rayOrigin).normalize)
 
-        ray.intersect(sphere)
+        sphere.intersect(ray)
           .hit
           .foreach({ h =>
             val point = ray.position(h.t)
