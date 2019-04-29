@@ -4,6 +4,8 @@ trait Shape {
 
   val transform: Matrix4x4
 
+  val material: Material
+
   def localIntersect(localRay: Ray): Intersections
 
   def localNormalAt(localPoint: Tuple): Tuple //todo Point, Vector
@@ -46,5 +48,19 @@ case class Sphere(transform: Matrix4x4 = Matrix4x4.Identity, material: Material 
   }
 
   override def localNormalAt(localPoint: Tuple): Tuple = localPoint - Point(0, 0, 0)
+
+}
+
+case class Plane(transform: Matrix4x4 = Matrix4x4.Identity, material: Material = Material()) extends Shape {
+
+  override def localIntersect(localRay: Ray): Intersections = {
+    if (math.abs(localRay.direction.y) < EPSILON) {
+      return Intersections(Nil)
+    }
+    val t = -localRay.origin.y / localRay.direction.y
+    Intersections(Intersection(t, this) :: Nil)
+  }
+
+  override def localNormalAt(localPoint: Tuple): Tuple = Vector(0, 1, 0)
 
 }

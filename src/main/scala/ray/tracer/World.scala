@@ -6,7 +6,7 @@ package ray.tracer
   * You would need to make sure your shade_hit function iterates over all of the light sources,
   * calling lighting for each one and adding the colors together.
   */
-case class World(light: PointLight, spheres: List[Sphere]) {
+case class World(light: PointLight, spheres: List[Shape]) {
 
   def contains(sphere: Sphere): Boolean = spheres.contains(sphere)
 
