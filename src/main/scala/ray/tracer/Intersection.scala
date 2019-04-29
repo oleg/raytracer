@@ -1,7 +1,7 @@
 package ray.tracer
 
 case class Computation(t: Double,
-                       obj: Sphere,
+                       obj: Shape,
                        point: Tuple,
                        overPoint: Tuple,
                        eyev: Tuple,
@@ -11,7 +11,7 @@ case class Computation(t: Double,
 }
 
 case class Intersection(t: Double,
-                        obj: Sphere) {
+                        obj: Shape) {
 
   def prepareComputations(ray: Ray): Computation = {
 

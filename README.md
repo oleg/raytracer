@@ -22,3 +22,6 @@ Implemented by following the book [The Ray Tracer Challenge
 
 ## 8. Shadows
 ![ThreeBallsShadow](samples/threeballsshadow.png)
+
+## 9. Planes
+![Planes](samples/plane.png)
