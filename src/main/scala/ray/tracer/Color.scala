@@ -47,4 +47,7 @@ class Color(val red: Double, val green: Double, val blue: Double) {
 
 object Color {
   def apply(red: Double, green: Double, blue: Double): Color = new Color(red, green, blue)
+
+  val white: Color = Color(1, 1, 1)
+  val black: Color = Color(0, 0, 0)
 }
