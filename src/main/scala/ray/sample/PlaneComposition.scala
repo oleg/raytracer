@@ -15,7 +15,10 @@ object PlaneComposition {
 
   def draw(args: Array[String]): Unit = {
 
-    val floor = Plane()
+    val floor = Plane(
+      material = Material(
+        pattern = StripePattern(Color(0.5, 0.3, 0), Color(0, 0.5, 1),
+          transform = Identity.rotateX(Pi / 2).rotateY(Pi / 2).rotateZ(Pi / 2))))
     val back = Plane(
       Identity.rotateX(Pi / 2).translate(0, 0, 4)
     )
@@ -26,7 +29,12 @@ object PlaneComposition {
 
     val middle = Sphere(
       Identity.translate(-0.5, 1, 0.2),
-      Material(color = Color(0.1, 0.1, 1), diffuse = 0.7, specular = 0.3))
+      Material(
+        color = Color(0.1, 0.1, 1),
+        diffuse = 0.7,
+        specular = 0.3,
+        pattern = StripePattern(Color(1, 0, 0), Color(0, 1, 0),
+          transform = Matrix4x4.Scaling(0.5, 0.5, 0.5))))
 
     val right = Sphere(
       Identity.scale(0.5, 0.8, 0.5).translate(1.5, 0.5, -0.5),

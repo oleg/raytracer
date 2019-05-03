@@ -17,7 +17,7 @@ case class World(light: PointLight, spheres: List[Shape]) {
       .getOrElse(Color(0, 0, 0))
 
   def shadeHit(comps: Computation): Color =
-    comps.obj.material.lighting(light, comps.overPoint, comps.eyev, comps.normalv, isShadowed(comps.overPoint))
+    comps.obj.material.lighting(light, comps.obj, comps.overPoint, comps.eyev, comps.normalv, isShadowed(comps.overPoint))
 
   def isShadowed(point: Tuple): Boolean = {
     val v = light.position - point

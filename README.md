@@ -25,3 +25,6 @@ Implemented by following the book [The Ray Tracer Challenge
 
 ## 9. Planes
 ![Planes](samples/plane.png)
+
+## 10. Patterns
+![Planes](samples/stripes.png)
