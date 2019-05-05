@@ -10,7 +10,7 @@ import scala.math.Pi
 object PlaneComposition {
 
   def main(args: Array[String]): Unit = {
-    val l = System.currentTimeMillis()
+    val l = System.currentTimeMillis() //todo remove
     draw(args)
     println(System.currentTimeMillis() - l)
   }
@@ -19,10 +19,12 @@ object PlaneComposition {
 
     val floor = Plane(
       material = Material(
-        pattern = StripePattern(Color(0.8, 0.8, 0.8), Color(0.2, 0.2, 0.2))))
+        pattern = RingPattern(Color(0.7, 0.9, 0.8), Color(0.3, 0.2, 0.5))))
 
     val back = Plane(
-      Identity.rotateX(Pi / 2).translate(0, 0, 4)
+      material = Material(
+        pattern = CheckersPattern(Color(0.6, 0.1, 0.2), Color(0.2, 0.3, 0.7))),
+      transform = Identity.rotateX(-Pi / 2).translate(0, 0, 4)
     )
 
     val left = Sphere(

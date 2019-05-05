@@ -1,5 +1,6 @@
 package ray.tracer
 
+//todo implement : Nested, Blended and Perturbed patterns
 trait Pattern {
 
   val transform: Matrix4x4
@@ -35,8 +36,25 @@ case class GradientPattern(a: Color, b: Color, transform: Matrix4x4 = Matrix4x4.
   override def patternAt(point: Tuple): Color = {
     val distance = b - a
     val fraction = point.x - math.floor(point.x)
-
     a + distance * fraction
+  }
+
+}
+
+case class RingPattern(a: Color, b: Color, transform: Matrix4x4 = Matrix4x4.Identity) extends Pattern {
+
+  override def patternAt(point: Tuple): Color = {
+    val useA = math.floor(math.sqrt(point.x * point.x + point.z * point.z)) % 2 == 0
+    if (useA) a else b
+  }
+
+}
+
+case class CheckersPattern(a: Color, b: Color, transform: Matrix4x4 = Matrix4x4.Identity) extends Pattern {
+
+  override def patternAt(point: Tuple): Color = {
+    val useA = (math.floor(point.x) + math.floor(point.y) + math.floor(point.z)) % 2 == 0
+    if (useA) a else b
   }
 
 }
