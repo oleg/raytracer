@@ -6,12 +6,12 @@ case class Material(color: Color = Color(1, 1, 1),
                     diffuse: Double = 0.9,
                     specular: Double = 0.9,
                     shininess: Double = 200.0,
-                    pattern: StripePattern = null) {
+                    pattern: Pattern = null) {
 
   def lighting(light: PointLight, shape: Shape, point: Tuple, eyev: Tuple, normalv: Tuple, inShadow: Boolean): Color = {
     val material = this
 
-    val color = Option(pattern).map(_.stripeAtObject(shape, point)).getOrElse(material.color)
+    val color = Option(pattern).map(_.patternAtShape(shape, point)).getOrElse(material.color)
 
     // combine the surface color with the light's color/intensity​
     val efectiveColor = color * light.intensity

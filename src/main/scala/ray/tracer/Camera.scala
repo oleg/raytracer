@@ -1,5 +1,10 @@
 package ray.tracer
 
+import java.util.concurrent.TimeUnit
+
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, Future}
+
 case class Camera(hszie: Int, vsize: Int, fieldOfView: Double, transform: Matrix4x4 = Matrix4x4.Identity) {
 
   private val halfView: Double = math.tan(fieldOfView / 2)
@@ -35,6 +40,24 @@ case class Camera(hszie: Int, vsize: Int, fieldOfView: Double, transform: Matrix
         canvas(x, y) = color
       }
     }
+    canvas
+  }
+
+  def renderConcurrently(world: World): Canvas = {
+    val canvas = Canvas(hszie, vsize)
+    val batchSize = vsize / Runtime.getRuntime.availableProcessors
+    import scala.concurrent.ExecutionContext.Implicits.global
+    val steps: Iterator[List[Int]] = 0.to(vsize, batchSize).toList.sliding(2)
+    val tasks = for (List(start, end) <- steps) yield Future {
+      for (y <- start until end) {
+        for (x <- 0 until hszie) {
+          val ray = rayForPixel(x, y)
+          canvas(x, y) = world.colorAt(ray)
+        }
+      }
+    }
+    val aggregate = Future.sequence(tasks)
+    Await.result(aggregate, Duration(1, TimeUnit.DAYS))
     canvas
   }
 }
