@@ -118,4 +118,36 @@ class PatternTest extends FunSuite {
     assert(pattern.patternAt(Point(0.75, 0, 0)) == Color(0.25, 0.25, 0.25))
   }
 
+  test("A ring should extend in both x and z") {
+    val pattern = RingPattern(Color.white, Color.black)
+
+    assert(pattern.patternAt(Point(0, 0, 0)) == Color.white)
+    assert(pattern.patternAt(Point(1, 0, 0)) == Color.black)
+    assert(pattern.patternAt(Point(0, 0, 1)) == Color.black)
+    assert(pattern.patternAt(Point(0.708, 0, 0.708)) == Color.black)
+  }
+
+  test("Checkers should repeat in x") {
+    val pattern = CheckersPattern(Color.white, Color.black)
+
+    assert(pattern.patternAt(Point(0, 0, 0)) == Color.white)
+    assert(pattern.patternAt(Point(0.99, 0, 0)) == Color.white)
+    assert(pattern.patternAt(Point(1.01, 0, 0)) == Color.black)
+  }
+
+  test("Checkers should repeat in y") {
+    val pattern = CheckersPattern(Color.white, Color.black)
+
+    assert(pattern.patternAt(Point(0, 0, 0)) == Color.white)
+    assert(pattern.patternAt(Point(0, 0.99, 0)) == Color.white)
+    assert(pattern.patternAt(Point(0, 1.01, 0)) == Color.black)
+  }
+
+  test("Checkers should repeat in z") {
+    val pattern = CheckersPattern(Color.white, Color.black)
+
+    assert(pattern.patternAt(Point(0, 0, 0)) == Color.white)
+    assert(pattern.patternAt(Point(0, 0, 0.99)) == Color.white)
+    assert(pattern.patternAt(Point(0, 0, 1.01)) == Color.black)
+  }
 }
