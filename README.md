@@ -28,3 +28,6 @@ Implemented by following the book [The Ray Tracer Challenge
 
 ## 10. Patterns
 ![Planes](samples/patterns4.png)
+
+## 11. Reflection and Refraction
+![Planes](samples/reflection.png)

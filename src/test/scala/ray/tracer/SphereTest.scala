@@ -141,9 +141,7 @@ class SphereTest extends FunSuite {
 
   test("Computing the normal on a transformed sphere") {
     val s = Sphere(transform = Matrix4x4.Scaling(1, 0.5, 1) * Matrix4x4.RotationZ(Pi / 5))
-    val v = math.sqrt(2) / 2
-
-    val n = s.normalAt(Point(0, v, -v))
+    val n = s.normalAt(Point(0, Sqrt2Div2, -Sqrt2Div2))
 
     assert(n ==~ Vector(0, 0.97014, -0.24254))
   }

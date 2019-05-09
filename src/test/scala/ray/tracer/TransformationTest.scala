@@ -64,7 +64,7 @@ class TransformationTest extends FunSuite {
     val halfQuarter = Matrix4x4.RotationX(Pi / 4)
     val fullQuarter = Matrix4x4.RotationX(Pi / 2)
 
-    assert(halfQuarter * p ==~ Point(0, sqrt(2) / 2, sqrt(2) / 2))
+    assert(halfQuarter * p ==~ Point(0, Sqrt2Div2, Sqrt2Div2))
     assert(fullQuarter * p ==~ Point(0, 0, 1))
   }
 
@@ -81,7 +81,7 @@ class TransformationTest extends FunSuite {
     val halfQuarter = Matrix4x4.RotationX(Pi / 4)
     val inv = halfQuarter.inverse
 
-    assert(inv * p ==~ Point(0, sqrt(2) / 2, -sqrt(2) / 2))
+    assert(inv * p ==~ Point(0, Sqrt2Div2, -Sqrt2Div2))
   }
 
   test("Rotating a point around the y axis") {
@@ -90,7 +90,7 @@ class TransformationTest extends FunSuite {
     val halfQuarter = Matrix4x4.RotationY(Pi / 4)
     val fullQuarter = Matrix4x4.RotationY(Pi / 2)
 
-    assert(halfQuarter * p ==~ Point(sqrt(2) / 2, 0, sqrt(2) / 2))
+    assert(halfQuarter * p ==~ Point(Sqrt2Div2, 0, Sqrt2Div2))
     assert(fullQuarter * p ==~ Point(1, 0, 0))
   }
 
@@ -99,7 +99,7 @@ class TransformationTest extends FunSuite {
     val halfQuarter = Matrix4x4.RotationZ(Pi / 4)
     val fullQuarter = Matrix4x4.RotationZ(Pi / 2)
 
-    assert(halfQuarter * p ==~ Point(-sqrt(2) / 2, sqrt(2) / 2, 0))
+    assert(halfQuarter * p ==~ Point(-Sqrt2Div2, Sqrt2Div2, 0))
     assert(fullQuarter * p ==~ Point(-1, 0, 0))
   }
 

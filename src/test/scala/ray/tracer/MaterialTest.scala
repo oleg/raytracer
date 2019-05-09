@@ -32,8 +32,7 @@ class MaterialTest extends FunSuite {
     val sphere = Sphere()
     val material = Material()
     val position = Point(0, 0, 0)
-    val v = math.sqrt(2) / 2
-    val eyev = Vector(0, v, -v)
+    val eyev = Vector(0, Sqrt2Div2, -Sqrt2Div2)
     val normalv = Vector(0, 0, -1)
     val light = PointLight(Point(0, 0, -10), Color(1, 1, 1))
     val inShadow = false
@@ -61,8 +60,7 @@ class MaterialTest extends FunSuite {
     val sphere = Sphere()
     val material = Material()
     val position = Point(0, 0, 0)
-    val v = math.sqrt(2) / 2
-    val eyev = Vector(0, -v, -v)
+    val eyev = Vector(0, -Sqrt2Div2, -Sqrt2Div2)
     val normalv = Vector(0, 0, -1)
     val light = PointLight(Point(0, 10, -10), Color(1, 1, 1))
     val inShadow = false
@@ -113,6 +111,12 @@ class MaterialTest extends FunSuite {
 
     assert(c1 == Color.white)
     assert(c2 == Color.black)
+  }
+
+  test("Reflectivity for the default material") {
+    val m = Material()
+
+    assert(m.reflective == 0.0)
   }
 
 }
