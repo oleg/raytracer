@@ -6,6 +6,7 @@ case class Computation(t: Double,
                        overPoint: Tuple,
                        eyev: Tuple,
                        normalv: Tuple,
+                       reflectv: Tuple,
                        inside: Boolean) {
 
 }
@@ -20,8 +21,10 @@ case class Intersection(t: Double,
     val normalv = obj.normalAt(point)
     val inside = (normalv dot eyev) < 0
     val overPoint = point + normalv * EPSILON
+    val directedNormalv = if (inside) -normalv else normalv
+    val reflectv = ray.direction.reflect(directedNormalv)
 
-    Computation(t, obj, point, overPoint, eyev, if (inside) -normalv else normalv, inside)
+    Computation(t, obj, point, overPoint, eyev, directedNormalv, reflectv, inside)
   }
 
 }

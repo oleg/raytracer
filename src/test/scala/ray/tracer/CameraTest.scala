@@ -49,7 +49,7 @@ class CameraTest extends FunSuite {
     val r = c.rayForPixel(100, 50)
 
     assert(r.origin ==~ Point(0, 2, -5))
-    assert(r.direction ==~ Vector(math.sqrt(2) / 2.0, 0, -math.sqrt(2) / 2.0))
+    assert(r.direction ==~ Vector(Sqrt2Div2, 0, -Sqrt2Div2))
   }
 
   test("Rendering a world with a camera") {
@@ -57,10 +57,10 @@ class CameraTest extends FunSuite {
     val from = Point(0, 0, -5)
     val to = Point(0, 0, 0)
     val up = Vector(0, 1, 0)
-    val c = Camera(11, 11, Pi/2, Matrix4x4.viewTransform(from, to, up))
+    val c = Camera(11, 11, Pi / 2, Matrix4x4.viewTransform(from, to, up))
 
     val image = c.render(w)
-    assert(image(5,5) ==~ Color(0.38066, 0.47583, 0.2855))
+    assert(image(5, 5) ==~ Color(0.38066, 0.47583, 0.2855))
   }
 
 

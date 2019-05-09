@@ -1,20 +1,21 @@
 package ray.tracer
 
 import org.scalatest.FunSuite
+import ray.tracer.Matrix4x4.Identity
 
 class WorldTest extends FunSuite {
 
   test("Creating a world") {
     val w = World(null, null)
     assert(w.light == null)
-    assert(w.spheres == null)
+    assert(w.shapes == null)
   }
 
   test("The default world") {
     val light = PointLight(Point(-10, 10, -10), Color(1, 1, 1))
 
     val s1 = Sphere(material = Material(color = Color(0.8, 1.0, 0.6), diffuse = 0.7, specular = 0.2))
-    val s2 = Sphere(transform = Matrix4x4.Identity.scale(0.5, 0.5, 0.5))
+    val s2 = Sphere(transform = Identity.scale(0.5, 0.5, 0.5))
     val w = defaultWorld()
 
     assert(w.light == light)
@@ -38,7 +39,7 @@ class WorldTest extends FunSuite {
   test("Shading an intersection") {
     val w = defaultWorld()
     val r = Ray(Point(0, 0, -5), Vector(0, 0, 1))
-    val shape = w.spheres(0)
+    val shape = w.shapes(0)
     val i = Intersection(4, shape)
 
     val comps = i.prepareComputations(r)
@@ -50,7 +51,7 @@ class WorldTest extends FunSuite {
   test("Shading an intersection from the inside") {
     val w = defaultWorld().copy(light = PointLight(Point(0, 0.25, 0), Color(1, 1, 1)))
     val r = Ray(Point(0, 0, 0), Vector(0, 0, 1))
-    val shape = w.spheres(1)
+    val shape = w.shapes(1)
     val i = Intersection(0.5, shape)
 
     val comps = i.prepareComputations(r)
@@ -61,7 +62,7 @@ class WorldTest extends FunSuite {
 
   test("shade_hit() is given an intersection in shadow") {
     val s1 = Sphere()
-    val s2 = Sphere(transform = Matrix4x4.Identity.translate(0, 0, 10))
+    val s2 = Sphere(transform = Identity.translate(0, 0, 10))
     val w = World(PointLight(Point(0, 0, -10), Color(1, 1, 1)), s1 :: s2 :: Nil)
     val r = Ray(Point(0, 0, 5), Vector(0, 0, 1))
     val i = Intersection(4, s2)
@@ -92,7 +93,7 @@ class WorldTest extends FunSuite {
 
   test("The color with an intersection behind the ray") {
     val outer = Sphere(material = Material(color = Color(0.8, 1.0, 0.6), diffuse = 0.7, specular = 0.2, ambient = 1))
-    val inner = Sphere(transform = Matrix4x4.Identity.scale(0.5, 0.5, 0.5), material = Material(ambient = 1))
+    val inner = Sphere(transform = Identity.scale(0.5, 0.5, 0.5), material = Material(ambient = 1))
     val w = World(PointLight(Point(-10, 10, -10), Color(1, 1, 1)), List(inner, outer))
     val r = Ray(Point(0, 0, 0.755), Vector(0, 0, -1))
 
@@ -129,10 +130,70 @@ class WorldTest extends FunSuite {
     assert(w.isShadowed(p) == false)
   }
 
+  test("The reflected color for a nonreflective material") {
+    val outer: Shape = Sphere(material = Material(color = Color(0.8, 1.0, 0.6), diffuse = 0.7, specular = 0.2))
+    val inner: Shape = Sphere(transform = Identity.scale(0.5, 0.5, 0.5), material = Material(ambient = 1))
+    val world: World = World(PointLight(Point(-10, 10, -10), Color(1, 1, 1)), List(outer, inner))
+    val r = Ray(Point(0, 0, 0), Vector(0, 0, 1))
+
+    val comps = Intersection(1, inner).prepareComputations(r)
+    val color = world.reflectedColor(comps, 5)
+
+    assert(color ==~ Color.black)
+  }
+
+  test("The reflected color for a reflective material") {
+    val outer: Shape = Sphere(material = Material(color = Color(0.8, 1.0, 0.6), diffuse = 0.7, specular = 0.2))
+    val inner: Shape = Sphere(transform = Identity.scale(0.5, 0.5, 0.5), material = Material(ambient = 1))
+    val plane: Shape = Plane(material = Material(reflective = 0.5), transform = Identity.translate(0, -1, 0))
+    val world: World = World(PointLight(Point(-10, 10, -10), Color(1, 1, 1)), List(outer, inner, plane))
+
+    val ray = Ray(Point(0, 0, -3), Vector(0, -Sqrt2Div2, Sqrt2Div2))
+    val i = Intersection(Sqrt2, plane)
+    val comps = i.prepareComputations(ray)
+    val color = world.reflectedColor(comps)
+
+    assert(color ==~ Color(0.19033, 0.23791, 0.14274), color)
+  }
+
+  test("shade_hit() with a reflective material") {
+    val outer: Shape = Sphere(material = Material(color = Color(0.8, 1.0, 0.6), diffuse = 0.7, specular = 0.2))
+    val inner: Shape = Sphere(transform = Identity.scale(0.5, 0.5, 0.5), material = Material(ambient = 1))
+    val plane: Shape = Plane(material = Material(reflective = 0.5), transform = Identity.translate(0, -1, 0))
+    val world: World = World(PointLight(Point(-10, 10, -10), Color(1, 1, 1)), List(outer, inner, plane))
+
+    val ray = Ray(Point(0, 0, -3), Vector(0, -Sqrt2Div2, Sqrt2Div2))
+    val i = Intersection(Sqrt2, plane)
+    val comps = i.prepareComputations(ray)
+    val color = world.shadeHit(comps)
+
+    assert(color ==~ Color(0.87675, 0.92434, 0.82917), color)
+  }
+
+  test("color_at() with mutually reflective surfaces") {
+    val lower = Plane(material = Material(reflective = 1), transform = Identity.translate(0, -1, 0))
+    val upper = Plane(material = Material(reflective = 1), transform = Identity.translate(0, 1, 0))
+    val w = World(light = PointLight(Point(0, 0, 0), Color(1, 1, 1)), shapes = List(upper, lower))
+
+    val r = Ray(Point(0, 0, 0), Vector(0, 1, 0))
+
+    w.colorAt(r)
+  }
+
+  test("The reflected color at the maximum recursive depth") {
+    val plane = Plane(material = Material(reflective = 0.5), transform = Identity.translate(0, -1, 0))
+    val w = World(PointLight(Point(-10, 10, -10), Color(1, 1, 1)), List(plane))
+    val r = Ray(Point(0, 0, -3), Vector(0, -Sqrt2Div2, Sqrt2Div2))
+    val i = Intersection(Sqrt2, plane)
+    val comps = i.prepareComputations(r)
+    val color = w.reflectedColor(comps, 0)
+    assert(color == Color.black)
+  }
+
   private def defaultWorld(): World = World(
     PointLight(Point(-10, 10, -10), Color(1, 1, 1)),
     List(
       Sphere(material = Material(color = Color(0.8, 1.0, 0.6), diffuse = 0.7, specular = 0.2)),
-      Sphere(transform = Matrix4x4.Identity.scale(0.5, 0.5, 0.5))))
+      Sphere(transform = Identity.scale(0.5, 0.5, 0.5))))
 
 }

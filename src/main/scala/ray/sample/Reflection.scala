@@ -7,7 +7,7 @@ import ray.tracer._
 
 import scala.math.Pi
 
-object PlaneComposition {
+object Reflection {
 
   def main(args: Array[String]): Unit = {
     val l = System.currentTimeMillis() //todo remove
@@ -19,13 +19,14 @@ object PlaneComposition {
 
     val floor = Plane(
       material = Material(
-        reflective = 0.5,
-        pattern = RingPattern(Color(0.7, 0.9, 0.8), Color(0.3, 0.2, 0.5))))
+        reflective = 0.5
+//        ,pattern = RingPattern(Color.black, Color.white)
+      ))
 
     val back = Plane(
       material = Material(
-        reflective = 0.5,
-        pattern = CheckersPattern(Color(0.6, 0.1, 0.2), Color(0.2, 0.3, 0.7))),
+        reflective = 0.1,
+        pattern = CheckersPattern(Color.black, Color.white)),
       transform = Identity.rotateX(-Pi / 2).translate(0, 0, 4)
     )
 
@@ -66,7 +67,7 @@ object PlaneComposition {
     val camera = Camera(1000, 500, Pi / 3, Matrix4x4.viewTransform(Point(0, 3, -6), Point(0, 1, 0), Vector(0, 1, 0)))
     val canvas = camera.renderConcurrently(world)
 
-    new PrintWriter("plane.ppm") {
+    new PrintWriter("reflection.ppm") {
       write(canvas.toPpm)
       close()
     }

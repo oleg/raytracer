@@ -166,8 +166,7 @@ class TupleTest extends FunSuite {
 
   test("Reflecting a vector off a slanted surface") {
     val v = Vector(0, -1, 0)
-    val p = math.sqrt(2) / 2
-    val n = Vector(p, p, 0)
+    val n = Vector(Sqrt2Div2, Sqrt2Div2, 0)
 
     val r = v.reflect(n)
 

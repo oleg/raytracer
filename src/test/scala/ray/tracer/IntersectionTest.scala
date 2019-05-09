@@ -110,4 +110,14 @@ class IntersectionTest extends FunSuite {
     assert(comps.point.z > comps.overPoint.z)
   }
 
+  test("Precomputing the reflection vector") {
+    val shape = Plane()
+    val r = Ray(Point(0, 1, -1), Vector(0, -Sqrt2Div2, Sqrt2Div2))
+    val i = Intersection(Sqrt2, shape)
+
+    val comps = i.prepareComputations(r)
+
+    assert(comps.reflectv == Vector(0, Sqrt2Div2, Sqrt2Div2))
+  }
+
 }

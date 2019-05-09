@@ -76,7 +76,7 @@ class ShapeTest extends FunSuite {
   test("Computing the normal on a transformed shape") {
     val s = TestShape(transform = Matrix4x4.Scaling(1, 0.5, 1) * Matrix4x4.RotationZ(Pi / 5))
 
-    val n = s.normalAt(Point(0, sqrt(2) / 2, -sqrt(2) / 2))
+    val n = s.normalAt(Point(0, Sqrt2Div2, -Sqrt2Div2))
 
     assert(n ==~ Vector(0, 0.97014, -0.24254))
   }
