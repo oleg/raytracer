@@ -26,11 +26,11 @@ class Matrix(private val points: Array[Array[Double]]) {
     Matrix(result)
   }
 
-  def transpose: Matrix = Matrix(points.transpose)
+  lazy val transpose: Matrix = Matrix(points.transpose)
 
-  def isInvertible: Boolean = determinant != 0
+  lazy val isInvertible: Boolean = determinant != 0
 
-  def inverse: Matrix = {
+  lazy val inverse: Matrix = { //todo test performance
     //todo refactor
     val det: Double = determinant
     val inv = Array.ofDim[Double](height, width)
@@ -42,7 +42,7 @@ class Matrix(private val points: Array[Array[Double]]) {
     Matrix(inv)
   }
 
-  def determinant: Double = { //todo test not square matrices
+  lazy val determinant: Double = { //todo test not square matrices
     if (width == 2 && height == 2) {
       points(0)(0) * points(1)(1) - points(0)(1) * points(1)(0) //todo fix me
     } else {
@@ -86,14 +86,11 @@ class Matrix(private val points: Array[Array[Double]]) {
     !(this ==~ other)
   }
 
-  def ==~(other: Matrix): Boolean = {
-    def eql = (a: Double, b: Double) => math.abs(a - b) < EPSILON
-
+  def ==~(other: Matrix): Boolean =
     height == other.height &&
       width == other.width &&
       (0 until height).forall(r =>
-        (0 until width).forall(c => eql(points(r)(c), other.points(r)(c))))
-  }
+        (0 until width).forall(c => approximatelyEqual(points(r)(c), other.points(r)(c))))
 
   def apply(i: Int, j: Int): Double = points(i)(j)
 

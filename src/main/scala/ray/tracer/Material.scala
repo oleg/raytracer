@@ -7,6 +7,8 @@ case class Material(color: Color = Color(1, 1, 1),
                     specular: Double = 0.9,
                     shininess: Double = 200.0,
                     reflective: Double = 0.0,
+                    transparency: Double = 0.0,
+                    refractiveIndex: Double = 1.0,
                     pattern: Pattern = null) {
 
   def lighting(light: PointLight,
@@ -18,33 +20,18 @@ case class Material(color: Color = Color(1, 1, 1),
     val material = this
 
     val color = Option(pattern).map(_.patternAtShape(shape, point)).getOrElse(material.color)
-
-    // combine the surface color with the light's color/intensity​
     val efectiveColor = color * light.intensity
-
-    // find the direction to the light source​
     val lightv = (light.position - point).normalize
-
-    // compute the ambient contribution​
     val ambient = efectiveColor * material.ambient
 
-    // light_dot_normal represents the cosine of the angle between the​
-    // light vector and the normal vector. A negative number means the​
-    // light is on the other side of the surface.​
     val lightDotNormal = lightv dot normalv
-
     if (lightDotNormal < 0 || inShadow) {
       return ambient
     }
-    // compute the diffuse contribution​
-    val diffuse = efectiveColor * material.diffuse * lightDotNormal
 
-    // reflect_dot_eye represents the cosine of the angle between the​
-    // reflection vector and the eye vector. A negative number means the​
-    // light reflects away from the eye.​
+    val diffuse = efectiveColor * material.diffuse * lightDotNormal
     val reflectv = (-lightv).reflect(normalv)
     val reflectDotEye = reflectv dot eyev
-
     if (reflectDotEye <= 0) {
       return ambient + diffuse
     }

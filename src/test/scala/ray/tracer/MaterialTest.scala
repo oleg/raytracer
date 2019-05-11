@@ -1,6 +1,7 @@
 package ray.tracer
 
 import org.scalatest.FunSuite
+import ray.tracer.Matrix4x4.Scaling
 
 class MaterialTest extends FunSuite {
 
@@ -117,6 +118,45 @@ class MaterialTest extends FunSuite {
     val m = Material()
 
     assert(m.reflective == 0.0)
+  }
+
+  test("Transparency for the default material") {
+    val m = Material()
+
+    assert(m.transparency == 0.0)
+  }
+
+  test("Refractive Index for the default material") {
+    val m = Material()
+
+    assert(m.refractiveIndex == 1.0)
+  }
+
+  test("A helper for producing a sphere with a glassy material") {
+    val s = Sphere.glass()
+    assert(s.transform == Matrix4x4.Identity)
+    assert(s.material.transparency == 1.0)
+    assert(s.material.refractiveIndex == 1.5)
+  }
+
+  test("Scenario Outline: Finding n1 and n2 at various intersections") {
+    val a = Sphere.glass(transform = Scaling(2, 2, 2), material = Material(refractiveIndex = 1.5))
+    val b = Sphere.glass(transform = Scaling(0, 0, -0.25), material = Material(refractiveIndex = 2.0))
+    val c = Sphere.glass(transform = Scaling(0, 0, 0.25), material = Material(refractiveIndex = 2.5))
+
+    val r = Ray(Point(0, 0, -4), Vector(0, 0, 1))
+
+    val xs = Intersections(Intersection(2, a) :: Intersection(2.75, b) :: Intersection(3.25, c) ::
+      Intersection(4.75, b) :: Intersection(5.25, c) :: Intersection(6, a) :: Nil)
+    //todo fix this test
+    val assertNs = (cmp: Computation, n1: Double, n2: Double) => assert((cmp.n1, cmp.n2) == (n1, n2))
+
+    assertNs(xs(0).prepareComputations(r, xs), 1.0, 1.5)
+    assertNs(xs(1).prepareComputations(r, xs), 1.5, 2.0)
+    assertNs(xs(2).prepareComputations(r, xs), 2.0, 2.5)
+    assertNs(xs(3).prepareComputations(r, xs), 2.5, 2.5)
+    assertNs(xs(4).prepareComputations(r, xs), 2.5, 1.5)
+    assertNs(xs(5)prepareComputations(r, xs), 1.5, 1.0)
   }
 
 }

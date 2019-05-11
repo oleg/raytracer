@@ -48,12 +48,10 @@ case class Tuple(x: Double, y: Double, z: Double, w: Double) {
   def ==~(other: Tuple): Boolean = {
     //(asList zip other.asList).forall(b => eql(b._1, b._2))
 
-    def eql = (a: Double, b: Double) => math.abs(a - b) < EPSILON
-
-    eql(x, other.x) &&
-      eql(y, other.y) &&
-      eql(z, other.z) &&
-      eql(w, other.w)
+    approximatelyEqual(x, other.x) &&
+      approximatelyEqual(y, other.y) &&
+      approximatelyEqual(z, other.z) &&
+      approximatelyEqual(w, other.w)
   }
 
 }

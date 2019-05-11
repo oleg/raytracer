@@ -18,15 +18,10 @@ class Color(val red: Double, val green: Double, val blue: Double) {
     new Color(f(red, other.red), f(green, other.green), f(blue, other.blue))
 
   //TODO Implement via implicits!!!
-  def ==~(other: Color): Boolean = {
-    //(asList zip other.asList).forall(b => eql(b._1, b._2))
-
-    def eql = (a: Double, b: Double) => math.abs(a - b) < EPSILON
-
-    eql(red, other.red) &&
-      eql(green, other.green) &&
-      eql(blue, other.blue)
-  }
+  def ==~(other: Color): Boolean =
+    approximatelyEqual(red, other.red) &&
+      approximatelyEqual(green, other.green) &&
+      approximatelyEqual(blue, other.blue)
 
   def canEqual(other: Any): Boolean = other.isInstanceOf[Color]
 
