@@ -25,7 +25,8 @@ trait Shape {
 
 }
 
-case class Sphere(transform: Matrix4x4 = Matrix4x4.Identity, material: Material = Material()) extends Shape {
+case class Sphere(transform: Matrix4x4 = Matrix4x4.Identity,
+                  material: Material = Material()) extends Shape {
 
   override def localIntersect(localRay: Ray): Intersections = {
     val sphereToRay = localRay.origin - Point(0, 0, 0)
@@ -51,7 +52,15 @@ case class Sphere(transform: Matrix4x4 = Matrix4x4.Identity, material: Material 
 
 }
 
-case class Plane(transform: Matrix4x4 = Matrix4x4.Identity, material: Material = Material()) extends Shape {
+object Sphere {
+
+  def glass(transform: Matrix4x4 = Matrix4x4.Identity,
+            material: Material = Material(transparency = 1.0, refractiveIndex = 1.5)): Sphere = Sphere(transform, material)
+
+}
+
+case class Plane(transform: Matrix4x4 = Matrix4x4.Identity,
+                 material: Material = Material()) extends Shape {
 
   override def localIntersect(localRay: Ray): Intersections = {
     if (math.abs(localRay.direction.y) < EPSILON) {

@@ -18,14 +18,14 @@ class CameraTest extends FunSuite {
   test("The pixel size for a horizontal canvas") {
     val c = Camera(200, 125, Pi / 2)
 
-    assert(math.abs(c.pixelSize - 0.01) < 0.00001, c.pixelSize)
+    assert(approximatelyEqual(c.pixelSize, 0.01), c.pixelSize)
 
   }
 
   test("The pixel size for a vertical canvas") {
     val c = Camera(125, 200, Pi / 2)
 
-    assert(math.abs(c.pixelSize - 0.01) < 0.00001, c.pixelSize)
+    assert(approximatelyEqual(c.pixelSize, 0.01), c.pixelSize)
   }
 
   test("Constructing a ray through the center of the canvas") {

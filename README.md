@@ -31,3 +31,5 @@ Implemented by following the book [The Ray Tracer Challenge
 
 ## 11. Reflection and Refraction
 ![Planes](samples/reflection.png)
+
+![Planes](samples/refraction6.png)
