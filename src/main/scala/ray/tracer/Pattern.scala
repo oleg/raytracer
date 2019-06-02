@@ -15,7 +15,9 @@ trait Pattern {
 
 }
 
-case class StripePattern(a: Color, b: Color, transform: Matrix4x4 = Matrix4x4.Identity) extends Pattern {
+case class StripePattern(a: Color,
+                         b: Color,
+                         transform: Matrix4x4 = Matrix4x4.Identity) extends Pattern {
 
   def patternAt(point: Tuple): Color = {
     val useA = math.floor(point.x) % 2 == 0
@@ -31,7 +33,9 @@ case class ColorPattern(transform: Matrix4x4 = Matrix4x4.Identity) extends Patte
 }
 
 
-case class GradientPattern(a: Color, b: Color, transform: Matrix4x4 = Matrix4x4.Identity) extends Pattern {
+case class GradientPattern(a: Color,
+                           b: Color,
+                           transform: Matrix4x4 = Matrix4x4.Identity) extends Pattern {
 
   override def patternAt(point: Tuple): Color = {
     val distance = b - a
@@ -41,7 +45,9 @@ case class GradientPattern(a: Color, b: Color, transform: Matrix4x4 = Matrix4x4.
 
 }
 
-case class RingPattern(a: Color, b: Color, transform: Matrix4x4 = Matrix4x4.Identity) extends Pattern {
+case class RingPattern(a: Color,
+                       b: Color,
+                       transform: Matrix4x4 = Matrix4x4.Identity) extends Pattern {
 
   override def patternAt(point: Tuple): Color = {
     val useA = math.floor(math.sqrt(point.x * point.x + point.z * point.z)) % 2 == 0
@@ -50,7 +56,9 @@ case class RingPattern(a: Color, b: Color, transform: Matrix4x4 = Matrix4x4.Iden
 
 }
 
-case class CheckersPattern(a: Color, b: Color, transform: Matrix4x4 = Matrix4x4.Identity) extends Pattern {
+case class CheckersPattern(a: Color,
+                           b: Color,
+                           transform: Matrix4x4 = Matrix4x4.Identity) extends Pattern {
 
   override def patternAt(point: Tuple): Color = {
     val useA = (math.floor(point.x) + math.floor(point.y) + math.floor(point.z)) % 2 == 0
