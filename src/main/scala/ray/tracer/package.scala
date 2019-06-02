@@ -10,4 +10,7 @@ package object tracer {
   val Sqrt2Div2: Double = math.sqrt(2) / 2.0
 
   def approximatelyEqual(a: Double, b: Double): Boolean = math.abs(a - b) < EPSILON
+
+//  type Point = Tuple
+//  type Vector = Tuple
 }
