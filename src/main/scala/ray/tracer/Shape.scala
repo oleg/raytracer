@@ -43,7 +43,7 @@ case class Sphere(transform: Matrix4x4 = Matrix4x4.Identity,
       val t2 = (-b + sd) / (2 * a)
       Intersections(Intersection(t1, this) :: Intersection(t2, this) :: Nil)
     } else {
-      Intersections(Nil)
+      Intersections.EMPTY
     }
 
   }
@@ -63,11 +63,12 @@ case class Plane(transform: Matrix4x4 = Matrix4x4.Identity,
                  material: Material = Material()) extends Shape {
 
   override def localIntersect(localRay: Ray): Intersections = {
-    if (math.abs(localRay.direction.y) < EPSILON) {
-      return Intersections(Nil)
+    if (approximatelyEqual(localRay.direction.y, 0.0)) {
+      Intersections.EMPTY
+    } else {
+      val t = -localRay.origin.y / localRay.direction.y
+      Intersections(Intersection(t, this) :: Nil)
     }
-    val t = -localRay.origin.y / localRay.direction.y
-    Intersections(Intersection(t, this) :: Nil)
   }
 
   override def localNormalAt(localPoint: Tuple): Tuple = Vector(0, 1, 0)
@@ -97,12 +98,46 @@ case class Cube(transform: Matrix4x4 = Matrix4x4.Identity,
   override def localNormalAt(localPoint: Tuple): Tuple = {
     val maxc = List(localPoint.x, localPoint.y, localPoint.z).map(math.abs).max
 
-    if (maxc == math.abs(localPoint.x))
+    if (maxc == localPoint.x.abs)
       Vector(localPoint.x, 0, 0)
-    else if (maxc == math.abs(localPoint.y))
+    else if (maxc == localPoint.y.abs)
       Vector(0, localPoint.y, 0)
     else
       Vector(0, 0, localPoint.z)
+  }
+
+}
+
+case class Cylinder(transform: Matrix4x4 = Matrix4x4.Identity,
+                    material: Material = Material()) extends Shape {
+
+  override def localIntersect(localRay: Ray): Intersections = {
+    val fromX = localRay.origin.x
+    val toX = localRay.direction.x
+    val fromZ = localRay.origin.z
+    val toZ = localRay.direction.z
+
+    val a = toX * toX + toZ * toZ
+    if (approximatelyEqual(a, 0.0)) {
+      return Intersections.EMPTY
+    }
+
+    val b = 2 * fromX * toX + 2 * fromZ * toZ
+    val c = fromX * fromX + fromZ * fromZ - 1
+    val discriminant = b * b - 4 * a * c
+    if (discriminant < 0) {
+      return Intersections.EMPTY
+    }
+
+    //TODO implement new math object for solving this
+    val t0 = (-b - math.sqrt(discriminant)) / (2 * a)
+    val t1 = (-b + math.sqrt(discriminant)) / (2 * a)
+    Intersections(Intersection(t0, this) :: Intersection(t1, this) :: Nil)
+  }
+
+
+  override def localNormalAt(localPoint: Tuple): Tuple = {
+    Vector(localPoint.x, 0, localPoint.z)
   }
 
 }
