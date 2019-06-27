@@ -20,7 +20,7 @@ case class StripePattern(a: Color,
                          transform: Matrix4x4 = Matrix4x4.Identity) extends Pattern {
 
   def patternAt(point: Tuple): Color = {
-    val useA = math.floor(point.x) % 2 == 0
+    val useA = point.x.floor % 2 == 0
     if (useA) a else b
   }
 
@@ -39,7 +39,7 @@ case class GradientPattern(a: Color,
 
   override def patternAt(point: Tuple): Color = {
     val distance = b - a
-    val fraction = point.x - math.floor(point.x)
+    val fraction = point.x - point.x.floor
     a + distance * fraction
   }
 
@@ -50,7 +50,7 @@ case class RingPattern(a: Color,
                        transform: Matrix4x4 = Matrix4x4.Identity) extends Pattern {
 
   override def patternAt(point: Tuple): Color = {
-    val useA = math.floor(math.sqrt(point.x * point.x + point.z * point.z)) % 2 == 0
+    val useA = math.hypot(point.x, point.z).floor % 2 == 0
     if (useA) a else b
   }
 
@@ -61,7 +61,7 @@ case class CheckersPattern(a: Color,
                            transform: Matrix4x4 = Matrix4x4.Identity) extends Pattern {
 
   override def patternAt(point: Tuple): Color = {
-    val useA = (math.floor(point.x) + math.floor(point.y) + math.floor(point.z)) % 2 == 0
+    val useA = (point.x.floor + point.y.floor + point.z.floor) % 2 == 0
     if (useA) a else b
   }
 

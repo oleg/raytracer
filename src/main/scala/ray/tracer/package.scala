@@ -11,6 +11,8 @@ package object tracer {
 
   def approximatelyEqual(a: Double, b: Double): Boolean = math.abs(a - b) < EPSILON
 
-//  type Point = Tuple
-//  type Vector = Tuple
+  def sqr(a: Double): Double = math.pow(a, 2)
+
+  //  type Point = Tuple
+  //  type Vector = Tuple
 }

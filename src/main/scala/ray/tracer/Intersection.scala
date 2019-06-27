@@ -98,6 +98,7 @@ case class Intersections private(private val is: List[Intersection]) extends Ite
 }
 
 object Intersections {
+  val EMPTY: Intersections = Intersections(Nil)
   private val vectorOrdering = Ordering.by((_: Intersection).t)
 
   def apply(is: List[Intersection]): Intersections = new Intersections(is.sorted(vectorOrdering))
