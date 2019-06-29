@@ -6,19 +6,19 @@ trait Shape {
 
   val material: Material
 
-  def localIntersect(localRay: Ray): Intersections
+  def localIntersect(ray: Ray): Intersections
 
-  def localNormalAt(localPoint: Tuple): Tuple //todo Point, Vector
+  def localNormalAt(point: Tuple): Tuple //todo Point, Vector
 
-  def intersect(ray: Ray): Intersections = {
-    val localRay = ray.transform(this.transform.inverse)
-    localIntersect(localRay)
+  def intersect(worldRay: Ray): Intersections = {
+    val ray = worldRay.transform(this.transform.inverse)
+    localIntersect(ray)
   }
 
   //todo how to make accept only points?
   def normalAt(worldPoint: Tuple): Tuple = {
-    val localPoint = transform.inverse * worldPoint
-    val localNormal = localNormalAt(localPoint)
+    val point = transform.inverse * worldPoint
+    val localNormal = localNormalAt(point)
     val worldNormal = transform.inverse.transpose * localNormal
     worldNormal.toVector.normalize
   }
@@ -28,11 +28,11 @@ trait Shape {
 case class Sphere(transform: Matrix4x4 = Matrix4x4.Identity,
                   material: Material = Material()) extends Shape {
 
-  override def localIntersect(localRay: Ray): Intersections = {
-    val sphereToRay = localRay.origin - Point(0, 0, 0)
+  override def localIntersect(ray: Ray): Intersections = {
+    val sphereToRay = ray.origin - Point(0, 0, 0)
 
-    val a: Double = localRay.direction dot localRay.direction
-    val b: Double = 2 * (localRay.direction dot sphereToRay)
+    val a: Double = ray.direction dot ray.direction
+    val b: Double = 2 * (ray.direction dot sphereToRay)
     val c: Double = (sphereToRay dot sphereToRay) - 1
 
     val discriminant = b * b - 4 * a * c
@@ -48,7 +48,7 @@ case class Sphere(transform: Matrix4x4 = Matrix4x4.Identity,
 
   }
 
-  override def localNormalAt(localPoint: Tuple): Tuple = localPoint - Point(0, 0, 0)
+  override def localNormalAt(point: Tuple): Tuple = point - Point(0, 0, 0)
 
 }
 
@@ -62,26 +62,26 @@ object Sphere {
 case class Plane(transform: Matrix4x4 = Matrix4x4.Identity,
                  material: Material = Material()) extends Shape {
 
-  override def localIntersect(localRay: Ray): Intersections = {
-    if (approximatelyEqual(localRay.direction.y, 0.0)) {
+  override def localIntersect(ray: Ray): Intersections = {
+    if (approximatelyEqual(ray.direction.y, 0.0)) {
       Intersections.EMPTY
     } else {
-      val t = -localRay.origin.y / localRay.direction.y
+      val t = -ray.origin.y / ray.direction.y
       Intersections(Intersection(t, this) :: Nil)
     }
   }
 
-  override def localNormalAt(localPoint: Tuple): Tuple = Vector(0, 1, 0)
+  override def localNormalAt(point: Tuple): Tuple = Vector(0, 1, 0)
 
 }
 
 case class Cube(transform: Matrix4x4 = Matrix4x4.Identity,
                 material: Material = Material()) extends Shape {
 
-  override def localIntersect(localRay: Ray): Intersections = {
-    val (xtmin, xtmax) = checkAxis(localRay.origin.x, localRay.direction.x)
-    val (ytmin, ytmax) = checkAxis(localRay.origin.y, localRay.direction.y)
-    val (ztmin, ztmax) = checkAxis(localRay.origin.z, localRay.direction.z)
+  override def localIntersect(ray: Ray): Intersections = {
+    val (xtmin, xtmax) = checkAxis(ray.origin.x, ray.direction.x)
+    val (ytmin, ytmax) = checkAxis(ray.origin.y, ray.direction.y)
+    val (ztmin, ztmax) = checkAxis(ray.origin.z, ray.direction.z)
 
     val tmin = List(xtmin, ytmin, ztmin).max
     val tmax = List(xtmax, ytmax, ztmax).min
@@ -95,27 +95,29 @@ case class Cube(transform: Matrix4x4 = Matrix4x4.Identity,
     if (tmin > tmax) (tmax, tmin) else (tmin, tmax)
   }
 
-  override def localNormalAt(localPoint: Tuple): Tuple = {
-    val maxc = List(localPoint.x, localPoint.y, localPoint.z).map(math.abs).max
+  override def localNormalAt(point: Tuple): Tuple = {
+    val maxc = List(point.x, point.y, point.z).map(math.abs).max
 
-    if (maxc == localPoint.x.abs)
-      Vector(localPoint.x, 0, 0)
-    else if (maxc == localPoint.y.abs)
-      Vector(0, localPoint.y, 0)
+    if (maxc == point.x.abs)
+      Vector(point.x, 0, 0)
+    else if (maxc == point.y.abs)
+      Vector(0, point.y, 0)
     else
-      Vector(0, 0, localPoint.z)
+      Vector(0, 0, point.z)
   }
 
 }
 
-case class Cylinder(transform: Matrix4x4 = Matrix4x4.Identity,
+case class Cylinder(minimum: Double = Double.NegativeInfinity,
+                    maximum: Double = Double.PositiveInfinity,
+                    transform: Matrix4x4 = Matrix4x4.Identity,
                     material: Material = Material()) extends Shape {
 
-  override def localIntersect(localRay: Ray): Intersections = {
-    val fromX = localRay.origin.x
-    val toX = localRay.direction.x
-    val fromZ = localRay.origin.z
-    val toZ = localRay.direction.z
+  override def localIntersect(ray: Ray): Intersections = {
+    val fromX = ray.origin.x
+    val toX = ray.direction.x
+    val fromZ = ray.origin.z
+    val toZ = ray.direction.z
 
     val a = toX * toX + toZ * toZ
     if (approximatelyEqual(a, 0.0)) {
@@ -132,12 +134,18 @@ case class Cylinder(transform: Matrix4x4 = Matrix4x4.Identity,
     //TODO implement new math object for solving this
     val t0 = (-b - math.sqrt(discriminant)) / (2 * a)
     val t1 = (-b + math.sqrt(discriminant)) / (2 * a)
-    Intersections(Intersection(t0, this) :: Intersection(t1, this) :: Nil)
+
+    val xs = List(t0, t1)
+      .sorted
+      .map(t => (t, ray.origin.y + t * ray.direction.y))
+      .filter(t2y => minimum < t2y._2 && t2y._2 < maximum)
+      .map(t2y => Intersection(t2y._1, this))
+
+    Intersections(xs)
   }
 
-
-  override def localNormalAt(localPoint: Tuple): Tuple = {
-    Vector(localPoint.x, 0, localPoint.z)
+  override def localNormalAt(point: Tuple): Tuple = {
+    Vector(point.x, 0, point.z)
   }
 
 }
