@@ -76,4 +76,53 @@ class CylinderTest extends FunSuite {
   test("Normal vector on a cylinder at -z") {
     assert(Cylinder().localNormalAt(Point(-1, 1, 0)) == Vector(-1, 0, 0))
   }
+
+  test("The default minimum and maximum for a cylinder") {
+    val cylinder = Cylinder()
+
+    assert(cylinder.minimum == Double.NegativeInfinity)
+    assert(cylinder.maximum == Double.PositiveInfinity)
+  }
+
+  test("Intersecting a constrained cylinder diagonally from inside the cylinder") {
+    val cylinder = Cylinder(minimum = 1, maximum = 2)
+    val ray = Ray(Point(0, 1.5, 0), Vector(0.1, 1, 0).normalize)
+
+    assert(cylinder.localIntersect(ray).length == 0)
+  }
+
+  test("Intersecting a constrained cylinder perpendicularly to the y axis above the cylinder") {
+    val cylinder = Cylinder(minimum = 1, maximum = 2)
+    val ray = Ray(Point(0, 3, -5), Vector(0, 0, 1).normalize)
+
+    assert(cylinder.localIntersect(ray).length == 0)
+  }
+
+  test("Intersecting a constrained cylinder perpendicularly to the y axis below the cylinder") {
+    val cylinder = Cylinder(minimum = 1, maximum = 2)
+    val ray = Ray(Point(0, 0, -5), Vector(0, 0, 1).normalize)
+
+    assert(cylinder.localIntersect(ray).length == 0)
+  }
+
+  test("Intersecting a constrained cylinder at minimum") {
+    val cylinder = Cylinder(minimum = 1, maximum = 2)
+    val ray = Ray(Point(0, 2, -5), Vector(0, 0, 1).normalize)
+
+    assert(cylinder.localIntersect(ray).length == 0)
+  }
+
+  test("Intersecting a constrained cylinder at maximum") {
+    val cylinder = Cylinder(minimum = 1, maximum = 2)
+    val ray = Ray(Point(0, 1, -5), Vector(0, 0, 1).normalize)
+
+    assert(cylinder.localIntersect(ray).length == 0)
+  }
+
+  test("Intersecting a constrained cylinder perpendicularly through the middle of the cylinder") {
+    val cylinder = Cylinder(minimum = 1, maximum = 2)
+    val ray = Ray(Point(0, 1.5, -2), Vector(0, 0, 1).normalize)
+
+    assert(cylinder.localIntersect(ray).length == 2)
+  }
 }
