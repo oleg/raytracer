@@ -36,6 +36,7 @@ object CylinderScene {
     val c3 = Cylinder(
       minimum = -5,
       maximum = 5,
+      closed = true,
       transform = Identity.scale(10, 3, 10).translate(-70, -30, 40).rotateX(-Pi / 4),
       material = Material(color = Color(0.3, 0.8, 0.3)))
 

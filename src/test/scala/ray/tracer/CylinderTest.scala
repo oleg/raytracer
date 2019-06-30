@@ -125,4 +125,56 @@ class CylinderTest extends FunSuite {
 
     assert(cylinder.localIntersect(ray).length == 2)
   }
+
+  test("The default closed value for a cylinder") {
+    val cylinder = Cylinder()
+
+    assert(!cylinder.closed)
+  }
+
+  test("Intersecting the caps of a closed cylinder, ray starts above the cylinder and points down through the cylinder’s middle") {
+    val cylinder = Cylinder(minimum = 1, maximum = 2, closed = true)
+    val ray = Ray(Point(0, 3, 0), Vector(0, -1, 0).normalize)
+
+    assert(cylinder.localIntersect(ray).length == 2)
+  }
+
+  test("Intersecting the caps of a closed cylinder, ray starts above the cylinder and cast a ray diagonally through it") {
+    val cylinder = Cylinder(minimum = 1, maximum = 2, closed = true)
+    val ray = Ray(Point(0, 3, -2), Vector(0, -1, 2).normalize)
+
+    assert(cylinder.localIntersect(ray).length == 2)
+  }
+
+  test("Intersecting the caps of a closed cylinder, ray starts above the cylinder, intersecting an end cap, cap intersects the side of the cylinder") {
+    val cylinder = Cylinder(minimum = 1, maximum = 2, closed = true)
+    val ray = Ray(Point(0, 4, -2), Vector(0, -1, 1).normalize)
+
+    assert(cylinder.localIntersect(ray).length == 2)
+  }
+
+  test("Intersecting the caps of a closed cylinder, ray starts below the cylinder and cast a ray diagonally through it") {
+    val cylinder = Cylinder(minimum = 1, maximum = 2, closed = true)
+    val ray = Ray(Point(0, 0, -2), Vector(0, 1, 2).normalize)
+
+    assert(cylinder.localIntersect(ray).length == 2)
+  }
+
+  test("Intersecting the caps of a closed cylinder, ray starts below the cylinder, intersecting an end cap, cap intersects the side of the cylinder") {
+    val cylinder = Cylinder(minimum = 1, maximum = 2, closed = true)
+    val ray = Ray(Point(0, -1, -2), Vector(0, 1, 1).normalize)
+
+    assert(cylinder.localIntersect(ray).length == 2)
+  }
+
+  test("The normal vector on a cylinder's end caps") {
+    val cylinder = Cylinder(minimum = 1, maximum = 2, closed = true)
+    //todo split test
+    assert(cylinder.localNormalAt(Point(0, 1, 0)) == Vector(0, -1, 0))
+    assert(cylinder.localNormalAt(Point(0.5, 1, 0)) == Vector(0, -1, 0))
+    assert(cylinder.localNormalAt(Point(0, 1, 0.5)) == Vector(0, -1, 0))
+    assert(cylinder.localNormalAt(Point(0, 2, 0)) == Vector(0, 1, 0))
+    assert(cylinder.localNormalAt(Point(0.5, 2, 0)) == Vector(0, 1, 0))
+    assert(cylinder.localNormalAt(Point(0, 2, 0.5)) == Vector(0, 1, 0))
+  }
 }
