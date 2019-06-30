@@ -110,6 +110,7 @@ case class Cube(transform: Matrix4x4 = Matrix4x4.Identity,
 
 case class Cylinder(minimum: Double = Double.NegativeInfinity,
                     maximum: Double = Double.PositiveInfinity,
+                    closed: Boolean = false,
                     transform: Matrix4x4 = Matrix4x4.Identity,
                     material: Material = Material()) extends Shape {
 
@@ -121,31 +122,67 @@ case class Cylinder(minimum: Double = Double.NegativeInfinity,
 
     val a = toX * toX + toZ * toZ
     if (approximatelyEqual(a, 0.0)) {
-      return Intersections.EMPTY
+      return Intersections(intersectCaps(ray)) //todo refactor
     }
 
     val b = 2 * fromX * toX + 2 * fromZ * toZ
     val c = fromX * fromX + fromZ * fromZ - 1
     val discriminant = b * b - 4 * a * c
     if (discriminant < 0) {
-      return Intersections.EMPTY
+      return Intersections(intersectCaps(ray))
     }
 
     //TODO implement new math object for solving this
     val t0 = (-b - math.sqrt(discriminant)) / (2 * a)
     val t1 = (-b + math.sqrt(discriminant)) / (2 * a)
 
-    val xs = List(t0, t1)
+    val xsCylinder = List(t0, t1)
       .sorted
       .map(t => (t, ray.origin.y + t * ray.direction.y))
       .filter(t2y => minimum < t2y._2 && t2y._2 < maximum)
       .map(t2y => Intersection(t2y._1, this))
 
-    Intersections(xs)
+    val xsCaps = intersectCaps(ray)
+
+    Intersections(xsCaps ::: xsCylinder)
+  }
+
+  private def intersectCaps(ray: Ray): List[Intersection] = {
+    var result: List[Intersection] = Nil //todo refactor
+
+    if (!closed || approximatelyEqual(ray.direction.y, 0.0)) {
+      return result
+    }
+
+    val t0 = (minimum - ray.origin.y) / ray.direction.y
+    if (checkCap(ray, t0)) {
+      result ::= Intersection(t0, this)
+    }
+
+    val t1 = (maximum - ray.origin.y) / ray.direction.y
+    if (checkCap(ray, t1)) {
+      result ::= Intersection(t1, this)
+    }
+
+    result
+  }
+
+  private def checkCap(ray: Ray, t: Double): Boolean = {
+    val x = ray.origin.x + t * ray.direction.x
+    val z = ray.origin.z + t * ray.direction.z
+    (x * x + z * z) <= 1
   }
 
   override def localNormalAt(point: Tuple): Tuple = {
-    Vector(point.x, 0, point.z)
+    val dist = point.x * point.x + point.z * point.z
+
+    if (dist < 1 && (point.y >= maximum - EPSILON)) { //todo remove reference to epsilon
+      Vector(0, 1, 0)
+    } else if (dist < 1 && (point.y <= minimum + EPSILON)) {
+      Vector(0, -1, 0)
+    } else {
+      Vector(point.x, 0, point.z)
+    }
   }
 
 }
