@@ -115,18 +115,14 @@ case class Cylinder(minimum: Double = Double.NegativeInfinity,
                     material: Material = Material()) extends Shape {
 
   override def localIntersect(ray: Ray): Intersections = {
-    val fromX = ray.origin.x
-    val toX = ray.direction.x
-    val fromZ = ray.origin.z
-    val toZ = ray.direction.z
+    val a = ray.direction.x * ray.direction.x + ray.direction.z * ray.direction.z
+    val b = 2 * ray.origin.x * ray.direction.x + 2 * ray.origin.z * ray.direction.z
+    val c = ray.origin.x * ray.origin.x + ray.origin.z * ray.origin.z - 1
 
-    val a = toX * toX + toZ * toZ
     if (approximatelyEqual(a, 0.0)) {
       return Intersections(intersectCaps(ray)) //todo refactor
     }
 
-    val b = 2 * fromX * toX + 2 * fromZ * toZ
-    val c = fromX * fromX + fromZ * fromZ - 1
     val discriminant = b * b - 4 * a * c
     if (discriminant < 0) {
       return Intersections(intersectCaps(ray))
@@ -184,6 +180,87 @@ case class Cylinder(minimum: Double = Double.NegativeInfinity,
       Vector(point.x, 0, point.z)
     }
   }
-
 }
+
+//todo refactor this class it's similar to Cylinder
+case class Cone(minimum: Double = Double.NegativeInfinity,
+                maximum: Double = Double.PositiveInfinity,
+                closed: Boolean = false,
+                transform: Matrix4x4 = Matrix4x4.Identity,
+                material: Material = Material()) extends Shape {
+
+  override def localIntersect(ray: Ray): Intersections = {
+    val a = ray.direction.x * ray.direction.x - ray.direction.y * ray.direction.y + ray.direction.z * ray.direction.z
+    val b = 2 * ray.origin.x * ray.direction.x - 2 * ray.origin.y * ray.direction.y + 2 * ray.origin.z * ray.direction.z
+    val c = ray.origin.x * ray.origin.x - ray.origin.y * ray.origin.y + ray.origin.z * ray.origin.z
+
+    if (approximatelyEqual(a, 0.0) && !approximatelyEqual(b, 0.0)) {
+      val t = -c / (2 * b)
+      val y0 = ray.origin.y + (t * ray.direction.y)
+      if (minimum < y0 && y0 < maximum) {
+        return Intersections(intersectCaps(ray) ::: Intersection(t, this) :: Nil) //todo refactor
+      }
+    }
+
+    val discriminant = b * b - 4 * a * c
+    if (discriminant < 0) {
+      return Intersections(intersectCaps(ray))
+    }
+
+    //TODO implement new math object for solving this
+    val t0 = (-b - math.sqrt(discriminant)) / (2 * a)
+    val t1 = (-b + math.sqrt(discriminant)) / (2 * a)
+
+    val xsCylinder = List(t0, t1)
+      .sorted
+      .map(t => (t, ray.origin.y + t * ray.direction.y))
+      .filter(t2y => minimum < t2y._2 && t2y._2 < maximum)
+      .map(t2y => Intersection(t2y._1, this))
+
+    val xsCaps = intersectCaps(ray)
+
+    Intersections(xsCaps ::: xsCylinder)
+  }
+
+  private def intersectCaps(ray: Ray): List[Intersection] = {
+    var result: List[Intersection] = Nil //todo refactor
+
+    if (!closed || approximatelyEqual(ray.direction.y, 0.0)) {
+      return result
+    }
+
+    val t0 = (minimum - ray.origin.y) / ray.direction.y
+    if (checkCap(ray, t0, minimum)) {
+      result ::= Intersection(t0, this)
+    }
+
+    val t1 = (maximum - ray.origin.y) / ray.direction.y
+    if (checkCap(ray, t1, maximum)) {
+      result ::= Intersection(t1, this)
+    }
+
+    result
+  }
+
+  private def checkCap(ray: Ray, t: Double, radius: Double): Boolean = {
+    val x = ray.origin.x + t * ray.direction.x
+    val z = ray.origin.z + t * ray.direction.z
+    (x * x + z * z) <= radius * radius
+  }
+
+  override def localNormalAt(point: Tuple): Tuple = {
+    val dist = point.x * point.x + point.z * point.z
+
+    if (dist < 1 && (point.y >= maximum - EPSILON)) { //todo remove reference to epsilon
+      Vector(0, 1, 0)
+    } else if (dist < 1 && (point.y <= minimum + EPSILON)) {
+      Vector(0, -1, 0)
+    } else {
+      val y0 = math.hypot(point.x, point.z)
+      val y = if (point.y > 0) -y0 else y0
+      Vector(point.x, y, point.z)
+    }
+  }
+}
+
 

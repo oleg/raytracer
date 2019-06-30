@@ -37,5 +37,7 @@ Implemented by following the book [The Ray Tracer Challenge
 ## 12. Cubes
 ![Cubes](samples/cubes1.png)
 
-## 12. Cylinders
+## 13. Cylinders
 ![InfiniteCylinders](samples/cylinder1.png)
+
+![InfiniteCylinders](samples/cone1.png)
