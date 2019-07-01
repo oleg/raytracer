@@ -1,10 +1,15 @@
 package ray.tracer
 
+import scala.collection.mutable.ListBuffer
+
+
 trait Shape {
 
   val transform: Matrix4x4
 
   val material: Material
+
+  var parent: Group //todo should not return Group
 
   def localIntersect(ray: Ray): Intersections
 
@@ -26,7 +31,8 @@ trait Shape {
 }
 
 case class Sphere(transform: Matrix4x4 = Matrix4x4.Identity,
-                  material: Material = Material()) extends Shape {
+                  material: Material = Material(),
+                  var parent: Group = null) extends Shape {
 
   override def localIntersect(ray: Ray): Intersections = {
     val sphereToRay = ray.origin - Point(0, 0, 0)
@@ -60,7 +66,8 @@ object Sphere {
 }
 
 case class Plane(transform: Matrix4x4 = Matrix4x4.Identity,
-                 material: Material = Material()) extends Shape {
+                 material: Material = Material(),
+                 var parent: Group = null) extends Shape {
 
   override def localIntersect(ray: Ray): Intersections = {
     if (approximatelyEqual(ray.direction.y, 0.0)) {
@@ -76,7 +83,8 @@ case class Plane(transform: Matrix4x4 = Matrix4x4.Identity,
 }
 
 case class Cube(transform: Matrix4x4 = Matrix4x4.Identity,
-                material: Material = Material()) extends Shape {
+                material: Material = Material(),
+                var parent: Group = null) extends Shape {
 
   override def localIntersect(ray: Ray): Intersections = {
     val (xtmin, xtmax) = checkAxis(ray.origin.x, ray.direction.x)
@@ -112,7 +120,8 @@ case class Cylinder(minimum: Double = Double.NegativeInfinity,
                     maximum: Double = Double.PositiveInfinity,
                     closed: Boolean = false,
                     transform: Matrix4x4 = Matrix4x4.Identity,
-                    material: Material = Material()) extends Shape {
+                    material: Material = Material(),
+                    var parent: Group = null) extends Shape {
 
   override def localIntersect(ray: Ray): Intersections = {
     val a = ray.direction.x * ray.direction.x + ray.direction.z * ray.direction.z
@@ -187,7 +196,8 @@ case class Cone(minimum: Double = Double.NegativeInfinity,
                 maximum: Double = Double.PositiveInfinity,
                 closed: Boolean = false,
                 transform: Matrix4x4 = Matrix4x4.Identity,
-                material: Material = Material()) extends Shape {
+                material: Material = Material(),
+                var parent: Group = null) extends Shape {
 
   override def localIntersect(ray: Ray): Intersections = {
     val a = ray.direction.x * ray.direction.x - ray.direction.y * ray.direction.y + ray.direction.z * ray.direction.z
@@ -261,6 +271,28 @@ case class Cone(minimum: Double = Double.NegativeInfinity,
       Vector(point.x, y, point.z)
     }
   }
+}
+
+//todo implement as immutable, with builder
+case class Group(children: ListBuffer[Shape] = ListBuffer(),
+                 transform: Matrix4x4 = Matrix4x4.Identity,
+                 material: Material = Material(),
+                 var parent: Group = null) extends Shape {
+
+  override def localIntersect(ray: Ray): Intersections =
+    children.foldLeft(Intersections(Nil))((acc, s) => acc ::: s.intersect(ray))
+
+
+  override def localNormalAt(point: Tuple): Tuple = ???
+
+  def add(shape: Shape): Unit = {
+    children += shape
+    shape.parent = this //todo refactor
+  }
+
+  def contains(shape: Shape): Boolean = children.contains(shape)
+
+  def size: Int = children.length
 }
 
 
