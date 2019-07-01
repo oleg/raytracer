@@ -26,7 +26,7 @@ case class Computation(t: Double,
       cos = cosT
     }
     val r0 = math.pow((n1 - n2) / (n1 + n2), 2)
-    return r0 + (1 - r0) * math.pow(1 - cos, 5)
+    r0 + (1 - r0) * math.pow(1 - cos, 5)
   }
 
 }
