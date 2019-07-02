@@ -41,3 +41,6 @@ Implemented by following the book [The Ray Tracer Challenge
 ![InfiniteCylinders](samples/cylinder1.png)
 
 ![InfiniteCylinders](samples/cone1.png)
+
+## 14. Groups
+![Hexagon](samples/hexagon1.png)
