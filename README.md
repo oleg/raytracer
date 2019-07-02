@@ -44,3 +44,6 @@ Implemented by following the book [The Ray Tracer Challenge
 
 ## 14. Groups
 ![Hexagon](samples/hexagon1.png)
+
+## 15. Triangles
+![Triangle](samples/triangle1.png)
