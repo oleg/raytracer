@@ -302,7 +302,46 @@ case class Group(children: ListBuffer[Shape] = ListBuffer(),
 
   def size: Int = children.length
 
-  override def toString: String = s"children: ${children.length}, parent: $parent"
+  override def toString: String = s"children: ${children.length}, parent: $parent" //todo fix me
 }
 
+
+case class Triangle(p1: Tuple,
+                    p2: Tuple,
+                    p3: Tuple,
+                    transform: Matrix4x4 = Matrix4x4.Identity,
+                    material: Material = Material(),
+                    var parent: Group = null) extends Shape {
+
+  val e1: Tuple = p2 - p1
+  val e2: Tuple = p3 - p1
+  val normal: Tuple = e2.cross(e1).normalize
+
+  override def localIntersect(ray: Ray): Intersections = {
+    val dirCrossE2 = ray.direction cross e2
+    val det = e1 dot dirCrossE2
+    if (approximatelyEqual(det, 0.0)) {
+      return Intersections(Nil)
+    }
+
+    val f = 1.0 / det
+    val p1ToOrigin = ray.origin - p1
+    val u = f * p1ToOrigin.dot(dirCrossE2)
+    if (u < 0 || 1 < u) {
+      return Intersections(Nil)
+    }
+
+    val originCrossE1 = p1ToOrigin cross e1
+    val v = f * ray.direction.dot(originCrossE1)
+    if (v < 0 || 1 < (u + v)) {
+      return Intersections(Nil)
+    }
+
+    val t = f * e2.dot(originCrossE1)
+    Intersections(Intersection(t, this) :: Nil)
+  }
+
+  override def localNormalAt(point: Tuple): Tuple = normal
+
+}
 
