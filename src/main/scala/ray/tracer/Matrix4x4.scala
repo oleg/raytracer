@@ -105,7 +105,7 @@ object Matrix4x4 {
       Array(
         Array(cr, 0, sr, 0),
         Array(0, 1, 0, 0),
-        Array(-sr, 1, cr, 0),
+        Array(-sr, 0, cr, 0),
         Array(0, 0, 0, 1)))
 
   }
@@ -137,10 +137,10 @@ object Matrix4x4 {
     val trueUp = left.cross(forward)
 
     val orientation = Matrix4x4(Array(
-      Array(    left.x,     left.y,     left.z, 0),
-      Array(  trueUp.x,   trueUp.y,   trueUp.z, 0),
+      Array(left.x, left.y, left.z, 0),
+      Array(trueUp.x, trueUp.y, trueUp.z, 0),
       Array(-forward.x, -forward.y, -forward.z, 0),
-      Array(         0,          0,          0, 1)))
+      Array(0, 0, 0, 1)))
 
     orientation * Translation(-from.x, -from.y, -from.z)
   }

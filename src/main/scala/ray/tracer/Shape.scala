@@ -16,16 +16,24 @@ trait Shape {
   def localNormalAt(point: Tuple): Tuple //todo Point, Vector
 
   def intersect(worldRay: Ray): Intersections = {
-    val ray = worldRay.transform(this.transform.inverse)
+    val ray = worldRay.transform(transform.inverse)
     localIntersect(ray)
   }
 
   //todo how to make accept only points?
   def normalAt(worldPoint: Tuple): Tuple = {
-    val point = transform.inverse * worldPoint
-    val localNormal = localNormalAt(point)
-    val worldNormal = transform.inverse.transpose * localNormal
-    worldNormal.toVector.normalize
+    val localPoint = worldToObject(worldPoint)
+    val localNormal = localNormalAt(localPoint)
+    normalToWorld(localNormal)
+  }
+
+  def worldToObject(point: Tuple): Tuple = {
+    transform.inverse * (if (parent != null) parent.worldToObject(point) else point)
+  }
+
+  def normalToWorld(normal: Tuple /*Vector*/): Tuple = {
+    val n = (transform.inverse.transpose * normal).toVector.normalize
+    if (parent != null) parent.normalToWorld(n) else n
   }
 
 }
@@ -293,6 +301,8 @@ case class Group(children: ListBuffer[Shape] = ListBuffer(),
   def contains(shape: Shape): Boolean = children.contains(shape)
 
   def size: Int = children.length
+
+  override def toString: String = s"children: ${children.length}, parent: $parent"
 }
 
 
