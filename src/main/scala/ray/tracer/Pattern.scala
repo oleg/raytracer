@@ -6,7 +6,7 @@ trait Pattern {
   val transform: Matrix4x4
 
   def patternAtShape(shape: Shape, point: Tuple): Color = {
-    val objPoint = shape.transform.inverse * point
+    val objPoint = shape.worldToObject(point)
     val patternPoint = this.transform.inverse * objPoint
     patternAt(patternPoint)
   }
