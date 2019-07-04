@@ -1,11 +1,5 @@
 package ray.tracer
 
-/**
-  * The world object described here supports only a single light source,
-  * but it’s not terribly difficult to support more than one.
-  * You would need to make sure your shade_hit function iterates over all of the light sources,
-  * calling lighting for each one and adding the colors together.
-  */
 case class World(light: PointLight, shapes: List[Shape]) {
 
   def contains(sphere: Sphere): Boolean = shapes.contains(sphere)
