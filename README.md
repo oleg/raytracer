@@ -47,3 +47,5 @@ Implemented by following the book [The Ray Tracer Challenge
 
 ## 15. Triangles
 ![Triangle](samples/triangle1.png)
+
+![Teapot](samples/teapot1.png)

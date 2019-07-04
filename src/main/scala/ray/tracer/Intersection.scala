@@ -41,8 +41,8 @@ case class Intersection(t: Double,
     val normalv = obj.normalAt(point)
     val inside = (normalv dot eyev) < 0
     val directedNormalv = if (inside) -normalv else normalv
-    val overPoint = point + normalv * EPSILON //TODO:oleg or directedNormalv?
-    val underPoint = point - directedNormalv * EPSILON //TODO:oleg normalv?
+    val overPoint = point + directedNormalv * EPSILON
+    val underPoint = point - directedNormalv * EPSILON
     val reflectv = ray.direction.reflect(directedNormalv)
 
     Computation(t, obj, point, overPoint, underPoint, eyev, directedNormalv, reflectv, n1, n2, inside)
