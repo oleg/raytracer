@@ -13,7 +13,7 @@ trait Shape {
 
   def localIntersect(ray: Ray): Intersections
 
-  def localNormalAt(point: Tuple): Tuple //todo Point, Vector
+  def localNormalAt(point: Tuple, intersection: Intersection): Tuple //todo Point, Vector
 
   def intersect(worldRay: Ray): Intersections = {
     val ray = worldRay.transform(transform.inverse)
@@ -21,9 +21,9 @@ trait Shape {
   }
 
   //todo how to make accept only points?
-  def normalAt(worldPoint: Tuple): Tuple = {
+  def normalAt(worldPoint: Tuple, intersection: Intersection): Tuple = {
     val localPoint = worldToObject(worldPoint)
-    val localNormal = localNormalAt(localPoint)
+    val localNormal = localNormalAt(localPoint, intersection)
     normalToWorld(localNormal)
   }
 
@@ -62,7 +62,7 @@ case class Sphere(transform: Matrix4x4 = Matrix4x4.Identity,
 
   }
 
-  override def localNormalAt(point: Tuple): Tuple = point - Point(0, 0, 0)
+  override def localNormalAt(point: Tuple, intersection: Intersection): Tuple = point - Point(0, 0, 0)
 
 }
 
@@ -86,7 +86,7 @@ case class Plane(transform: Matrix4x4 = Matrix4x4.Identity,
     }
   }
 
-  override def localNormalAt(point: Tuple): Tuple = Vector(0, 1, 0)
+  override def localNormalAt(point: Tuple, intersection: Intersection): Tuple = Vector(0, 1, 0)
 
 }
 
@@ -111,7 +111,7 @@ case class Cube(transform: Matrix4x4 = Matrix4x4.Identity,
     if (tmin > tmax) (tmax, tmin) else (tmin, tmax)
   }
 
-  override def localNormalAt(point: Tuple): Tuple = {
+  override def localNormalAt(point: Tuple, intersection: Intersection): Tuple = {
     val maxc = List(point.x, point.y, point.z).map(math.abs).max
 
     if (maxc == point.x.abs)
@@ -186,7 +186,7 @@ case class Cylinder(minimum: Double = Double.NegativeInfinity,
     (x * x + z * z) <= 1
   }
 
-  override def localNormalAt(point: Tuple): Tuple = {
+  override def localNormalAt(point: Tuple, intersection: Intersection): Tuple = {
     val dist = point.x * point.x + point.z * point.z
 
     if (dist < 1 && (point.y >= maximum - EPSILON)) { //todo remove reference to epsilon
@@ -266,7 +266,7 @@ case class Cone(minimum: Double = Double.NegativeInfinity,
     (x * x + z * z) <= radius * radius
   }
 
-  override def localNormalAt(point: Tuple): Tuple = {
+  override def localNormalAt(point: Tuple, intersection: Intersection): Tuple = {
     val dist = point.x * point.x + point.z * point.z
 
     if (dist < 1 && (point.y >= maximum - EPSILON)) { //todo remove reference to epsilon
@@ -291,7 +291,7 @@ case class Group(children: ListBuffer[Shape] = ListBuffer(),
     children.foldLeft(Intersections(Nil))((acc, s) => acc ::: s.intersect(ray))
 
 
-  override def localNormalAt(point: Tuple): Tuple = ???
+  override def localNormalAt(point: Tuple, intersection: Intersection): Tuple = ???
 
   def add(shape: Shape): Unit = {
     children += shape
@@ -341,7 +341,51 @@ case class Triangle(p1: Tuple,
     Intersections(Intersection(t, this) :: Nil)
   }
 
-  override def localNormalAt(point: Tuple): Tuple = normal
+  override def localNormalAt(point: Tuple, intersection: Intersection): Tuple = normal
+
+}
+
+case class SmoothTriangle(
+                           p1: Tuple,
+                           p2: Tuple,
+                           p3: Tuple,
+                           n1: Tuple,
+                           n2: Tuple,
+                           n3: Tuple,
+                           transform: Matrix4x4 = Matrix4x4.Identity,
+                           material: Material = Material(),
+                           var parent: Group = null) extends Shape {
+
+  val e1: Tuple = p2 - p1
+  val e2: Tuple = p3 - p1
+  val normal: Tuple = e2.cross(e1).normalize
+
+  override def localIntersect(ray: Ray): Intersections = {
+    val dirCrossE2 = ray.direction cross e2
+    val det = e1 dot dirCrossE2
+    if (approximatelyEqual(det, 0.0)) {
+      return Intersections(Nil)
+    }
+
+    val f = 1.0 / det
+    val p1ToOrigin = ray.origin - p1
+    val u = f * p1ToOrigin.dot(dirCrossE2)
+    if (u < 0 || 1 < u) {
+      return Intersections(Nil)
+    }
+
+    val originCrossE1 = p1ToOrigin cross e1
+    val v = f * ray.direction.dot(originCrossE1)
+    if (v < 0 || 1 < (u + v)) {
+      return Intersections(Nil)
+    }
+
+    val t = f * e2.dot(originCrossE1)
+    Intersections(Intersection(t, this, u, v) :: Nil)
+  }
+
+  override def localNormalAt(point: Tuple, hit: Intersection): Tuple
+  = n2 * hit.u + n3 * hit.v + n1 * (1 - hit.u - hit.v)
 
 }
 

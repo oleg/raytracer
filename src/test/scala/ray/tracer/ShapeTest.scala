@@ -17,7 +17,7 @@ class ShapeTest extends FunSuite {
       null
     }
 
-    override def localNormalAt(localPoint: Tuple): Tuple = localPoint.toVector
+    override def localNormalAt(localPoint: Tuple, intersection: Intersection): Tuple = localPoint.toVector
   }
 
   test("The default transformation") {
@@ -69,7 +69,7 @@ class ShapeTest extends FunSuite {
   test("Computing the normal on a translated shape") {
     val s = TestShape(transform = Matrix4x4.Translation(0, 1, 0))
 
-    val n = s.normalAt(Point(0, 1.70711, -0.70711))
+    val n = s.normalAt(Point(0, 1.70711, -0.70711), null)
 
     assert(n ==~ Vector(0, 0.70711, -0.70711))
   }
@@ -77,7 +77,7 @@ class ShapeTest extends FunSuite {
   test("Computing the normal on a transformed shape") {
     val s = TestShape(transform = Matrix4x4.Scaling(1, 0.5, 1) * Matrix4x4.RotationZ(Pi / 5))
 
-    val n = s.normalAt(Point(0, Sqrt2Div2, -Sqrt2Div2))
+    val n = s.normalAt(Point(0, Sqrt2Div2, -Sqrt2Div2), null)
 
     assert(n ==~ Vector(0, 0.97014, -0.24254))
   }

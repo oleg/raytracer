@@ -32,13 +32,15 @@ case class Computation(t: Double,
 }
 
 case class Intersection(t: Double,
-                        obj: Shape) {
+                        obj: Shape,
+                        u: Double = Double.NaN,
+                        v: Double = Double.NaN) {
 
   def prepareComputations(ray: Ray, xs: Intersections): Computation = {
     val (n1, n2) = findNs(xs)
     val point = ray.position(t)
     val eyev = -ray.direction
-    val normalv = obj.normalAt(point)
+    val normalv = obj.normalAt(point, this)
     val inside = (normalv dot eyev) < 0
     val directedNormalv = if (inside) -normalv else normalv
     val overPoint = point + directedNormalv * EPSILON
