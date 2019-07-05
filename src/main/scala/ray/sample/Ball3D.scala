@@ -44,7 +44,7 @@ object Ball3D {
           .hit
           .foreach({ h =>
             val point = ray.position(h.t)
-            val normal = h.obj.normalAt(point)
+            val normal = h.obj.normalAt(point, null)
             val eye = -ray.direction
 
             canvas(x, y) = h.obj.material.lighting(light, h.obj, point, eye, normal, false)

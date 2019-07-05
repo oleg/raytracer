@@ -64,14 +64,14 @@ class ConeTest extends FunSuite {
   }
 
   test("Computing the normal vector on a cone, 0") {
-    assert(Cone().localNormalAt(Point(0, 0, 0)) == Vector(0, 0, 0))
+    assert(Cone().localNormalAt(Point(0, 0, 0), null) == Vector(0, 0, 0))
   }
 
   test("Computing the normal vector on a cone, 1") {
-    assert(Cone().localNormalAt(Point(1, 1, 1)) == Vector(1, -Sqrt2, 1))
+    assert(Cone().localNormalAt(Point(1, 1, 1), null) == Vector(1, -Sqrt2, 1))
   }
 
   test("Computing the normal vector on a cone, -1") {
-    assert(Cone().localNormalAt(Point(-1, -1, 0)) == Vector(-1, 1, 0))
+    assert(Cone().localNormalAt(Point(-1, -1, 0), null) == Vector(-1, 1, 0))
   }
 }

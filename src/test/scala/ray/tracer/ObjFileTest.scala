@@ -15,6 +15,7 @@ class ObjFileTest extends FunSuite {
         |and came back the previous night.​""".stripMargin
 
     val objFile = new ObjFileParser().parse(Source.fromString(gibberish))
+
     assert(objFile.ignored == 5)
   }
 
@@ -115,5 +116,51 @@ class ObjFileTest extends FunSuite {
 
     assert(g.children.contains(g1))
     assert(g.children.contains(g2))
+  }
+
+  test("Vertex normal records") {
+    val file =
+      """
+        |vn 0 0 1
+        |vn 0.707 0 -0.707
+        |vn 1 2 3
+      """.stripMargin
+
+    val objFile = new ObjFileParser().parse(Source.fromString(file))
+
+    assert(objFile.normals(1) == Vector(0, 0, 1))
+    assert(objFile.normals(2) == Vector(0.707, 0, -0.707))
+    assert(objFile.normals(3) == Vector(1, 2, 3))
+  }
+
+  test("Faces with normals") {
+    val file =
+      """
+        |v 0 1 0
+        |v -1 0 0
+        |v 1 0 0
+        |
+        |vn -1 0 0
+        |vn 1 0 0
+        |vn 0 1 0
+        |
+        |f 1//3 2//1 3//2
+        |f 1/0/3 2/102/1 3/14/2
+      """.stripMargin
+
+    val objFile = new ObjFileParser().parse(Source.fromString(file))
+    val g = objFile.groups("default")
+    val t1 = g.children(0).asInstanceOf[SmoothTriangle]
+    val t2 = g.children(1).asInstanceOf[SmoothTriangle]
+
+    assert(t1.p1 == objFile.vertices(1))
+    assert(t1.p2 == objFile.vertices(2))
+    assert(t1.p3 == objFile.vertices(3))
+
+    assert(t1.n1 == objFile.normals(3))
+    assert(t1.n2 == objFile.normals(1))
+    assert(t1.n3 == objFile.normals(2))
+
+    assert(t1 == t2)
   }
 }

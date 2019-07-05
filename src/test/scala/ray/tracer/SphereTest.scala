@@ -97,19 +97,19 @@ class SphereTest extends FunSuite {
 
   test("The normal on a sphere at a point on the x axis") {
     val s = Sphere()
-    val n = s.normalAt(Point(1, 0, 0))
+    val n = s.normalAt(Point(1, 0, 0),null)
     assert(n == Vector(1, 0, 0))
   }
 
   test("The normal on a sphere at a point on the y axis") {
     val s = Sphere()
-    val n = s.normalAt(Point(0, 1, 0))
+    val n = s.normalAt(Point(0, 1, 0),null)
     assert(n == Vector(0, 1, 0))
   }
 
   test("The normal on a sphere at a point on the z axis") {
     val s = Sphere()
-    val n = s.normalAt(Point(0, 0, 1))
+    val n = s.normalAt(Point(0, 0, 1),null)
     assert(n == Vector(0, 0, 1))
   }
 
@@ -117,7 +117,7 @@ class SphereTest extends FunSuite {
     val s = Sphere()
     val v = math.sqrt(3) / 3
 
-    val n = s.normalAt(Point(v, v, v))
+    val n = s.normalAt(Point(v, v, v),null)
 
     assert(n == Vector(v, v, v))
   }
@@ -126,7 +126,7 @@ class SphereTest extends FunSuite {
     val s = Sphere()
     val v = math.sqrt(3) / 3
 
-    val n = s.normalAt(Point(v, v, v))
+    val n = s.normalAt(Point(v, v, v),null)
 
     assert(n == n.normalize)
   }
@@ -134,14 +134,14 @@ class SphereTest extends FunSuite {
   test("Computing the normal on a translated sphere") {
     val s = Sphere(transform = Matrix4x4.Translation(0, 1, 0))
 
-    val n = s.normalAt(Point(0, 1.70711, -0.70711))
+    val n = s.normalAt(Point(0, 1.70711, -0.70711),null)
 
     assert(n ==~ Vector(0, 0.70711, -0.70711))
   }
 
   test("Computing the normal on a transformed sphere") {
     val s = Sphere(transform = Matrix4x4.Scaling(1, 0.5, 1) * Matrix4x4.RotationZ(Pi / 5))
-    val n = s.normalAt(Point(0, Sqrt2Div2, -Sqrt2Div2))
+    val n = s.normalAt(Point(0, Sqrt2Div2, -Sqrt2Div2),null)
 
     assert(n ==~ Vector(0, 0.97014, -0.24254))
   }

@@ -7,9 +7,9 @@ class PlaneTest extends FunSuite {
   test("The normal of a plane is constant everywhere") {
     val p = Plane()
 
-    val n1 = p.localNormalAt(Point(0, 0, 0))
-    val n2 = p.localNormalAt(Point(10, 0, -10))
-    val n3 = p.localNormalAt(Point(-5, 0, 150))
+    val n1 = p.localNormalAt(Point(0, 0, 0), null)
+    val n2 = p.localNormalAt(Point(10, 0, -10), null)
+    val n3 = p.localNormalAt(Point(-5, 0, 150), null)
 
     assert(n1 == Vector(0, 1, 0))
     assert(n2 == Vector(0, 1, 0))

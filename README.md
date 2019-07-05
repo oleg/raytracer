@@ -49,3 +49,5 @@ Implemented by following the book [The Ray Tracer Challenge
 ![Triangle](samples/triangle1.png)
 
 ![Teapot](samples/teapot1.png)
+
+![Teapot 2](samples/teapot2.png)

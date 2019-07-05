@@ -1,43 +1,45 @@
 package ray.tracer
 
 import scala.collection.mutable
+import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
 
-//case?
-class ObjFile(val mainGroup: Group,
-              val groups: Map[String, Group],
-              val vertices: Map[Int, Tuple],
-              val ignored: Int) {
-
-}
+case class ObjFile(
+                    mainGroup: Group,
+                    groups: Map[String, Group],
+                    vertices: List[Tuple],
+                    normals: List[Tuple],
+                    ignored: Int)
 
 class ObjFileParser {
 
-  var ignored: Int = 0
-  var vertexIndex: Int = 0
+  val vertices: ArrayBuffer[Tuple] = ArrayBuffer()
+  vertices += null
 
-  val vertices: mutable.Map[Int, Tuple] = mutable.HashMap.empty //Int, Point
+  val normals: ArrayBuffer[Tuple] = ArrayBuffer()
+  normals += null //todo hack fix me
+
 
   var currentGroup: Group = Group()
   val groups: mutable.Map[String, Group] = mutable.HashMap.empty
-
   groups.put("default", currentGroup)
 
-  def nextVertexIndex(): Int = {
-    vertexIndex += 1
-    vertexIndex
-  }
+  var ignored: Int = 0
+
+  case class Item(vertexIndex: Int, normalIndex: Int)
 
   def parse(source: Source): ObjFile = {
     source
       .getLines
       .foreach(line => {
-        if (line.startsWith("v ")) {
-          consumeSafe(line, parseVertex)
+        if (line.startsWith("vn ")) {
+          parseNormal(line)
+        } else if (line.startsWith("v ")) {
+          parseVertex(line)
         } else if (line.startsWith("g")) {
-          consumeSafe(line, parseGroupName)
+          parseGroupName(line)
         } else if (line.startsWith("f")) {
-          consumeSafe(line, parseFace)
+          parseFace(line)
         } else {
           ignored += 1
         }
@@ -46,35 +48,48 @@ class ObjFileParser {
     val mainGroup = Group()
     groups.values.foreach(mainGroup.add(_))
 
-    new ObjFile(mainGroup, groups.toMap, vertices.toMap, ignored)
+    new ObjFile(mainGroup, groups.toMap, vertices.toList, normals.toList, ignored)
+  }
+
+  //todo refactor
+  private def parseFace(line: String): Unit = {
+    val items = line.split("\\s+")
+    val item = parseItem(items(1))
+    val smooth = item.normalIndex > 0 && item.normalIndex < normals.length
+
+    items.drop(2)
+      .map(parseItem)
+      .sliding(2)
+      .map(pair => {
+        if (smooth) {
+          smoothTriangle(item, pair(0), pair(1))
+        } else {
+          triangle(item, pair(0), pair(1))
+        }
+      })
+      .foreach(currentGroup.add(_))
   }
 
   //todo refactor
   private def parseVertex(line: String): Unit = {
     val items = line.split("\\s+")
     val point = Point(items(1).toDouble, items(2).toDouble, items(3).toDouble)
-    vertices.put(nextVertexIndex(), point)
+    vertices += point
   }
 
-  //todo refactor
-  private def parseFace(line: String): Unit = {
+  private def parseNormal(line: String): Unit = {
     val items = line.split("\\s+")
-    val a = vertices(parseItem(items(1)))
-    items.drop(2)
-      .map(parseItem)
-      .map(vertices(_))
-      .sliding(2)
-      .map(pair => Triangle(a, pair(0), pair(1)))
-      .foreach(currentGroup.add(_))
+    val vector = Vector(items(1).toDouble, items(2).toDouble, items(3).toDouble)
+    normals += vector
   }
 
-  private def parseItem(item: String): Int = {
-    val i = item.indexOf("/")
-    (if (i != -1) {
-      item.substring(0, i)
+  private def parseItem(item: String): Item = {
+    val parts = item.split("/")
+    if (parts.length == 3) {
+      Item(parts(0).toInt, parts(2).toInt)
     } else {
-      item
-    }).toInt
+      Item(parts(0).toInt, -1)
+    }
   }
 
   //todo refactor
@@ -84,11 +99,21 @@ class ObjFileParser {
     groups.put(items(1), currentGroup)
   }
 
-  private def consumeSafe[T](line: String, f: String => T): Unit =
-    try {
-      f(line)
-    } catch {
-      case e: RuntimeException => throw e //e.printStackTrace()
-    }
+  private def triangle(i1: Item, i2: Item, i3: Item): Triangle = {
+    Triangle(
+      vertices(i1.vertexIndex),
+      vertices(i2.vertexIndex),
+      vertices(i3.vertexIndex))
+  }
+
+  private def smoothTriangle(i1: Item, i2: Item, i3: Item): SmoothTriangle = {
+    SmoothTriangle(
+      vertices(i1.vertexIndex),
+      vertices(i2.vertexIndex),
+      vertices(i3.vertexIndex),
+      normals(i1.normalIndex),
+      normals(i2.normalIndex),
+      normals(i3.normalIndex))
+  }
 }
 
