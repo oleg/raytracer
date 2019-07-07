@@ -7,7 +7,7 @@ import ray.tracer._
 
 import scala.math.Pi
 
-object BallComposition {
+object BallScene {
 
   def main(args: Array[String]): Unit = {
     draw(args)
