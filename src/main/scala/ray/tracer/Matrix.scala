@@ -99,8 +99,9 @@ class Matrix(private val points: Array[Array[Double]]) {
   override def equals(other: Any): Boolean = other match {
     case that: Matrix =>
       (that canEqual this) &&
-        (width == that.width && height == that.height) &&
-        (points.deep == that.points.deep) //todo think about it: (matrix sameElements that.matrix)
+        width == that.width &&
+        height == that.height &&
+        java.util.Objects.deepEquals(points, that.points) //todo think about it: (matrix sameElements that.matrix)
     case _ => false
   }
 
@@ -108,7 +109,7 @@ class Matrix(private val points: Array[Array[Double]]) {
 
   override def toString: String = {
     val leftPad = (s: String, len: Int) => " " * (len - s.length()) + s
-    val max: Int = points.flatMap(x => x.map(_.toString.length)).max
+    val max: Int = points.flatMap((x: Array[Double]) => x.map(y => y.toString.length)).max
     points.map(row => row.map(e => leftPad(e.toString, max)).mkString(" | ")).map(e => "| " + e + " |").mkString("\n")
   }
 }
