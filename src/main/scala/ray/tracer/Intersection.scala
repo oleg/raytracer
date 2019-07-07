@@ -36,6 +36,13 @@ case class Intersection(t: Double,
                         u: Double = Double.NaN,
                         v: Double = Double.NaN) {
 
+  override def toString: String =
+    s"""
+      |Intersection(
+      |$t, $u, $v
+      |$obj)
+    """.stripMargin
+
   def prepareComputations(ray: Ray, xs: Intersections): Computation = {
     val (n1, n2) = findNs(xs)
     val point = ray.position(t)

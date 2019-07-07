@@ -7,7 +7,7 @@ import ray.tracer._
 
 import scala.math.Pi
 
-object PlaneComposition {
+object PlaneScene {
 
   def main(args: Array[String]): Unit = {
     val l = System.currentTimeMillis() //todo remove

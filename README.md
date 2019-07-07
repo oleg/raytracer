@@ -51,3 +51,7 @@ Implemented by following the book [The Ray Tracer Challenge
 ![Teapot](samples/teapot1.png)
 
 ![Teapot 2](samples/teapot2.png)
+
+## 16. Constructive Solid Geometry (CSG)
+
+![CSG](samples/csg1.png)
