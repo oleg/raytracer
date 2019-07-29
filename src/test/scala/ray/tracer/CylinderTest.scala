@@ -3,6 +3,7 @@ package ray.tracer
 import org.scalatest.FunSuite
 
 class CylinderTest extends FunSuite {
+  val p = implicitly[Precision[Double]] //todo
 
   test("A ray misses a cylinder at origin(1,0,0) with direction(0,1,0)") {
     val origin = Point(1, 0, 0)
@@ -57,8 +58,8 @@ class CylinderTest extends FunSuite {
 
     val ixs = Cylinder().localIntersect(ray)
     assert(ixs.length == 2)
-    assert(approximatelyEqual(ixs(0).t, 6.80798), ixs(0).t)
-    assert(approximatelyEqual(ixs(1).t, 7.08872), ixs(1).t)
+    assert(p.approximatelyEqual(ixs(0).t, 6.80798), ixs(0).t)
+    assert(p.approximatelyEqual(ixs(1).t, 7.08872), ixs(1).t)
   }
 
   test("Normal vector on a cylinder at +x") {

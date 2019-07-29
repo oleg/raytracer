@@ -31,11 +31,10 @@ case class Vector(x: Double, y: Double, z: Double) {
     (thisInstance - vector)
   }
 
-  //TODO Implement via implicits!!!
-  def ==~(other: Vector): Boolean = {
-    approximatelyEqual(x, other.x) &&
-      approximatelyEqual(y, other.y) &&
-      approximatelyEqual(z, other.z)
+  def ==~(other: Vector)(implicit p: Precision[Double]): Boolean = {
+    p.approximatelyEqual(x, other.x) &&
+      p.approximatelyEqual(y, other.y) &&
+      p.approximatelyEqual(z, other.z)
   }
 }
 
