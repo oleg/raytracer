@@ -47,7 +47,7 @@ object BallScene {
       Identity.scale(0.33, 0.33, 0.33).translate(-1.5, 0.33, -0.75),
       Material(color = Color(1, 0.8, 0.1), diffuse = 0.7, specular = 0.3))
 
-    val light = PointLight(new Point(-10, 10, -10), Color(1, 1, 1))
+    val light = PointLight(Point(-10, 10, -10), Color(1, 1, 1))
 
     val world = World(light, floor :: leftWall :: rightWall :: middle :: right :: left :: Nil)
     val camera = Camera(1000, 500, Pi / 3, Matrix4x4.viewTransform(Point(0, 1.5, -5), Point(0, 1, 0), Vector(0, 1, 0)))

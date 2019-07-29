@@ -1,6 +1,5 @@
 package ray.tracer
 
-//todo implement : Nested, Blended and Perturbed patterns
 trait Pattern {
 
   val transform: Matrix4x4

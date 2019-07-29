@@ -22,7 +22,6 @@ trait Shape {
     localIntersect(ray)
   }
 
-  //todo how to make accept only points?
   def normalAt(worldPoint: Point, intersection: Intersection): Vector = {
     val localPoint: Point = worldToObject(worldPoint)
     val localNormal: Vector = localNormalAt(localPoint, intersection)
@@ -34,7 +33,7 @@ trait Shape {
   }
 
   def normalToWorld(normal: Vector): Vector = {
-    val n: Vector = (transform.inverse.transpose * normal).toVector.normalize
+    val n = (transform.inverse.transpose * normal).normalize
     if (parent != null) parent.normalToWorld(n) else n
   }
 

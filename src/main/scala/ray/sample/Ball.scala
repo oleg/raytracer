@@ -12,7 +12,7 @@ object Ball {
 
   def draw(args: Array[String]): Unit = {
 
-    val rayOrigin = new Point(0, 0, -5)
+    val rayOrigin = Point(0, 0, -5)
     val wallZ = 10
     val wallSize = 7.0
     val canvasPixels = 100
@@ -31,7 +31,7 @@ object Ball {
       val worldY = half - pixelSize * y
       for (x <- 0 until canvasPixels) {
         val worldX = -half + pixelSize * x
-        val position = new Point(worldX, worldY, wallZ)
+        val position = Point(worldX, worldY, wallZ)
         val ray = Ray(rayOrigin, (position - rayOrigin).normalize)
         sphere.intersect(ray).hit.foreach(_ => canvas(x, y) = white)
       }

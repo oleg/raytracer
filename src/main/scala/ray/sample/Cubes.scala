@@ -71,7 +71,7 @@ object Cubes {
 
     val world = World(light, floor :: b0 :: b1 :: b3 :: back :: Nil)
     val f = 20
-    val camera = Camera(100 * f, 50 * f, Pi / 3, Matrix4x4.viewTransform(new Point(0, 3, -6), new Point(0, 1, 0), Vector(0, 1, 0)))
+    val camera = Camera(100 * f, 50 * f, Pi / 3, Matrix4x4.viewTransform(Point(0, 3, -6), Point(0, 1, 0), Vector(0, 1, 0)))
     val canvas = camera.renderConcurrently(world)
 
     new PrintWriter(s"cubes-${System.currentTimeMillis()}.ppm") {
