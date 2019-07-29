@@ -47,10 +47,10 @@ object CsgScene {
     val csg2 = Csg(Operation.difference, s2, c2,
       transform = Identity.rotateX(Pi/6).rotateZ(Pi/6).rotateY(Pi/6).translate(7, 0, 0))
 
-    val light = PointLight(new Point(4, 18, -10), Color(1, 1, 1))
+    val light = PointLight(Point(4, 18, -10), Color(1, 1, 1))
 
     val world = World(light, floor :: csg1 :: csg2 :: Nil)
-    val camera = Camera(1000, 500, Pi / 1.8, Matrix4x4.viewTransform(new Point(0, 4, -19), new Point(0, 0, 0), Vector(0, 1, 0)))
+    val camera = Camera(1000, 500, Pi / 1.8, Matrix4x4.viewTransform(Point(0, 4, -19), Point(0, 0, 0), Vector(0, 1, 0)))
     val canvas = camera.renderConcurrently(world)
 
     new PrintWriter(s"csg-${System.currentTimeMillis()}.ppm") {
