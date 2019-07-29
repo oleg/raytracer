@@ -13,9 +13,9 @@ case class Material(color: Color = Color(1, 1, 1),
 
   def lighting(light: PointLight,
                shape: Shape,
-               point: Tuple,
-               eyev: Tuple,
-               normalv: Tuple,
+               point: Point,
+               eyev: Vector,
+               normalv: Vector,
                inShadow: Boolean): Color = {
     val material = this
 

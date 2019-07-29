@@ -6,7 +6,7 @@ import ray.tracer.Matrix4x4.{Scaling, Translation}
 class PatternTest extends FunSuite {
 
   case class TestPattern(transform: Matrix4x4 = Matrix4x4.Identity) extends Pattern {
-    override def patternAt(point: Tuple): Color = Color(point.x, point.y, point.z)
+    override def patternAt(point: Point): Color = Color(point.x, point.y, point.z)
   }
 
   test("The default pattern transformation") {

@@ -12,7 +12,7 @@ object Ball3D {
 
   def draw(args: Array[String]): Unit = {
 
-    val rayOrigin = Point(0, 0, -5)
+    val rayOrigin = new Point(0, 0, -5)
     val wallZ = 10
     val wallSize = 7.0
     val canvasPixels = 500 //300 //100
@@ -27,7 +27,7 @@ object Ball3D {
     val transform = Matrix4x4.Identity //Matrix4x4.Shearing(1, 0, 0, 0, 0, 0) * Matrix4x4.Scaling(0.5, 1, 1)
     val sphere = Sphere(transform, Material(color = Color(0.2, 0.8, 0.3)))
 
-    val lightPosition = Point(-10, 10, -10)
+    val lightPosition = new Point(-10, 10, -10)
     val lightColor = Color(1, 1, 1)
     val light = PointLight(lightPosition, lightColor)
 
@@ -36,9 +36,9 @@ object Ball3D {
       for (x <- 0 until canvasPixels) {
 
         val worldX = -half + pixelSize * x
-        val position = Point(worldX, worldY, wallZ)
+        val position1 = new Point(worldX, worldY, wallZ)
 
-        val ray = Ray(rayOrigin, (position - rayOrigin).normalize)
+        val ray = Ray(rayOrigin, (position1 - rayOrigin).normalize)
 
         sphere.intersect(ray)
           .hit
