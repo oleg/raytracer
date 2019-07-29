@@ -44,14 +44,15 @@ case class Intersection(t: Double,
     """.stripMargin
 
   def prepareComputations(ray: Ray, xs: Intersections): Computation = {
+    val p = implicitly[Precision[Double]]
     val (n1, n2) = findNs(xs)
     val point = ray.position(t)
     val eyev = -ray.direction
     val normalv = obj.normalAt(point, this)
     val inside = (normalv dot eyev) < 0
     val directedNormalv = if (inside) -normalv else normalv
-    val overPoint = point + directedNormalv * EPSILON
-    val underPoint = point - directedNormalv * EPSILON
+    val overPoint = point + directedNormalv * p.precision
+    val underPoint = point - directedNormalv * p.precision
     val reflectv = ray.direction.reflect(directedNormalv)
 
     Computation(t, obj, point, overPoint, underPoint, eyev, directedNormalv, reflectv, n1, n2, inside)

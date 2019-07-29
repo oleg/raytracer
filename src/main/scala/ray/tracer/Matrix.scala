@@ -1,8 +1,8 @@
 package ray.tracer
 
 /**
-  * Matrix class support operations for matrices of any dimensions
-  */
+ * Matrix class support operations for matrices of any dimensions
+ */
 //TODO immutable?
 class Matrix(private val points: Array[Array[Double]]) {
 
@@ -81,16 +81,15 @@ class Matrix(private val points: Array[Array[Double]]) {
     Matrix(newMatrix)
   }
 
-  //TODO Implement via implicits!!!
   def !==~(other: Matrix): Boolean = {
     !(this ==~ other)
   }
 
-  def ==~(other: Matrix): Boolean =
+  def ==~(other: Matrix)(implicit p: Precision[Double]): Boolean =
     height == other.height &&
       width == other.width &&
       (0 until height).forall(r =>
-        (0 until width).forall(c => approximatelyEqual(points(r)(c), other.points(r)(c))))
+        (0 until width).forall(c => p.approximatelyEqual(points(r)(c), other.points(r)(c))))
 
   def apply(i: Int, j: Int): Double = points(i)(j)
 

@@ -3,7 +3,7 @@ package ray.tracer
 import org.scalatest.FunSuite
 
 class SmoothTriangleTest extends FunSuite {
-
+  val p = implicitly[Precision[Double]]
   test("Constructing a smooth triangle") {
     val tri = smoothTriangle()
     assert(tri.p1 == Point(0, 1, 0))
@@ -28,8 +28,8 @@ class SmoothTriangleTest extends FunSuite {
     val r = Ray(Point(-0.2, 0.3, -2), Vector(0, 0, 1))
     val xs = tri.localIntersect(r)
 
-    assert(approximatelyEqual(xs(0).u, 0.45))
-    assert(approximatelyEqual(xs(0).v, 0.25))
+    assert(p.approximatelyEqual(xs(0).u, 0.45))
+    assert(p.approximatelyEqual(xs(0).v, 0.25))
   }
 
   test("A smooth triangle uses u/v to interpolate the normal") {

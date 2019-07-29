@@ -3,7 +3,7 @@ package ray.tracer
 import org.scalatest.FunSuite
 
 class IntersectionTest extends FunSuite {
-
+  private val p: Precision[Double] = implicitly[Precision[Double]]
   test("An intersection encapsulates t and object") {
     val ray = Ray(Point(0, 0, -5), Vector(0, 0, 1))
     val sphere = Sphere()
@@ -106,7 +106,7 @@ class IntersectionTest extends FunSuite {
 
     val comps = i.prepareComputations(r, Intersections(i :: Nil))
 
-    assert(comps.overPoint.z < -EPSILON / 2)
+    assert(comps.overPoint.z < (-p.precision / 2))
     assert(comps.point.z > comps.overPoint.z)
   }
 
@@ -129,7 +129,7 @@ class IntersectionTest extends FunSuite {
 
     val comps = i.prepareComputations(r, xs)
 
-    assert(comps.underPoint.z > EPSILON / 2)
+    assert(comps.underPoint.z > p.precision / 2)
     assert(comps.point.z < comps.underPoint.z)
   }
 
@@ -153,7 +153,7 @@ class IntersectionTest extends FunSuite {
     val comps = xs(1).prepareComputations(r, xs)
     val reflectance = comps.schlick()
 
-    assert(approximatelyEqual(reflectance, 0.04), reflectance)
+    assert(p.approximatelyEqual(reflectance, 0.04), reflectance)
   }
 
   test("The Schlick approximation with small angle and n2 > n1") {
@@ -165,6 +165,6 @@ class IntersectionTest extends FunSuite {
     val comps = xs(0).prepareComputations(r, xs)
     val reflectance = comps.schlick()
 
-    assert(approximatelyEqual(reflectance, 0.48873), reflectance)
+    assert(p.approximatelyEqual(reflectance, 0.48873), reflectance)
   }
 }
