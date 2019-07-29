@@ -6,9 +6,6 @@ import ray.tracer._
 
 object Projectile {
 
-  type Vector = Tuple
-  type Point = Tuple
-
   class Environment(val gravity: Vector, val wind: Vector)
 
   class Projectile(val position: Point, val velocity: Vector) {

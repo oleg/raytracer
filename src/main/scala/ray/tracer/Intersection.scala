@@ -4,12 +4,12 @@ import scala.collection.mutable.ArrayBuffer
 
 case class Computation(t: Double,
                        obj: Shape,
-                       point: Tuple,
-                       overPoint: Tuple,
-                       underPoint: Tuple,
-                       eyev: Tuple,
-                       normalv: Tuple,
-                       reflectv: Tuple,
+                       point: Point,
+                       overPoint: Point,
+                       underPoint: Point,
+                       eyev: Vector,
+                       normalv: Vector,
+                       reflectv: Vector,
                        n1: Double,
                        n2: Double,
                        inside: Boolean) {

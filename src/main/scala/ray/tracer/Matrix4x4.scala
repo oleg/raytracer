@@ -1,8 +1,8 @@
 package ray.tracer
 
 /**
-  * Matrix4x4 class support and specific for 4x4 matrices operations
-  */
+ * Matrix4x4 class support and specific for 4x4 matrices operations
+ */
 class Matrix4x4(private val matrix: Matrix) {
   if (matrix.width != 4 || matrix.height != 4)
     throw new IllegalArgumentException(s"Expected 4x4 matrix, but found ${matrix.height}x${matrix.width}")
@@ -14,10 +14,17 @@ class Matrix4x4(private val matrix: Matrix) {
   def *(other: Matrix4x4): Matrix4x4 = new Matrix4x4(matrix * other.matrix)
 
   //todo add size checks
-  def *(other: Tuple): Tuple = { //todo :scary: fix me
-    val m = this.matrix * Matrix(Array(Array(other.x), Array(other.y), Array(other.z), Array(other.w)))
+  def *(other: Point): Point = { //todo :scary: fix me
+    val m = this.matrix * Matrix(Array(Array(other.x), Array(other.y), Array(other.z), Array(1)))
     //todo: fix me
-    Tuple(m(0, 0), m(1, 0), m(2, 0), m(3, 0))
+    Point(m(0, 0), m(1, 0), m(2, 0))
+  }
+
+  //todo add size checks
+  def *(other: Vector): Vector = { //todo :scary: fix me
+    val m = this.matrix * Matrix(Array(Array(other.x), Array(other.y), Array(other.z), Array(0)))
+    //todo: fix me
+     Vector(m(0, 0), m(1, 0), m(2, 0))
   }
 
   //TODO Implement via implicits!!!
@@ -131,7 +138,7 @@ object Matrix4x4 {
         Array(zx, zy, 1, 0),
         Array(0, 0, 0, 1)))
 
-  def viewTransform(from: Tuple, to: Tuple, up: Tuple): Matrix4x4 = {
+  def viewTransform(from: Point, to: Point, up: Vector): Matrix4x4 = {
     val forward = (to - from).normalize
     val left = forward.cross(up.normalize)
     val trueUp = left.cross(forward)

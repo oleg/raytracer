@@ -5,52 +5,30 @@ import org.scalatest.FunSuite
 class TupleTest extends FunSuite {
 
   test("A tuple equal to another tuple") {
-    val t = Tuple(4.3, -4.2, 3.1, 1.0)
+    val t = Point(4.3, -4.2, 3.1)
 
-    assert(t == Tuple(4.3, -4.2, 3.1, 1.0))
+    assert(t == Point(4.3, -4.2, 3.1))
   }
 
   test("A tuple with w=1.0 is a point") {
-    val t = Tuple(4.3, -4.2, 3.1, 1.0)
+    val t = Point(4.3, -4.2, 3.1)
     assert(t.x == 4.3)
     assert(t.y == -4.2)
     assert(t.z == 3.1)
-    assert(t.w == 1.0)
-    assert(t.isPoint)
-    assert(!t.isVector)
   }
 
   test("A tuple with w=0 is a vector") {
-    val t = Tuple(4.3, -4.2, 3.1, 0.0)
+    val t = Vector(4.3, -4.2, 3.1)
     assert(t.x == 4.3)
     assert(t.y == -4.2)
     assert(t.z == 3.1)
-    assert(t.w == 0.0)
-    assert(t.isVector)
-    assert(!t.isPoint)
-  }
-
-  test("point() creates tuples with w=1") {
-    val p = Point(4, -4, 3)
-    val t = Tuple(4, -4, 3, 1)
-
-    assert(p == t)
-    assert(t == p)
-  }
-
-  test("vector() creates tuples with w=0") {
-    val v = Vector(4, -4, 3)
-    val t = Tuple(4, -4, 3, 0)
-
-    assert(v == t)
-    assert(t == v)
   }
 
   test("Adding two tuples") {
-    val a1 = Tuple(3, -2, 5, 1)
-    val a2 = Tuple(-2, 3, 1, 0)
+    val a1 = Point(3, -2, 5)
+    val a2 = Vector(-2, 3, 1)
 
-    assert(a1 + a2 == Tuple(1, 1, 6, 1))
+    assert(a1 + a2 == Point(1, 1, 6))
   }
 
   test("Subtracting two points") {
@@ -82,25 +60,25 @@ class TupleTest extends FunSuite {
   }
 
   test("Negating a tuple") {
-    val a = Tuple(1, -2, 3, -4)
+    val a = Vector(1, -2, 3)
 
-    assert(-a == Tuple(-1, 2, -3, 4))
+    assert(-a == Vector(-1, 2, -3))
   }
   test("Multiplying a tuple by a scalar") {
-    val a = Tuple(1, -2, 3, -4)
+    val a = Vector(1, -2, 3)
 
-    assert(a * 3.5 == Tuple(3.5, -7, 10.5, -14))
+    assert(a * 3.5 == Vector(3.5, -7, 10.5))
   }
   test("Multiplying a tuple by a fraction") {
-    val a = Tuple(1, -2, 3, -4)
+    val a = Vector(1, -2, 3)
 
-    assert(a * 0.5 == Tuple(0.5, -1, 1.5, -2))
+    assert(a * 0.5 == Vector(0.5, -1, 1.5))
   }
 
   test("Dividing a tuple by a scalar") {
-    val a = Tuple(1, -2, 3, -4)
+    val a = Vector(1, -2, 3)
 
-    assert(a / 2 == Tuple(0.5, -1, 1.5, -2))
+    assert(a / 2 == Vector(0.5, -1, 1.5))
   }
 
   test("Computing the magnitude of vector(1, 0, 0)") {

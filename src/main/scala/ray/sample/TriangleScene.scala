@@ -46,8 +46,7 @@ object TriangleScene {
     val light = PointLight(Point(10, 10, -10), Color(1, 1, 1))
 
     val world = World(light, floor :: t0 :: t1 :: t2 :: back :: Nil)
-    val f = 10
-    val camera = Camera(100 * f, 50 * f, Pi / 3, Matrix4x4.viewTransform(Point(0, 3, -6), Point(0, 1, 0), Vector(0, 1, 0)))
+    val camera = Camera(1000, 500, Pi / 3, Matrix4x4.viewTransform(Point(0, 3, -6), Point(0, 1, 0), Vector(0, 1, 0)))
     val canvas = camera.renderConcurrently(world)
 
     new PrintWriter(s"triangle-${System.currentTimeMillis()}.ppm") {

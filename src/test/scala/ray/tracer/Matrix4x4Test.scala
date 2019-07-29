@@ -100,9 +100,9 @@ class Matrix4x4Test extends FunSuite {
         | 0 | 0 | 0 | 1 |
       """))
 
-    val b = Tuple(1, 2, 3, 1)
+    val b = Point(1, 2, 3)
 
-    assert(ma * b ==~ Tuple(18, 24, 33, 1))
+    assert(ma * b ==~ Point(18, 24, 33))
   }
 
   test("Multiplying a matrix by the identity matrix") {
@@ -118,7 +118,7 @@ class Matrix4x4Test extends FunSuite {
   }
 
   test("Multiplying the identity matrix by a tuple") {
-    val a = Tuple(1, 2, 3, 4)
+    val a = Vector(1, 2, 3)
 
     assert(Matrix4x4.Identity * a ==~ a)
   }

@@ -7,16 +7,16 @@ import scala.io.Source
 case class ObjFile(
                     mainGroup: Group,
                     groups: Map[String, Group],
-                    vertices: List[Tuple],
-                    normals: List[Tuple],
+                    vertices: List[Point],
+                    normals: List[Vector],
                     ignored: Int)
 
 class ObjFileParser {
 
-  val vertices: ArrayBuffer[Tuple] = ArrayBuffer()
+  val vertices: ArrayBuffer[Point] = ArrayBuffer()
   vertices += null
 
-  val normals: ArrayBuffer[Tuple] = ArrayBuffer()
+  val normals: ArrayBuffer[Vector] = ArrayBuffer()
   normals += null //todo hack fix me
 
 
