@@ -55,10 +55,10 @@ object ConeScene {
       transform = Identity.rotateX(-Pi / 6).rotateZ(-Pi / 6).translate(3, 1, 0).scale(4, 4, 4),
       material = Material(color = Color(0.3, 1, 1)))
 
-    val light = PointLight(Point(10, 10, -25), Color(1, 1, 1))
+    val light = PointLight(new Point(10, 10, -25), Color(1, 1, 1))
 
     val world = World(light, floor :: c1 :: c2 :: cy2 :: c3 :: back :: Nil)
-    val camera = Camera(1000, 500, Pi / 1.8, Matrix4x4.viewTransform(Point(0, 3, -15), Point(0, 1, 0), Vector(0, 1, 0)))
+    val camera = Camera(1000, 500, Pi / 1.8, Matrix4x4.viewTransform(new Point(0, 3, -15), new Point(0, 1, 0), Vector(0, 1, 0)))
     val canvas = camera.renderConcurrently(world)
 
     new PrintWriter(s"cone-${System.currentTimeMillis()}.ppm") {

@@ -321,7 +321,7 @@ class WorldTest extends FunSuite {
 
   //todo remove duplication
   case class TestPattern(transform: Matrix4x4 = Matrix4x4.Identity) extends Pattern {
-    override def patternAt(point: Tuple): Color = Color(point.x, point.y, point.z)
+    override def patternAt(point: Point): Color = Color(point.x, point.y, point.z)
   }
 
 }

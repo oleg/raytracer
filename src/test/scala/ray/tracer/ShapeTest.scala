@@ -17,7 +17,7 @@ class ShapeTest extends FunSuite {
       null
     }
 
-    override def localNormalAt(localPoint: Tuple, intersection: Intersection): Tuple = localPoint.toVector
+    override def localNormalAt(localPoint: Point, intersection: Intersection): Vector = localPoint- Point(0,0,0)
   }
 
   test("The default transformation") {

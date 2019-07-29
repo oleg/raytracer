@@ -30,22 +30,6 @@ class TupleTest extends FunSuite {
     assert(!t.isPoint)
   }
 
-  test("point() creates tuples with w=1") {
-    val p = Point(4, -4, 3)
-    val t = Tuple(4, -4, 3, 1)
-
-    assert(p == t)
-    assert(t == p)
-  }
-
-  test("vector() creates tuples with w=0") {
-    val v = Vector(4, -4, 3)
-    val t = Tuple(4, -4, 3, 0)
-
-    assert(v == t)
-    assert(t == v)
-  }
-
   test("Adding two tuples") {
     val a1 = Tuple(3, -2, 5, 1)
     val a2 = Tuple(-2, 3, 1, 0)

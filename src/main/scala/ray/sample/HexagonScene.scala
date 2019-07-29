@@ -21,8 +21,7 @@ object HexagonScene {
     val light = PointLight(Point(10, 10, -10), Color(1, 1, 1))
 
     val world = World(light, hexagon() :: Nil)
-    val f = 10
-    val camera = Camera(100 * f, 50 * f, Pi / 3, Matrix4x4.viewTransform(Point(0, 1, -3), Point(0, 0, 0), Vector(0, 1, 0)))
+    val camera = Camera(1000, 500, Pi / 3, Matrix4x4.viewTransform(Point(0, 1, -3), Point(0, 0, 0), Vector(0, 1, 0)))
     val canvas = camera.renderConcurrently(world)
 
     new PrintWriter(s"hexagon-${System.currentTimeMillis()}.ppm") {

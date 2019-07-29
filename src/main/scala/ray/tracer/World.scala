@@ -62,7 +62,7 @@ case class World(light: PointLight, shapes: List[Shape]) {
     colorAt(refractRay, leftIterations - 1) * comps.obj.material.transparency
   }
 
-  def isShadowed(point: Tuple): Boolean = {
+  def isShadowed(point: Point): Boolean = {
     val v = light.position - point
     val distance = v.magnitude
     val direction = v.normalize
