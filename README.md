@@ -1,5 +1,5 @@
 # Ray Tracer in Scala
-Photorealistic 3D renderer implemented in Scala
+3D renderer implemented in Scala from scratch.
 
 Implemented by following the book [The Ray Tracer Challenge
  A Test-Driven Guide to Your First 3D Renderer](https://pragprog.com/book/jbtracer/the-ray-tracer-challenge) by Jamis Buck
