@@ -14,13 +14,10 @@ case class Point(x: Double, y: Double, z: Double) {
 
   def unary_-(): Point = Point(-x, -y, -z) //todo test me
 
-  //TODO Implement via implicits!!!
-  def ==~(other: Point): Boolean = {
-    //(asList zip other.asList).forall(b => eql(b._1, b._2))
-
-    approximatelyEqual(x, other.x) &&
-      approximatelyEqual(y, other.y) &&
-      approximatelyEqual(z, other.z)
+  def ==~(other: Point)(implicit p: Precision[Double]): Boolean = {
+    p.approximatelyEqual(x, other.x) &&
+      p.approximatelyEqual(y, other.y) &&
+      p.approximatelyEqual(z, other.z)
   }
 
 }

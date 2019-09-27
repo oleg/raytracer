@@ -79,7 +79,8 @@ case class Plane(transform: Matrix4x4 = Matrix4x4.Identity,
                  var parent: Shape = null) extends Shape {
 
   override def localIntersect(ray: Ray): Intersections = {
-    if (approximatelyEqual(ray.direction.y, 0.0)) {
+    //todo:oleg think about this
+    if (implicitly[Precision[Double]].approximatelyEqual(ray.direction.y, 0.0)) {
       Intersections.EMPTY
     } else {
       val t = -ray.origin.y / ray.direction.y
@@ -137,7 +138,7 @@ case class Cylinder(minimum: Double = Double.NegativeInfinity,
     val b = 2 * ray.origin.x * ray.direction.x + 2 * ray.origin.z * ray.direction.z
     val c = ray.origin.x * ray.origin.x + ray.origin.z * ray.origin.z - 1
 
-    if (approximatelyEqual(a, 0.0)) {
+    if (implicitly[Precision[Double]].approximatelyEqual(a, 0.0)) {
       return Intersections(intersectCaps(ray)) //todo refactor
     }
 
@@ -164,7 +165,7 @@ case class Cylinder(minimum: Double = Double.NegativeInfinity,
   private def intersectCaps(ray: Ray): List[Intersection] = {
     var result: List[Intersection] = Nil //todo refactor
 
-    if (!closed || approximatelyEqual(ray.direction.y, 0.0)) {
+    if (!closed || implicitly[Precision[Double]].approximatelyEqual(ray.direction.y, 0.0)) {
       return result
     }
 
@@ -189,10 +190,10 @@ case class Cylinder(minimum: Double = Double.NegativeInfinity,
 
   override def localNormalAt(point: Point, intersection: Intersection): Vector = {
     val dist = point.x * point.x + point.z * point.z
-
-    if (dist < 1 && (point.y >= maximum - EPSILON)) { //todo remove reference to epsilon
+    val p = implicitly[Precision[Double]] //todo fix me
+    if (dist < 1 && p.approximatelyGreater(point.y, maximum)) {
       Vector(0, 1, 0)
-    } else if (dist < 1 && (point.y <= minimum + EPSILON)) {
+    } else if (dist < 1 && p.approximatelyLess(point.y, minimum)) {
       Vector(0, -1, 0)
     } else {
       Vector(point.x, 0, point.z)
@@ -213,7 +214,7 @@ case class Cone(minimum: Double = Double.NegativeInfinity,
     val b = 2 * ray.origin.x * ray.direction.x - 2 * ray.origin.y * ray.direction.y + 2 * ray.origin.z * ray.direction.z
     val c = ray.origin.x * ray.origin.x - ray.origin.y * ray.origin.y + ray.origin.z * ray.origin.z
 
-    if (approximatelyEqual(a, 0.0) && !approximatelyEqual(b, 0.0)) {
+    if (implicitly[Precision[Double]].approximatelyEqual(a, 0.0) && !implicitly[Precision[Double]].approximatelyEqual(b, 0.0)) {
       val t = -c / (2 * b)
       val y0 = ray.origin.y + (t * ray.direction.y)
       if (minimum < y0 && y0 < maximum) {
@@ -244,7 +245,7 @@ case class Cone(minimum: Double = Double.NegativeInfinity,
   private def intersectCaps(ray: Ray): List[Intersection] = {
     var result: List[Intersection] = Nil //todo refactor
 
-    if (!closed || approximatelyEqual(ray.direction.y, 0.0)) {
+    if (!closed || implicitly[Precision[Double]].approximatelyEqual(ray.direction.y, 0.0)) {
       return result
     }
 
@@ -269,10 +270,11 @@ case class Cone(minimum: Double = Double.NegativeInfinity,
 
   override def localNormalAt(point: Point, intersection: Intersection): Vector = {
     val dist = point.x * point.x + point.z * point.z
-
-    if (dist < 1 && (point.y >= maximum - EPSILON)) { //todo remove reference to epsilon
+    //p.approximatelyLess(point.y, minimum)
+    val p = implicitly[Precision[Double]]
+    if (dist < 1 && p.approximatelyGreater(point.y, maximum)) { //todo remove reference to epsilon
       Vector(0, 1, 0)
-    } else if (dist < 1 && (point.y <= minimum + EPSILON)) {
+    } else if (dist < 1 && p.approximatelyLess(point.y, minimum)) {
       Vector(0, -1, 0)
     } else {
       val y0 = math.hypot(point.x, point.z)
@@ -321,7 +323,7 @@ case class Triangle(p1: Point,
   override def localIntersect(ray: Ray): Intersections = {
     val dirCrossE2 = ray.direction cross e2
     val det = e1 dot dirCrossE2
-    if (approximatelyEqual(det, 0.0)) {
+    if (implicitly[Precision[Double]].approximatelyEqual(det, 0.0)) {
       return Intersections(Nil)
     }
 
@@ -364,7 +366,7 @@ case class SmoothTriangle(
   override def localIntersect(ray: Ray): Intersections = {
     val dirCrossE2 = ray.direction cross e2
     val det = e1 dot dirCrossE2
-    if (approximatelyEqual(det, 0.0)) {
+    if (implicitly[Precision[Double]].approximatelyEqual(det, 0.0)) {
       return Intersections(Nil)
     }
 
