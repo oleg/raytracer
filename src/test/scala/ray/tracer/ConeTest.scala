@@ -3,7 +3,7 @@ package ray.tracer
 import org.scalatest.FunSuite
 
 class ConeTest extends FunSuite {
-
+  val p = implicitly[Precision[Double]]
   test("Intersecting a cone with a ray, 5;5") {
     val ray = Ray(Point(0, 0, -5), Vector(0, 0, 1).normalize)
 
@@ -20,8 +20,8 @@ class ConeTest extends FunSuite {
     val xs = Cone().localIntersect(ray)
 
     assert(xs.length == 2)
-    assert(approximatelyEqual(xs(0).t, 8.66025))
-    assert(approximatelyEqual(xs(1).t, 8.66025))
+    assert(p.approximatelyEqual(xs(0).t, 8.66025))
+    assert(p.approximatelyEqual(xs(1).t, 8.66025))
   }
 
   test("Intersecting a cone with a ray, 4;49") {
@@ -30,8 +30,8 @@ class ConeTest extends FunSuite {
     val xs = Cone().localIntersect(ray)
 
     assert(xs.length == 2)
-    assert(approximatelyEqual(xs(0).t, 4.55006))
-    assert(approximatelyEqual(xs(1).t, 49.44994))
+    assert(p.approximatelyEqual(xs(0).t, 4.55006))
+    assert(p.approximatelyEqual(xs(1).t, 49.44994))
   }
 
   test("Intersecting a cone with a ray parallel to one of its halves") {
@@ -39,7 +39,7 @@ class ConeTest extends FunSuite {
 
     val xs = Cone().localIntersect(ray)
     assert(xs.length == 1)
-    assert(approximatelyEqual(xs(0).t, 0.35355))
+    assert(p.approximatelyEqual(xs(0).t, 0.35355))
   }
 
   test("Intersecting a cone's end caps; -5") {

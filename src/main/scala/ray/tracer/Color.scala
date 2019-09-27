@@ -17,11 +17,10 @@ class Color(val red: Double, val green: Double, val blue: Double) {
   private def zip(other: Color, f: (Double, Double) => Double): Color =
     new Color(f(red, other.red), f(green, other.green), f(blue, other.blue))
 
-  //TODO Implement via implicits!!!
-  def ==~(other: Color): Boolean =
-    approximatelyEqual(red, other.red) &&
-      approximatelyEqual(green, other.green) &&
-      approximatelyEqual(blue, other.blue)
+  def ==~(other: Color)(implicit p: Precision[Double]): Boolean =
+    p.approximatelyEqual(red, other.red) &&
+      p.approximatelyEqual(green, other.green) &&
+      p.approximatelyEqual(blue, other.blue)
 
   def canEqual(other: Any): Boolean = other.isInstanceOf[Color]
 
