@@ -8,7 +8,7 @@ case class Cylinder(minimum: Double = Double.NegativeInfinity,
                     closed: Boolean = false,
                     transform: Matrix4x4 = Matrix4x4.Identity,
                     material: Material = Material(),
-                    var parent: Shape = null) extends Shape {
+                    parent: Shape = null) extends Shape {
 
   override def localIntersect(ray: Ray): Intersections = {
     val d = ray.direction
@@ -83,7 +83,7 @@ case class Cone(minimum: Double = Double.NegativeInfinity,
                 closed: Boolean = false,
                 transform: Matrix4x4 = Matrix4x4.Identity,
                 material: Material = Material(),
-                var parent: Shape = null) extends Shape {
+                parent: Shape = null) extends Shape {
 
   override def localIntersect(ray: Ray): Intersections = {
     val d = ray.direction
@@ -106,7 +106,7 @@ case class Cone(minimum: Double = Double.NegativeInfinity,
     RayMath.solveQuadratic(a, b, c) match {
       case Some((t0, t1)) =>
         val xsCylinder = List(t0, t1)
-          .sorted
+          .sorted(Ordering.Double.TotalOrdering)
           .map(t => (t, o.y + t * d.y))
           .filter(t2y => minimum < t2y._2 && t2y._2 < maximum)
           .map(t2y => t2y._1)

@@ -5,10 +5,10 @@ import org.scalatest.FunSuite
 class CsgTest extends FunSuite {
 
   test("CSG is created with an operation and two shapes") {
-    val s1 = Sphere()
-    val s2 = Cube()
+    val c = Csg(Operation.union)
+    val s1 = Sphere(parent = c)
+    val s2 = Cube(parent = c)
 
-    val c = Csg(Operation.union, s1, s2)
 
     assert(c.operation == Operation.union)
     assert(c.left == s1)

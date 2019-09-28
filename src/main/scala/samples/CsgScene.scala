@@ -26,27 +26,33 @@ object CsgScene {
       transform = Identity.translate(0, -10, 0)
     )
 
-    val c1 = Cube(
-      transform = Identity.scale(3.5, 3.5, 3.5),
-      material = Material(color = Color(1, 0.3, 0.3)))
-
-    val s1 = Sphere(
-      transform = Identity.scale(4, 4, 4),
-      material = Material(color = Color(0.3, 0.3, 1)))
-
-    val csg1 = Csg(Operation.difference, c1, s1,
+    val csg1 = Csg(Operation.difference, null, null,
       transform = Identity.rotateX(Pi/6).rotateZ(Pi/6).rotateY(Pi/6).translate(-7, 0, 0))
 
-    val c2 = Cube(
+    Cube(
+      transform = Identity.scale(3.5, 3.5, 3.5),
+      material = Material(color = Color(1, 0.3, 0.3)),
+      parent = csg1)
+
+    Sphere(
       transform = Identity.scale(4, 4, 4),
-      material = Material(color = Color(1, 0.3, 0.3)))
+      material = Material(color = Color(0.3, 0.3, 1)),
+      parent = csg1)
 
-    val s2 = Sphere(
-      transform = Identity.scale(5, 5, 5),
-      material = Material(color = Color(0.3, 0.3, 1)))
 
-    val csg2 = Csg(Operation.difference, s2, c2,
+    val csg2 = Csg(Operation.difference, null, null,
       transform = Identity.rotateX(Pi/6).rotateZ(Pi/6).rotateY(Pi/6).translate(7, 0, 0))
+
+    Sphere(
+      transform = Identity.scale(5, 5, 5),
+      material = Material(color = Color(0.3, 0.3, 1)),
+      parent = csg2)
+
+    Cube(
+      transform = Identity.scale(4, 4, 4),
+      material = Material(color = Color(1, 0.3, 0.3)),
+      parent = csg2)
+
 
     val light = PointLight(Point(4, 18, -10), Color(1, 1, 1))
 

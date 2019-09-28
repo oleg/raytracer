@@ -5,9 +5,11 @@ import ray.tracer.{Intersection, Intersections, Material, Matrix4x4, Point, Ray,
 trait Shape {
   val transform: Matrix4x4
   val material: Material
-  var parent: Shape //todo should not return Group
+  val parent: Shape
   def localIntersect(ray: Ray): Intersections
   def localNormalAt(point: Point, intersection: Intersection): Vector
+
+  parentSet(parent)
 
   def intersect(worldRay: Ray): Intersections =
     localIntersect(
@@ -24,6 +26,15 @@ trait Shape {
   def normalToWorld(normal: Vector): Vector = {
     val n = (transform.inverse.transpose * normal).normalize
     if (parent != null) parent.normalToWorld(n) else n
+  }
+
+  private def parentSet(shape: Shape): Unit = {
+    if (parent != null)
+      parent.newChildrenAdded(this)
+  }
+
+  protected def newChildrenAdded(shape: Shape): Unit = {
+    //override if needed
   }
 
 }

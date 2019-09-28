@@ -8,7 +8,7 @@ class GroupTest extends FunSuite {
 
   case class TestShape(transform: Matrix4x4 = Matrix4x4.Identity,
                        material: Material = Material(),
-                       var parent: Shape = null,
+                       parent: Shape = null,
                        var savedRay: Ray = null) extends Shape {
 
     //todo replace with mocks
@@ -37,7 +37,7 @@ class GroupTest extends FunSuite {
     val g = Group()
     val s = TestShape(parent = g)
 
-    g.add(s)
+//    g.add(s)
 
     assert(g.size == 1)
     assert(g.contains(s))
@@ -55,13 +55,13 @@ class GroupTest extends FunSuite {
 
   test("Intersecting a ray with a nonempty group") {
     val g = Group()
-    val s1 = Sphere()
-    val s2 = Sphere(transform = Matrix4x4.Translation(0, 0, -3))
-    val s3 = Sphere(transform = Matrix4x4.Translation(5, 0, 0))
+    val s1 = Sphere(parent = g)
+    val s2 = Sphere(transform = Matrix4x4.Translation(0, 0, -3), parent = g)
+    val s3 = Sphere(transform = Matrix4x4.Translation(5, 0, 0), parent = g)
 
-    g.add(s1)
-    g.add(s2)
-    g.add(s3)
+//    g.add(s1)
+//    g.add(s2)
+//    g.add(s3)
 
     val r = Ray(Point(0, 0, -5), Vector(0, 0, 1))
 
@@ -76,9 +76,9 @@ class GroupTest extends FunSuite {
 
   test("Intersecting a transformed group") {
     val g = Group(transform = Matrix4x4.Scaling(2, 2, 2))
-    val s = Sphere(transform = Matrix4x4.Translation(5, 0, 0))
+    val s = Sphere(transform = Matrix4x4.Translation(5, 0, 0), parent = g)
 
-    g.add(s)
+//    g.add(s)
 
     val r = Ray(Point(10, 0, -10), Vector(0, 0, 1))
 
@@ -89,11 +89,11 @@ class GroupTest extends FunSuite {
 
   test("Converting a point from world to object space") {
     val g1 = Group(transform = Matrix4x4.RotationY(Pi / 2.0))
-    val g2 = Group(transform = Matrix4x4.Scaling(2, 2, 2))
-    val s = Sphere(transform = Matrix4x4.Translation(5, 0, 0))
+    val g2 = Group(transform = Matrix4x4.Scaling(2, 2, 2), parent = g1)
+    val s = Sphere(transform = Matrix4x4.Translation(5, 0, 0), parent = g2)
 
-    g1.add(g2)
-    g2.add(s)
+//    g1.add(g2)
+//    g2.add(s)
 
     val p = s.worldToObject(Point(-2, 0, -10))
 
@@ -102,11 +102,11 @@ class GroupTest extends FunSuite {
 
   test("Converting a normal from object to world space") {
     val g1 = Group(transform = Matrix4x4.RotationY(Pi / 2))
-    val g2 = Group(transform = Matrix4x4.Scaling(1, 2, 3))
-    val s = Sphere(transform = Matrix4x4.Translation(5, 0, 0))
+    val g2 = Group(transform = Matrix4x4.Scaling(1, 2, 3), parent = g1)
+    val s = Sphere(transform = Matrix4x4.Translation(5, 0, 0), parent = g2)
 
-    g2.add(s)
-    g1.add(g2)
+//    g2.add(s)
+//    g1.add(g2)
 
     val normal = Vector(math.sqrt(3) / 3.0, math.sqrt(3) / 3.0, math.sqrt(3) / 3.0)
 
@@ -117,11 +117,11 @@ class GroupTest extends FunSuite {
 
   test("Finding the normal on a child object") {
     val g1 = Group(transform = Matrix4x4.RotationY(Pi / 2))
-    val g2 = Group(transform = Matrix4x4.Scaling(1, 2, 3))
-    val s = Sphere(transform = Matrix4x4.Translation(5, 0, 0))
+    val g2 = Group(transform = Matrix4x4.Scaling(1, 2, 3), parent = g1)
+    val s = Sphere(transform = Matrix4x4.Translation(5, 0, 0), parent = g2)
 
-    g1.add(g2)
-    g2.add(s)
+//    g1.add(g2)
+//    g2.add(s)
 
     val n = s.normalAt(Point(1.7321, 1.1547, -5.5774), null)
 

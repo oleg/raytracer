@@ -5,7 +5,7 @@ import ray.tracer.{Intersection, Intersections, Material, Matrix4x4, Point, Ray,
 
 case class Sphere(transform: Matrix4x4 = Matrix4x4.Identity,
                   material: Material = Material(),
-                  var parent: Shape = null) extends Shape {
+                  parent: Shape = null) extends Shape {
 
   override def localIntersect(ray: Ray): Intersections = {
     val sphereToRay = ray.origin - Point(0, 0, 0)

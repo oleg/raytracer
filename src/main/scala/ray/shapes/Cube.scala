@@ -4,7 +4,7 @@ import ray.tracer.{Intersection, Intersections, Material, Matrix4x4, Point, Ray,
 
 case class Cube(transform: Matrix4x4 = Matrix4x4.Identity,
                 material: Material = Material(),
-                var parent: Shape = null) extends Shape {
+                parent: Shape = null) extends Shape {
 
   override def localIntersect(ray: Ray): Intersections = {
     val (xtmin, xtmax) = normalizeAxis(ray.origin.x, ray.direction.x)

@@ -66,7 +66,7 @@ class ObjFileParser {
           triangle(item, pair(0), pair(1))
         }
       })
-      .foreach(currentGroup.add(_))
+      .toList
   }
 
   //todo refactor
@@ -94,8 +94,8 @@ class ObjFileParser {
   //todo refactor
   private def parseGroupName(line: String): Unit = {
     val items = line.split("\\s+")
-    currentGroup = Group()
-    mainGroup.add(currentGroup) //todo refactor
+    currentGroup = Group(parent = mainGroup)
+//    mainGroup.add(currentGroup) //todo refactor
     groups.put(items(1), currentGroup)
   }
 
@@ -103,7 +103,8 @@ class ObjFileParser {
     Triangle(
       vertices(i1.vertexIndex),
       vertices(i2.vertexIndex),
-      vertices(i3.vertexIndex))
+      vertices(i3.vertexIndex),
+      parent = currentGroup)
   }
 
   //todo refactor
@@ -114,7 +115,8 @@ class ObjFileParser {
       vertices(i3.vertexIndex),
       normals(i1.normalIndex),
       normals(i2.normalIndex),
-      normals(i3.normalIndex))
+      normals(i3.normalIndex),
+      parent = currentGroup)
   }
 }
 

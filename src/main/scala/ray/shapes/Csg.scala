@@ -17,14 +17,21 @@ object Operation extends Enumeration {
 }
 
 case class Csg(operation: Operation,
-               left: Shape, //todo this is children!
-               right: Shape,
+               var left: Shape = null, //todo this is children!
+               var right: Shape = null,
                transform: Matrix4x4 = Matrix4x4.Identity,
                material: Material = Material(),
-               var parent: Shape = null) extends Shape {
+               parent: Shape = null) extends Shape {
 
-  left.parent = this
-  right.parent = this
+//  left.parent = this
+//  right.parent = this
+
+  override protected def newChildrenAdded(shape: Shape): Unit = {
+    if (left == null)
+      left = shape
+    else
+      right = shape
+  }
 
   //todo refactor, replace with polymorphism
   private def includes(a: Shape, b: Shape): Boolean =

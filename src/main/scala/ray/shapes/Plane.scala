@@ -4,7 +4,7 @@ import ray.tracer.{Intersection, Intersections, Material, Matrix4x4, Point, Prec
 
 case class Plane(transform: Matrix4x4 = Matrix4x4.Identity,
                  material: Material = Material(),
-                 var parent: Shape = null) extends Shape { //todo can I make it immutable
+                parent: Shape = null) extends Shape { //todo can I make it immutable
 
   //todo:oleg can I simplify this, should method expect implicit param?
   override def localIntersect(ray: Ray): Intersections =

@@ -25,7 +25,7 @@ object ObjFileScene {
         .rotateX(-Pi / 2)
         .translate(0, -5, 0))
 
-    group1.add(obj.mainGroup)
+//    group1.add(obj.mainGroup) //todo oleg fix me
 
     val world = World(
       PointLight(Point(20, 20, 30), Color.white),

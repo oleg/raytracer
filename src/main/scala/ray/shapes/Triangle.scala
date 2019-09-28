@@ -7,7 +7,7 @@ case class Triangle(p1: Point,
                     p3: Point,
                     transform: Matrix4x4 = Matrix4x4.Identity,
                     material: Material = Material(),
-                    var parent: Shape = null) extends Shape {
+                    parent: Shape = null) extends Shape {
 
   val e1: Vector = p2 - p1
   val e2: Vector = p3 - p1
@@ -50,7 +50,7 @@ case class SmoothTriangle(
                            n3: Vector,
                            transform: Matrix4x4 = Matrix4x4.Identity,
                            material: Material = Material(),
-                           var parent: Shape = null) extends Shape {
+                           parent: Shape = null) extends Shape {
 
   val e1: Vector = p2 - p1
   val e2: Vector = p3 - p1

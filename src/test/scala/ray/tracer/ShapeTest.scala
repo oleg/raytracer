@@ -9,7 +9,7 @@ class ShapeTest extends FunSuite {
 
   case class TestShape(transform: Matrix4x4 = Matrix4x4.Identity,
                        material: Material = Material(),
-                       var parent: Shape = null,
+                       parent: Shape = null,
                        var savedRay: Ray = null) extends Shape {
 
     //todo replace with mocks
