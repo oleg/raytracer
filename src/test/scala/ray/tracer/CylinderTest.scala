@@ -1,7 +1,7 @@
 package ray.tracer
 
 import org.scalatest.FunSuite
-
+import ray.shapes._
 class CylinderTest extends FunSuite {
   val p = implicitly[Precision[Double]] //todo
 

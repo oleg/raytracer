@@ -1,4 +1,4 @@
-package ray.sample
+package samples
 
 import java.io.PrintWriter
 
@@ -6,6 +6,7 @@ import ray.tracer.Matrix4x4.Identity
 import ray.tracer._
 
 import scala.math.Pi
+import ray.shapes._
 
 object CsgScene {
 

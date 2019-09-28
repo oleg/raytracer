@@ -1,5 +1,6 @@
 package ray.tracer
-
+import ray.shapes._
+import ray.raymath.RayMath._
 import org.scalatest.FunSuite
 
 class IntersectionTest extends FunSuite {

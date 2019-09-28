@@ -1,5 +1,5 @@
 package ray.tracer
-
+import ray.raymath.RayMath._
 import org.scalatest.FunSuite
 
 import scala.math.{Pi, sqrt}

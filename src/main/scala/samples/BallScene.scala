@@ -1,9 +1,10 @@
-package ray.sample
+package samples
 
 import java.io.PrintWriter
 
 import ray.tracer.Matrix4x4.Identity
 import ray.tracer._
+import ray.shapes._
 
 import scala.math.Pi
 

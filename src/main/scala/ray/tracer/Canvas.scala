@@ -1,6 +1,8 @@
 package ray.tracer
 
-case class Canvas(width: Int, height: Int, initialColor: Color = Color(0, 0, 0)) {
+case class Canvas(width: Int,
+                  height: Int,
+                  initialColor: Color = Color(0, 0, 0)) {
   private val pixels: Array[Array[Color]] = Array.fill(width, height)(initialColor)
 
   def toPpm: String = {

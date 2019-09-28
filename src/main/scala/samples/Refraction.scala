@@ -1,4 +1,4 @@
-package ray.sample
+package samples
 
 import java.io.PrintWriter
 
@@ -6,8 +6,9 @@ import ray.tracer.Matrix4x4.Identity
 import ray.tracer._
 
 import scala.math.Pi
+import ray.shapes._
 
-object Cubes {
+object Refraction {
 
   def main(args: Array[String]): Unit = {
     val l = System.currentTimeMillis() //todo remove
@@ -22,8 +23,7 @@ object Cubes {
         reflective = 0.7,
         transparency = 0.2,
         refractiveIndex = 1.3,
-        pattern = GradientPattern(Color.black, Color.white,
-          transform = Identity.scale(7, 1, 1).rotateY(math.Pi / 2).translate(0, 0, -10)))
+        pattern = CheckersPattern(Color.black, Color.white))
     )
 
     val back = Plane(
@@ -31,50 +31,46 @@ object Cubes {
         reflective = 0.3,
         transparency = 0.1,
         refractiveIndex = 2,
-        pattern = RingPattern(Color(0.2, 0.2, 0.2), Color(0.8, 0.8, 0.8))),
+        pattern = CheckersPattern(Color.black, Color.white)),
       transform = Identity.rotateX(-Pi / 2).translate(0, 0, 4)
     )
 
-    val b0 = Cube(
-      Identity.translate(2.2, 1, -1.5)
-        .scale(0.4, 0.5, 0.6),
+    val b0 = Sphere(
+      Identity.translate(-2.4, 1, 0.2),
       Material(
         //        specular = 1,
         transparency = 0.3,
         reflective = 0.3,
         refractiveIndex = 1,
         ambient = 0.2,
-        color = Color(0.9, 0.8, 0.2)
+        color = Color.white
       ))
 
-    val b1 = Cube(
-      Identity.translate(-0.1, 1, 0)
-        .scale(0.9, 0.8, 0.7),
+    val b1 = Sphere(
+      Identity.translate(-0.1, 1, 0.2),
       Material(
         transparency = 0.5,
         reflective = 0.3,
         refractiveIndex = 1.2,
-        color = Color(0.9, 0.2, 0.2)
+        color = Color(0, 0, 0.4)
       ))
 
-    val b3 = Cube(
-      Identity.translate(-1.5, 1, 1.3)
-        .scale(1, 1, 1),
+    val b3 = Sphere(
+      Identity.translate(2.2, 1, 0.2),
       Material(
         transparency = 0.7,
         reflective = 0.3,
         refractiveIndex = 1.5,
-        color = Color(0.1, 0.1, 0.1)
+        color = Color(0.4, 0, 0)
       ))
 
     val light = PointLight(Point(10, 10, -10), Color(1, 1, 1))
 
     val world = World(light, floor :: b0 :: b1 :: b3 :: back :: Nil)
-    val f = 20
-    val camera = Camera(100 * f, 50 * f, Pi / 3, Matrix4x4.viewTransform(Point(0, 3, -6), Point(0, 1, 0), Vector(0, 1, 0)))
+    val camera = Camera(1000, 500, Pi / 3, Matrix4x4.viewTransform(Point(0, 3, -6), Point(0, 1, 0), Vector(0, 1, 0)))
     val canvas = camera.renderConcurrently(world)
 
-    new PrintWriter(s"cubes-${System.currentTimeMillis()}.ppm") {
+    new PrintWriter(s"refraction-${System.currentTimeMillis()}.ppm") {
       write(canvas.toPpm)
       close()
     }

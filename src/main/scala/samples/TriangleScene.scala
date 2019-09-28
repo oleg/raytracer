@@ -1,5 +1,5 @@
-package ray.sample
-
+package samples
+import ray.shapes._
 import java.io.PrintWriter
 
 import ray.tracer.Matrix4x4.Identity

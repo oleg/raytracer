@@ -1,5 +1,5 @@
-package ray.sample
-
+package samples
+import ray.shapes._
 import java.io.PrintWriter
 
 import ray.tracer._
@@ -18,6 +18,7 @@ object ObjFileScene {
   def draw(args: Array[String]): Unit = {
 
     val obj = new ObjFileParser().parse(Source.fromResource("teapot-low.obj"))
+
     //todo fix
     val group1 = Group(
       transform = Matrix4x4.Identity

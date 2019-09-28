@@ -1,5 +1,6 @@
 package ray.tracer
 
+//TODO don't make it generic, make it always Double
 trait Precision[T] {
 
   def precision: T

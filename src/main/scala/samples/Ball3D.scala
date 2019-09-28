@@ -1,8 +1,9 @@
-package ray.sample
+package samples
 
 import java.io.PrintWriter
 
 import ray.tracer._
+import ray.shapes._
 
 object Ball3D {
 

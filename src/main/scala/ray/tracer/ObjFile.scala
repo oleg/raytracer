@@ -1,5 +1,7 @@
 package ray.tracer
 
+import ray.shapes._
+
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
@@ -13,18 +15,18 @@ case class ObjFile(
 
 class ObjFileParser {
 
-  val vertices: ArrayBuffer[Point] = ArrayBuffer()
+  private val vertices: ArrayBuffer[Point] = ArrayBuffer()
   vertices += null
 
-  val normals: ArrayBuffer[Vector] = ArrayBuffer()
+  private val normals: ArrayBuffer[Vector] = ArrayBuffer()
   normals += null //todo hack fix me
 
+  private val mainGroup: Group = Group()
+  private val groups: mutable.Map[String, Group] = mutable.HashMap.empty
+  private var currentGroup: Group = _
+  private var ignored: Int = 0
 
-  var currentGroup: Group = Group()
-  val groups: mutable.Map[String, Group] = mutable.HashMap.empty
-  groups.put("default", currentGroup)
-
-  var ignored: Int = 0
+  parseGroupName("g default")
 
   case class Item(vertexIndex: Int, normalIndex: Int)
 
@@ -45,10 +47,7 @@ class ObjFileParser {
         }
       })
 
-    val mainGroup = Group()
-    groups.values.foreach(mainGroup.add(_))
-
-    new ObjFile(mainGroup, groups.toMap, vertices.toList, normals.toList, ignored)
+    ObjFile(mainGroup, groups.toMap, vertices.toList, normals.toList, ignored)
   }
 
   //todo refactor
@@ -62,12 +61,12 @@ class ObjFileParser {
       .sliding(2)
       .map(pair => {
         if (smooth) {
-          smoothTriangle(item, pair(0), pair(1))
+          smoothTriangle(item, pair(0), pair(1), currentGroup)
         } else {
-          triangle(item, pair(0), pair(1))
+          triangle(item, pair(0), pair(1), currentGroup)
         }
       })
-      .foreach(currentGroup.add(_))
+      .toList
   }
 
   //todo refactor
@@ -95,25 +94,34 @@ class ObjFileParser {
   //todo refactor
   private def parseGroupName(line: String): Unit = {
     val items = line.split("\\s+")
-    currentGroup = Group()
+    currentGroup = Group(parent = mainGroup)
+    mainGroup.add(currentGroup) //todo refactor
     groups.put(items(1), currentGroup)
   }
 
-  private def triangle(i1: Item, i2: Item, i3: Item): Triangle = {
-    Triangle(
+  private def triangle(i1: Item, i2: Item, i3: Item, group: Group): Triangle = {
+    //todo refactor
+    val t = Triangle(
       vertices(i1.vertexIndex),
       vertices(i2.vertexIndex),
-      vertices(i3.vertexIndex))
+      vertices(i3.vertexIndex),
+      parent = group)
+    group.add(t)
+    t
   }
 
-  private def smoothTriangle(i1: Item, i2: Item, i3: Item): SmoothTriangle = {
-    SmoothTriangle(
+  private def smoothTriangle(i1: Item, i2: Item, i3: Item, group: Group): SmoothTriangle = {
+    val st = SmoothTriangle(
       vertices(i1.vertexIndex),
       vertices(i2.vertexIndex),
       vertices(i3.vertexIndex),
       normals(i1.normalIndex),
       normals(i2.normalIndex),
-      normals(i3.normalIndex))
+      normals(i3.normalIndex),
+      parent = group)
+    //todo refactor
+    group.add(st)
+    st
   }
 }
 

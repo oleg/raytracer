@@ -1,5 +1,5 @@
-package ray.sample
-
+package samples
+import ray.shapes._
 import java.io.PrintWriter
 
 import ray.tracer.Matrix4x4.Identity
@@ -35,6 +35,9 @@ object GroupScene {
       transform = Identity.rotateX(-Pi / 2).translate(0, 0, 4)
     )
 
+    val g = Group(transform = Identity.translate(-2, 0, 0))
+    val g1 = Group(transform = Identity.scale(0.5, 0.5, 0.5), parent = g)
+    g.add(g1)
 
     val b0 = Cube(
       Identity.translate(2.2, 1, -1.5),
@@ -45,7 +48,9 @@ object GroupScene {
         ambient = 0.2,
         color = Color(0.9, 0.8, 0.2),
         pattern = CheckersPattern(Color(0.9, 0.8, 0.2), Color(0.9, 0.2, 0.2))
-      ))
+      ),
+      parent = g1
+    )
 
     val b1 = Cube(
       Identity.translate(-0.1, 1, 0),
@@ -55,7 +60,9 @@ object GroupScene {
         refractiveIndex = 1.2,
         color = Color(0.9, 0.2, 0.2),
         pattern = CheckersPattern(Color(0.9, 0.2, 0.2), Color(0.9, 0.8, 0.2))
-      ))
+      ),
+      parent = g1
+    )
 
     val b2 = Cube(
       Identity.translate(-1.5, 1, 1.3),
@@ -64,15 +71,14 @@ object GroupScene {
         reflective = 0.3,
         refractiveIndex = 1.5,
         color = Color(0.1, 0.1, 0.1)
-      ))
-
-    val g1 = Group(transform = Identity.scale(0.5, 0.5, 0.5))
+      ),
+      parent = g1
+    )
     g1.add(b0)
     g1.add(b1)
     g1.add(b2)
 
-    val g = Group(transform = Identity.translate(-2, 0, 0))
-    g.add(g1)
+
 
     val light = PointLight(Point(10, 10, -10), Color(1, 1, 1))
 

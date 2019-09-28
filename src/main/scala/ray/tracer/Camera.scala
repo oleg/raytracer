@@ -5,7 +5,10 @@ import java.util.concurrent.TimeUnit
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
-case class Camera(hszie: Int, vsize: Int, fieldOfView: Double, transform: Matrix4x4 = Matrix4x4.Identity) {
+case class Camera(hszie: Int,
+                  vsize: Int,
+                  fieldOfView: Double,
+                  transform: Matrix4x4 = Matrix4x4.Identity) {
 
   private val halfView: Double = math.tan(fieldOfView / 2)
 

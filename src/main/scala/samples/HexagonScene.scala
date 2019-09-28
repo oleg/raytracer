@@ -1,7 +1,8 @@
-package ray.sample
+package samples
 
 import java.io.PrintWriter
 
+import ray.shapes._
 import ray.tracer.Matrix4x4.Identity
 import ray.tracer._
 
@@ -30,13 +31,28 @@ object HexagonScene {
     }
   }
 
+  private def hexagon(): Shape = {
+    val hex = Group()
+    for (n <- 0 to 5) {
+      hex.add(hexagonSide(n, hex))
+    }
+    hex
+  }
 
-  private def hexagonCorner(): Shape =
+  private def hexagonSide(n: Int, hex: Group): Shape = {
+    val side = Group(transform = Identity.rotateY(n * Pi / 3), parent = hex)
+    side.add(hexagonCorner(side))
+    side.add(hexagonEdge(side))
+    side
+  }
+
+  private def hexagonCorner(group: Group): Shape =
     Sphere(transform = Identity
       .scale(0.25, 0.25, 0.25)
-      .translate(0, 0, -1))
+      .translate(0, 0, -1),
+      parent = group)
 
-  private def hexagonEdge(): Shape =
+  private def hexagonEdge(group: Group): Shape =
     Cylinder(
       minimum = 0,
       maximum = 1,
@@ -44,21 +60,7 @@ object HexagonScene {
         .scale(0.25, 1, 0.25)
         .rotateZ(-Pi / 2)
         .rotateY(-Pi / 6)
-        .translate(0, 0, -1))
-
-  private def hexagonSide(n: Int): Shape = {
-    val side = Group(transform = Identity.rotateY(n * Pi / 3))
-    side.add(hexagonCorner())
-    side.add(hexagonEdge())
-    side
-  }
-
-  private def hexagon(): Shape = {
-    val hex = Group()
-    for (n <- 0 to 5) {
-      hex.add(hexagonSide(n))
-    }
-    hex
-  }
+        .translate(0, 0, -1),
+      parent = group)
 
 }

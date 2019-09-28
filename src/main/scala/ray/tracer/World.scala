@@ -1,4 +1,6 @@
 package ray.tracer
+import ray.shapes._
+import ray.shapes.Sphere
 
 case class World(light: PointLight, shapes: List[Shape]) {
 

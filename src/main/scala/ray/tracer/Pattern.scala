@@ -1,4 +1,5 @@
 package ray.tracer
+import ray.shapes._
 
 trait Pattern {
 

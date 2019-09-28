@@ -1,5 +1,7 @@
 package ray.tracer
 
+import ray.shapes._
+
 import scala.collection.mutable.ArrayBuffer
 
 case class Computation(t: Double,

@@ -1,4 +1,4 @@
-package ray.sample
+package samples
 
 import java.io.PrintWriter
 

@@ -1,9 +1,9 @@
 package ray.tracer
-
+import ray.shapes._
 import org.scalatest.FunSuite
 
 import scala.math.Pi
-
+import ray.shapes._
 class GroupTest extends FunSuite {
 
   case class TestShape(transform: Matrix4x4 = Matrix4x4.Identity,
@@ -35,7 +35,7 @@ class GroupTest extends FunSuite {
 
   test("Adding a child to a group") {
     val g = Group()
-    val s = TestShape()
+    val s = TestShape(parent = g)
 
     g.add(s)
 
@@ -89,8 +89,8 @@ class GroupTest extends FunSuite {
 
   test("Converting a point from world to object space") {
     val g1 = Group(transform = Matrix4x4.RotationY(Pi / 2.0))
-    val g2 = Group(transform = Matrix4x4.Scaling(2, 2, 2))
-    val s = Sphere(transform = Matrix4x4.Translation(5, 0, 0))
+    val g2 = Group(transform = Matrix4x4.Scaling(2, 2, 2), parent = g1)
+    val s = Sphere(transform = Matrix4x4.Translation(5, 0, 0), parent = g2)
 
     g1.add(g2)
     g2.add(s)
@@ -102,8 +102,8 @@ class GroupTest extends FunSuite {
 
   test("Converting a normal from object to world space") {
     val g1 = Group(transform = Matrix4x4.RotationY(Pi / 2))
-    val g2 = Group(transform = Matrix4x4.Scaling(1, 2, 3))
-    val s = Sphere(transform = Matrix4x4.Translation(5, 0, 0))
+    val g2 = Group(transform = Matrix4x4.Scaling(1, 2, 3), parent = g1)
+    val s = Sphere(transform = Matrix4x4.Translation(5, 0, 0), parent = g2)
 
     g2.add(s)
     g1.add(g2)
@@ -117,8 +117,8 @@ class GroupTest extends FunSuite {
 
   test("Finding the normal on a child object") {
     val g1 = Group(transform = Matrix4x4.RotationY(Pi / 2))
-    val g2 = Group(transform = Matrix4x4.Scaling(1, 2, 3))
-    val s = Sphere(transform = Matrix4x4.Translation(5, 0, 0))
+    val g2 = Group(transform = Matrix4x4.Scaling(1, 2, 3), parent = g1)
+    val s = Sphere(transform = Matrix4x4.Translation(5, 0, 0), parent = g2)
 
     g1.add(g2)
     g2.add(s)

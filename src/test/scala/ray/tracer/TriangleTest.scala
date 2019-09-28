@@ -1,5 +1,5 @@
 package ray.tracer
-
+import ray.shapes._
 import org.scalatest.FunSuite
 
 class TriangleTest extends FunSuite {
