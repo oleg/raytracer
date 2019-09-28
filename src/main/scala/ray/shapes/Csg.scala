@@ -17,7 +17,7 @@ object Operation extends Enumeration {
 }
 
 case class Csg(operation: Operation,
-               left: Shape,
+               left: Shape, //todo this is children!
                right: Shape,
                transform: Matrix4x4 = Matrix4x4.Identity,
                material: Material = Material(),

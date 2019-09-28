@@ -36,7 +36,7 @@ object GroupScene {
     )
 
     val g = Group(transform = Identity.translate(-2, 0, 0))
-    val g1 = Group(transform = Identity.scale(0.5, 0.5, 0.5), parent = g)
+    val g1 = Group(transform = Identity.scale(0.5, 0.5, 0.5))
     g.add(g1)
 
     val b0 = Cube(
@@ -48,9 +48,7 @@ object GroupScene {
         ambient = 0.2,
         color = Color(0.9, 0.8, 0.2),
         pattern = CheckersPattern(Color(0.9, 0.8, 0.2), Color(0.9, 0.2, 0.2))
-      ),
-      parent = g1
-    )
+      ))
 
     val b1 = Cube(
       Identity.translate(-0.1, 1, 0),
@@ -60,9 +58,7 @@ object GroupScene {
         refractiveIndex = 1.2,
         color = Color(0.9, 0.2, 0.2),
         pattern = CheckersPattern(Color(0.9, 0.2, 0.2), Color(0.9, 0.8, 0.2))
-      ),
-      parent = g1
-    )
+      ))
 
     val b2 = Cube(
       Identity.translate(-1.5, 1, 1.3),
@@ -71,9 +67,7 @@ object GroupScene {
         reflective = 0.3,
         refractiveIndex = 1.5,
         color = Color(0.1, 0.1, 0.1)
-      ),
-      parent = g1
-    )
+      ))
     g1.add(b0)
     g1.add(b1)
     g1.add(b2)

@@ -19,7 +19,7 @@ case class Group(children: ListBuffer[Shape] = ListBuffer(),
 
   def add(shape: Shape): Unit = {
     children += shape
-//    shape.parent = this //todo refactor
+    shape.parent = this //todo refactor
   }
 
   def contains(shape: Shape): Boolean = children.contains(shape)

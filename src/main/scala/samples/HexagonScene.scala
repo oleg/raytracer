@@ -34,25 +34,24 @@ object HexagonScene {
   private def hexagon(): Shape = {
     val hex = Group()
     for (n <- 0 to 5) {
-      hex.add(hexagonSide(n, hex))
+      hex.add(hexagonSide(n))
     }
     hex
   }
 
-  private def hexagonSide(n: Int, hex: Group): Shape = {
-    val side = Group(transform = Identity.rotateY(n * Pi / 3), parent = hex)
-    side.add(hexagonCorner(side))
-    side.add(hexagonEdge(side))
+  private def hexagonSide(n: Int): Shape = {
+    val side = Group(transform = Identity.rotateY(n * Pi / 3))
+    side.add(hexagonCorner())
+    side.add(hexagonEdge())
     side
   }
 
-  private def hexagonCorner(group: Group): Shape =
+  private def hexagonCorner(): Shape =
     Sphere(transform = Identity
       .scale(0.25, 0.25, 0.25)
-      .translate(0, 0, -1),
-      parent = group)
+      .translate(0, 0, -1))
 
-  private def hexagonEdge(group: Group): Shape =
+  private def hexagonEdge(): Shape =
     Cylinder(
       minimum = 0,
       maximum = 1,
@@ -60,7 +59,6 @@ object HexagonScene {
         .scale(0.25, 1, 0.25)
         .rotateZ(-Pi / 2)
         .rotateY(-Pi / 6)
-        .translate(0, 0, -1),
-      parent = group)
+        .translate(0, 0, -1))
 
 }

@@ -61,12 +61,12 @@ class ObjFileParser {
       .sliding(2)
       .map(pair => {
         if (smooth) {
-          smoothTriangle(item, pair(0), pair(1), currentGroup)
+          smoothTriangle(item, pair(0), pair(1))
         } else {
-          triangle(item, pair(0), pair(1), currentGroup)
+          triangle(item, pair(0), pair(1))
         }
       })
-      .toList
+      .foreach(currentGroup.add(_))
   }
 
   //todo refactor
@@ -94,34 +94,27 @@ class ObjFileParser {
   //todo refactor
   private def parseGroupName(line: String): Unit = {
     val items = line.split("\\s+")
-    currentGroup = Group(parent = mainGroup)
+    currentGroup = Group()
     mainGroup.add(currentGroup) //todo refactor
     groups.put(items(1), currentGroup)
   }
 
-  private def triangle(i1: Item, i2: Item, i3: Item, group: Group): Triangle = {
-    //todo refactor
-    val t = Triangle(
+  private def triangle(i1: Item, i2: Item, i3: Item): Triangle = {
+    Triangle(
       vertices(i1.vertexIndex),
       vertices(i2.vertexIndex),
-      vertices(i3.vertexIndex),
-      parent = group)
-    group.add(t)
-    t
+      vertices(i3.vertexIndex))
   }
 
-  private def smoothTriangle(i1: Item, i2: Item, i3: Item, group: Group): SmoothTriangle = {
-    val st = SmoothTriangle(
+  //todo refactor
+  private def smoothTriangle(i1: Item, i2: Item, i3: Item): SmoothTriangle = {
+    SmoothTriangle(
       vertices(i1.vertexIndex),
       vertices(i2.vertexIndex),
       vertices(i3.vertexIndex),
       normals(i1.normalIndex),
       normals(i2.normalIndex),
-      normals(i3.normalIndex),
-      parent = group)
-    //todo refactor
-    group.add(st)
-    st
+      normals(i3.normalIndex))
   }
 }
 
