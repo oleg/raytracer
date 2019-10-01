@@ -5,10 +5,8 @@ trait Pattern {
 
   val transform: Matrix4x4
 
-  def patternAtShape(shape: Shape, point: Point): Color = {
-    val objPoint = shape.worldToObject(point)
-    val patternPoint = this.transform.inverse * objPoint
-    patternAt(patternPoint)
+  def patternAtShape(objectPoint: Point): Color = {
+    patternAt(this.transform.inverse * objectPoint)
   }
 
   def patternAt(point: Point): Color

@@ -17,13 +17,13 @@ case class World(light: PointLight, shapes: List[Shape]) {
   def shadeHit(comps: Computation, leftIterations: Int = 5): Color = {
     val shadowed = isShadowed(comps.overPoint)
 
-    val surface = comps.obj.material.lighting(
-      light, comps.obj, comps.overPoint, comps.eyev, comps.normalv, shadowed)
+    val surface = comps.material.lighting(
+      light, comps.overPoint, comps.objectPoint, comps.eyev, comps.normalv, shadowed)
 
     val reflected = reflectedColor(comps, leftIterations)
     val refracted = refractedColor(comps, leftIterations)
 
-    val m = comps.obj.material
+    val m = comps.material
     if (m.reflective > 0 && m.transparency > 0) {
       val reflectance = comps.schlick()
       return surface + reflected * reflectance + refracted * (1 - reflectance)
@@ -35,19 +35,19 @@ case class World(light: PointLight, shapes: List[Shape]) {
     if (leftIterations < 1) {
       return Color.black
     }
-    if (comps.obj.material.reflective == 0) {
+    if (comps.material.reflective == 0) {
       return Color.black
     }
 
     val reflectRay = Ray(comps.overPoint, comps.reflectv)
-    colorAt(reflectRay, leftIterations - 1) * comps.obj.material.reflective
+    colorAt(reflectRay, leftIterations - 1) * comps.material.reflective
   }
 
   def refractedColor(comps: Computation, leftIterations: Int = 5): Color = {
     if (leftIterations < 1) {
       return Color.black
     }
-    if (comps.obj.material.transparency == 0) {
+    if (comps.material.transparency == 0) {
       return Color.black
     }
     val nRatio = comps.n1 / comps.n2
@@ -61,7 +61,7 @@ case class World(light: PointLight, shapes: List[Shape]) {
     val refractv = comps.normalv * (nRatio * cosI - cosT) - comps.eyev * nRatio
 
     val refractRay = Ray(comps.underPoint, refractv)
-    colorAt(refractRay, leftIterations - 1) * comps.obj.material.transparency
+    colorAt(refractRay, leftIterations - 1) * comps.material.transparency
   }
 
   def isShadowed(point: Point): Boolean = {

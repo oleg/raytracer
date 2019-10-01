@@ -47,8 +47,8 @@ object Ball3D {
             val point = ray.position(h.t)
             val normal = h.obj.normalAt(point, null)
             val eye = -ray.direction
-
-            canvas(x, y) = h.obj.material.lighting(light, h.obj, point, eye, normal, false)
+            val point1 = h.obj.worldToObject(point)
+            canvas(x, y) = h.obj.material.lighting(light, point1, point, eye, normal, false)
           })
 
 

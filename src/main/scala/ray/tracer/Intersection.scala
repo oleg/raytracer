@@ -5,10 +5,11 @@ import ray.shapes._
 import scala.collection.mutable.ArrayBuffer
 
 case class Computation(t: Double,
-                       obj: Shape,
+                       material: Material,
                        point: Point,
                        overPoint: Point,
                        underPoint: Point,
+                       objectPoint: Point,
                        eyev: Vector,
                        normalv: Vector,
                        reflectv: Vector,
@@ -30,7 +31,6 @@ case class Computation(t: Double,
     val r0 = math.pow((n1 - n2) / (n1 + n2), 2)
     r0 + (1 - r0) * math.pow(1 - cos, 5)
   }
-
 }
 
 case class Intersection(t: Double,
@@ -46,18 +46,21 @@ case class Intersection(t: Double,
     """.stripMargin
 
   def prepareComputations(ray: Ray, xs: Intersections): Computation = {
-    val p = implicitly[Precision[Double]]
     val (n1, n2) = findNs(xs)
     val point = ray.position(t)
     val eyev = -ray.direction
     val normalv = obj.normalAt(point, this)
     val inside = (normalv dot eyev) < 0
     val directedNormalv = if (inside) -normalv else normalv
+
+    val p = implicitly[Precision[Double]]
     val overPoint = point + directedNormalv * p.precision
     val underPoint = point - directedNormalv * p.precision
-    val reflectv = ray.direction.reflect(directedNormalv)
 
-    Computation(t, obj, point, overPoint, underPoint, eyev, directedNormalv, reflectv, n1, n2, inside)
+    val reflectv = ray.direction.reflect(directedNormalv)
+    val objectPoint = obj.worldToObject(overPoint)
+
+    Computation(t, obj.material, point, overPoint, underPoint, objectPoint, eyev, directedNormalv, reflectv, n1, n2, inside)
   }
 
   def findNs(xs: Intersections): (Double, Double) = {
@@ -71,7 +74,7 @@ case class Intersection(t: Double,
         if (containners.isEmpty) {
           n1 = 1.0
         } else {
-          n1 = containners.last.material.refractiveIndex
+          n1 = containners.last.material.refractiveIndex //obj.material....
         }
       }
 
@@ -85,7 +88,7 @@ case class Intersection(t: Double,
         if (containners.isEmpty) {
           n2 = 1.0
         } else {
-          n2 = containners.last.material.refractiveIndex
+          n2 = containners.last.material.refractiveIndex //obj.material....
         }
         return (n1, n2)
       }

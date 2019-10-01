@@ -85,7 +85,7 @@ case class Cone(minimum: Double = Double.NegativeInfinity,
                 material: Material = Material(),
                 parent: Shape = null) extends Shape {
 
-  override def localIntersect(ray: Ray): Intersections = {
+  protected override def localIntersect(ray: Ray): Intersections = {
     val d = ray.direction
     val o = ray.origin
 
