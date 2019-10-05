@@ -1,22 +1,15 @@
-package ray.sample
+package it.ray.tracer
 
-import java.io.PrintWriter
-
+import org.scalatest.FunSuite
 import ray.tracer.Matrix4x4.Identity
 import ray.tracer._
+import testutil.Sources
 
 import scala.math.Pi
 
-object CsgScene {
+class CsgSceneIntegrationTest extends FunSuite {
 
-  def main(args: Array[String]): Unit = {
-    val l = System.currentTimeMillis() //todo remove
-    draw(args)
-    println(System.currentTimeMillis() - l)
-  }
-
-  def draw(args: Array[String]): Unit = {
-
+  test("generate csg scene") {
     val floor = Plane(
       material = Material(
         reflective = 0.7,
@@ -50,14 +43,11 @@ object CsgScene {
     val light = PointLight(Point(4, 18, -10), Color(1, 1, 1))
 
     val world = World(light, floor :: csg1 :: csg2 :: Nil)
-    val camera = Camera(1000, 500, Pi / 1.8, Matrix4x4.viewTransform(Point(0, 4, -19), Point(0, 0, 0), Vector(0, 1, 0)))
+    val camera = Camera(500, 250, Pi / 1.8, Matrix4x4.viewTransform(Point(0, 4, -19), Point(0, 0, 0), Vector(0, 1, 0)))
     val canvas = camera.renderConcurrently(world)
 
-    new PrintWriter(s"csg-${System.currentTimeMillis()}.ppm") {
-      write(canvas.toPpm)
-      close()
-    }
+    //    canvas.dumpPpmTo("csg-500x250.ppm")
+    assert(canvas.toPpm == Sources.readString("/it/csg-500x250.ppm"))
   }
-
 
 }

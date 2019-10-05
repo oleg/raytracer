@@ -1,32 +1,25 @@
-package ray.sample
+package it.ray.tracer
 
-import java.io.PrintWriter
-
+import org.scalatest.FunSuite
 import ray.tracer.Matrix4x4.Identity
 import ray.tracer._
+import testutil.Sources
 
 import scala.math.Pi
 
-object Reflection {
+class PlaneSceneIntegrationTest extends FunSuite {
 
-  def main(args: Array[String]): Unit = {
-    val l = System.currentTimeMillis() //todo remove
-    draw(args)
-    println(System.currentTimeMillis() - l)
-  }
-
-  def draw(args: Array[String]): Unit = {
+  test("generate planes") {
 
     val floor = Plane(
       material = Material(
-        reflective = 0.5
-//        ,pattern = RingPattern(Color.black, Color.white)
-      ))
+        reflective = 0.5,
+        pattern = RingPattern(Color(0.7, 0.9, 0.8), Color(0.3, 0.2, 0.5))))
 
     val back = Plane(
       material = Material(
-        reflective = 0.1,
-        pattern = CheckersPattern(Color.black, Color.white)),
+        reflective = 0.5,
+        pattern = CheckersPattern(Color(0.6, 0.1, 0.2), Color(0.2, 0.3, 0.7))),
       transform = Identity.rotateX(-Pi / 2).translate(0, 0, 4)
     )
 
@@ -64,14 +57,11 @@ object Reflection {
     val light = PointLight(Point(10, 10, -10), Color(1, 1, 1))
 
     val world = World(light, back :: floor :: middle :: right :: left :: Nil)
-    val camera = Camera(1000, 500, Pi / 3, Matrix4x4.viewTransform(Point(0, 3, -6), Point(0, 1, 0), Vector(0, 1, 0)))
+    val camera = Camera(500, 250, Pi / 3, Matrix4x4.viewTransform(Point(0, 3, -6), Point(0, 1, 0), Vector(0, 1, 0)))
     val canvas = camera.renderConcurrently(world)
 
-    new PrintWriter("reflection.ppm") {
-      write(canvas.toPpm)
-      close()
-    }
+    //    canvas.dumpPpmTo("planes-500x250.ppm")
+    assert(canvas.toPpm == Sources.readString("/it/planes-500x250.ppm"))
   }
-
 
 }

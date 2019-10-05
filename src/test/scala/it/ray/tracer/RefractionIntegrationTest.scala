@@ -1,21 +1,15 @@
-package ray.sample
+package it.ray.tracer
 
-import java.io.PrintWriter
-
+import org.scalatest.FunSuite
 import ray.tracer.Matrix4x4.Identity
 import ray.tracer._
+import testutil.Sources
 
 import scala.math.Pi
 
-object Refraction {
+class RefractionIntegrationTest extends FunSuite {
 
-  def main(args: Array[String]): Unit = {
-    val l = System.currentTimeMillis() //todo remove
-    draw(args)
-    println(System.currentTimeMillis() - l)
-  }
-
-  def draw(args: Array[String]): Unit = {
+  test("generate refractions") {
 
     val floor = Plane(
       material = Material(
@@ -66,14 +60,11 @@ object Refraction {
     val light = PointLight(Point(10, 10, -10), Color(1, 1, 1))
 
     val world = World(light, floor :: b0 :: b1 :: b3 :: back :: Nil)
-    val camera = Camera(1000, 500, Pi / 3, Matrix4x4.viewTransform(Point(0, 3, -6), Point(0, 1, 0), Vector(0, 1, 0)))
+    val camera = Camera(500, 250, Pi / 3, Matrix4x4.viewTransform(Point(0, 3, -6), Point(0, 1, 0), Vector(0, 1, 0)))
     val canvas = camera.renderConcurrently(world)
 
-    new PrintWriter(s"refraction-${System.currentTimeMillis()}.ppm") {
-      write(canvas.toPpm)
-      close()
-    }
+    //    canvas.dumpPpmTo("refractions-500x250.ppm")
+    assert(canvas.toPpm == Sources.readString("/it/refractions-500x250.ppm"))
   }
-
 
 }
