@@ -1,21 +1,15 @@
-package ray.sample
+package it.ray.tracer
 
-import java.io.PrintWriter
-
+import org.scalatest.FunSuite
 import ray.tracer.Matrix4x4.Identity
 import ray.tracer._
+import testutil.Sources
 
 import scala.math.Pi
 
-object CylinderScene {
+class CylinderSceneIntegrationTest extends FunSuite {
 
-  def main(args: Array[String]): Unit = {
-    val l = System.currentTimeMillis() //todo remove
-    draw(args)
-    println(System.currentTimeMillis() - l)
-  }
-
-  def draw(args: Array[String]): Unit = {
+  test("generate cylinders") {
 
     val floor = Plane(
       material = Material(
@@ -49,14 +43,11 @@ object CylinderScene {
     val light = PointLight(Point(10, 10, -10), Color(1, 1, 1))
 
     val world = World(light, floor :: c1 :: c2 :: c3 :: c4 :: Nil)
-    val camera = Camera(1000, 500, Pi / 1.8, Matrix4x4.viewTransform(Point(0, 3, -60), Point(0, 1, 0), Vector(0, 1, 0)))
+    val camera = Camera(500, 250, Pi / 1.8, Matrix4x4.viewTransform(Point(0, 3, -60), Point(0, 1, 0), Vector(0, 1, 0)))
     val canvas = camera.renderConcurrently(world)
 
-    new PrintWriter(s"cylinder-${System.currentTimeMillis()}.ppm") {
-      write(canvas.toPpm)
-      close()
-    }
+    //    canvas.dumpPpmTo("cylinders-500x250.ppm")
+    assert(canvas.toPpm == Sources.readString("/it/cylinders-500x250.ppm"))
   }
-
 
 }

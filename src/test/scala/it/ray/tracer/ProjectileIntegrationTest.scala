@@ -1,10 +1,10 @@
-package ray.sample
+package it.ray.tracer
 
-import java.io.PrintWriter
+import org.scalatest.FunSuite
+import ray.tracer.{Canvas, Color, Point, Vector}
+import testutil.Sources
 
-import ray.tracer._
-
-object Projectile {
+class ProjectileIntegrationTest extends FunSuite {
 
   class Environment(val gravity: Vector, val wind: Vector)
 
@@ -14,14 +14,9 @@ object Projectile {
       new Projectile(
         position + velocity,
         velocity + env.gravity + env.wind)
-
   }
 
-  def main(args: Array[String]): Unit = {
-    draw(args)
-  }
-
-  def draw(args: Array[String]): Unit = {
+  test("generate projectile") {
     val canvas = Canvas(900, 500)
     val red = Color(1, 1, 1)
     val environment = new Environment(Vector(0, -0.15, 0), Vector(-0.02, 0, 0))
@@ -31,24 +26,8 @@ object Projectile {
       projectile = projectile.tick(environment)
     } while (projectile.position.y > 0 && projectile.position.y < canvas.height)
 
-    new PrintWriter("projectile.ppm") {
-      write(canvas.toPpm)
-      close()
-    }
-  }
-
-  def run(args: Array[String]): Unit = {
-    val environment = new Environment(Vector(0, -0.1, 0), Vector(-0.01, 0, 0))
-    var projectile = new Projectile(Point(0, 1, 0), Vector(1, 1, 0).normalize)
-    do {
-      projectile = projectile.tick(environment)
-
-      println(projectile.position)
-      Thread.sleep(500)
-    } while (projectile.position.y > 0)
+//    canvas.dumpPpmTo("projectile-900x500.ppm")
+    assert(canvas.toPpm == Sources.readString("/it/projectile-900x500.ppm"))
   }
 
 }
-
-
-

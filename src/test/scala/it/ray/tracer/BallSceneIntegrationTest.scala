@@ -1,19 +1,14 @@
-package ray.sample
+package it.ray.tracer
 
-import java.io.PrintWriter
-
+import org.scalatest.FunSuite
 import ray.tracer.Matrix4x4.Identity
 import ray.tracer._
+import testutil.Sources
 
 import scala.math.Pi
 
-object BallScene {
-
-  def main(args: Array[String]): Unit = {
-    draw(args)
-  }
-
-  def draw(args: Array[String]): Unit = {
+class BallSceneIntegrationTest extends FunSuite {
+  test("generate ball scene") {
 
     val floor = Sphere(
       Identity.scale(10, 0.01, 10),
@@ -50,14 +45,10 @@ object BallScene {
     val light = PointLight(Point(-10, 10, -10), Color(1, 1, 1))
 
     val world = World(light, floor :: leftWall :: rightWall :: middle :: right :: left :: Nil)
-    val camera = Camera(1000, 500, Pi / 3, Matrix4x4.viewTransform(Point(0, 1.5, -5), Point(0, 1, 0), Vector(0, 1, 0)))
+    val camera = Camera(500, 250, Pi / 3, Matrix4x4.viewTransform(Point(0, 1.5, -5), Point(0, 1, 0), Vector(0, 1, 0)))
     val canvas = camera.renderConcurrently(world)
 
-    new PrintWriter("threeballs.ppm") {
-      write(canvas.toPpm)
-      close()
-    }
+    //    canvas.dumpPpmTo("ball-scene-500x250.ppm")
+    assert(canvas.toPpm == Sources.readString("/it/ball-scene-500x250.ppm"));
   }
-
-
 }

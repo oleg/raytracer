@@ -1,7 +1,16 @@
 package ray.tracer
 
+import java.io.PrintWriter
+
 case class Canvas(width: Int, height: Int, initialColor: Color = Color(0, 0, 0)) {
   private val pixels: Array[Array[Color]] = Array.fill(width, height)(initialColor)
+
+  def dumpPpmTo(filename: String): Unit = {
+    new PrintWriter(filename) {
+      write(toPpm)
+      close()
+    }
+  }
 
   def toPpm: String = {
     ppmHeader + ppmLines + "\n"

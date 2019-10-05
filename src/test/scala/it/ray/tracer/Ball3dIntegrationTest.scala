@@ -1,17 +1,11 @@
-package ray.sample
+package it.ray.tracer
 
-import java.io.PrintWriter
-
+import org.scalatest.FunSuite
 import ray.tracer._
+import testutil.Sources
 
-object Ball3D {
-
-  def main(args: Array[String]): Unit = {
-    draw(args)
-  }
-
-  def draw(args: Array[String]): Unit = {
-
+class Ball3dIntegrationTest extends FunSuite {
+  test("generate 3d ball") {
     val rayOrigin = Point(0, 0, -5)
     val wallZ = 10
     val wallSize = 7.0
@@ -49,16 +43,9 @@ object Ball3D {
 
             canvas(x, y) = h.obj.material.lighting(light, h.obj, point, eye, normal, false)
           })
-
-
       }
     }
 
-    new PrintWriter("ball3d.ppm") {
-      write(canvas.toPpm)
-      close()
-    }
+    assert(canvas.toPpm == Sources.readString("/it/ball-3d-500x500.ppm"))
   }
-
-
 }

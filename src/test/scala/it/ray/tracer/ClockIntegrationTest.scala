@@ -1,19 +1,14 @@
-package ray.sample
+package it.ray.tracer
 
-import java.io.PrintWriter
-
-import ray.tracer._
+import org.scalatest.FunSuite
+import ray.tracer.{Canvas, Color, Matrix4x4, Point}
+import testutil.Sources
 
 import scala.math.Pi
 
-object Clock {
+class ClockIntegrationTest extends FunSuite {
 
-
-  def main(args: Array[String]): Unit = {
-    draw(args)
-  }
-
-  def draw(args: Array[String]): Unit = {
+  test("generate clock") {
     val width = 500
     val height = 500
     val canvas = Canvas(width, height)
@@ -25,20 +20,13 @@ object Clock {
 
     var next = Point(0, 0, 1)
 
-    for (i <- 0 until 12) {
+    for (_ <- 0 until 12) {
       val c = Point(next.x * radius + 250, next.y, next.z * radius + 250)
       canvas(c.x.toInt, c.z.toInt) = white
       next = rotY * next
     }
 
-    new PrintWriter("clock.ppm") {
-      write(canvas.toPpm)
-      close()
-    }
+    //    canvas.dumpPpmTo("clock-500x500.ppm")
+    assert(canvas.toPpm == Sources.readString("/it/clock-500x500.ppm"))
   }
-
-
 }
-
-
-
