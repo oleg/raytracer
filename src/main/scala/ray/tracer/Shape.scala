@@ -4,6 +4,40 @@ import ray.tracer.Operation.Operation
 
 import scala.collection.mutable.ListBuffer
 
+//todo find a better name
+case class Inter(t: Double,
+                 u: Double = Double.NaN,
+                 v: Double = Double.NaN)
+
+trait ShapeMath {
+  def intersect(ray: Ray): List[Inter]
+
+  def normalAt(point: Point, inter: Inter): Vector
+}
+
+case class SphereMath() extends ShapeMath {
+  override def intersect(ray: Ray): List[Inter] = {
+    val sphereToRay = ray.origin - Point(0, 0, 0)
+
+    val a: Double = ray.direction dot ray.direction
+    val b: Double = 2 * (ray.direction dot sphereToRay)
+    val c: Double = (sphereToRay dot sphereToRay) - 1
+
+    val discriminant = b * b - 4 * a * c
+
+    if (discriminant >= 0) {
+      val sd = math.sqrt(discriminant)
+      val t1 = (-b - sd) / (2 * a)
+      val t2 = (-b + sd) / (2 * a)
+      Inter(t1) :: Inter(t2) :: Nil
+    } else {
+      Nil
+    }
+  }
+
+  override def normalAt(point: Point, inter: Inter): Vector =
+    point - Point(0, 0, 0)
+}
 
 trait Shape {
 
@@ -43,27 +77,13 @@ case class Sphere(transform: Matrix4x4 = Matrix4x4.Identity,
                   material: Material = Material(),
                   var parent: Shape = null) extends Shape {
 
-  override def localIntersect(ray: Ray): Intersections = {
-    val sphereToRay = ray.origin - Point(0, 0, 0)
+  private val sphereMath = SphereMath()
 
-    val a: Double = ray.direction dot ray.direction
-    val b: Double = 2 * (ray.direction dot sphereToRay)
-    val c: Double = (sphereToRay dot sphereToRay) - 1
+  override def localIntersect(ray: Ray): Intersections =
+    Intersections(sphereMath.intersect(ray).map(i => Intersection(i.t, this, i.u, i.v)))
 
-    val discriminant = b * b - 4 * a * c
-
-    if (discriminant >= 0) {
-      val sd = math.sqrt(discriminant)
-      val t1 = (-b - sd) / (2 * a)
-      val t2 = (-b + sd) / (2 * a)
-      Intersections(Intersection(t1, this) :: Intersection(t2, this) :: Nil)
-    } else {
-      Intersections.EMPTY
-    }
-
-  }
-
-  override def localNormalAt(point: Point, intersection: Intersection): Vector = point - Point(0, 0, 0)
+  override def localNormalAt(point: Point, intersection: Intersection): Vector =
+    sphereMath.normalAt(point, Option(intersection).map(i => Inter(i.t, i.u, i.v)).orNull)
 
 }
 

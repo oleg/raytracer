@@ -97,7 +97,7 @@ class SphereTest extends FunSuite {
 
   test("The normal on a sphere at a point on the x axis") {
     val s = Sphere()
-    val n = s.normalAt(Point(1, 0, 0),null)
+    val n = s.normalAt(Point(1, 0, 0), null)
     assert(n == Vector(1, 0, 0))
   }
 
