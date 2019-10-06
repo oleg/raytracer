@@ -3,6 +3,7 @@ package ray.tracer.shapemath
 import ray.tracer.{Point, Ray, Vector}
 
 case class SphereMath() extends ShapeMath {
+
   override def intersect(ray: Ray): List[Inter] = {
     val sphereToRay = ray.origin - Point(0, 0, 0)
 
