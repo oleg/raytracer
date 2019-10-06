@@ -1,43 +1,10 @@
 package ray.tracer
 
 import ray.tracer.Operation.Operation
+import ray.tracer.shapemath.{CubeMath, Inter, PlaneMath, SphereMath}
 
 import scala.collection.mutable.ListBuffer
 
-//todo find a better name
-case class Inter(t: Double,
-                 u: Double = Double.NaN,
-                 v: Double = Double.NaN)
-
-trait ShapeMath {
-  def intersect(ray: Ray): List[Inter]
-
-  def normalAt(point: Point, inter: Inter): Vector
-}
-
-case class SphereMath() extends ShapeMath {
-  override def intersect(ray: Ray): List[Inter] = {
-    val sphereToRay = ray.origin - Point(0, 0, 0)
-
-    val a: Double = ray.direction dot ray.direction
-    val b: Double = 2 * (ray.direction dot sphereToRay)
-    val c: Double = (sphereToRay dot sphereToRay) - 1
-
-    val discriminant = b * b - 4 * a * c
-
-    if (discriminant >= 0) {
-      val sd = math.sqrt(discriminant)
-      val t1 = (-b - sd) / (2 * a)
-      val t2 = (-b + sd) / (2 * a)
-      Inter(t1) :: Inter(t2) :: Nil
-    } else {
-      Nil
-    }
-  }
-
-  override def normalAt(point: Point, inter: Inter): Vector =
-    point - Point(0, 0, 0)
-}
 
 trait Shape {
 
@@ -90,7 +57,8 @@ case class Sphere(transform: Matrix4x4 = Matrix4x4.Identity,
 object Sphere {
 
   def glass(transform: Matrix4x4 = Matrix4x4.Identity,
-            material: Material = Material(transparency = 1.0, refractiveIndex = 1.5)): Sphere = Sphere(transform, material)
+            material: Material = Material(transparency = 1.0, refractiveIndex = 1.5)): Sphere =
+    Sphere(transform, material)
 
 }
 
@@ -98,17 +66,13 @@ case class Plane(transform: Matrix4x4 = Matrix4x4.Identity,
                  material: Material = Material(),
                  var parent: Shape = null) extends Shape {
 
-  override def localIntersect(ray: Ray): Intersections = {
-    //todo:oleg think about this
-    if (implicitly[Precision[Double]].approximatelyEqual(ray.direction.y, 0.0)) {
-      Intersections.EMPTY
-    } else {
-      val t = -ray.origin.y / ray.direction.y
-      Intersections(Intersection(t, this) :: Nil)
-    }
-  }
+  private val planeMath = PlaneMath()
 
-  override def localNormalAt(point: Point, intersection: Intersection): Vector = Vector(0, 1, 0)
+  override def localIntersect(ray: Ray): Intersections =
+    Intersections(planeMath.intersect(ray).map(i => Intersection(i.t, this, i.u, i.v)))
+
+  override def localNormalAt(point: Point, intersection: Intersection): Vector =
+    planeMath.normalAt(point, Option(intersection).map(i => Inter(i.t, i.u, i.v)).orNull)
 
 }
 
@@ -116,33 +80,13 @@ case class Cube(transform: Matrix4x4 = Matrix4x4.Identity,
                 material: Material = Material(),
                 var parent: Shape = null) extends Shape {
 
-  override def localIntersect(ray: Ray): Intersections = {
-    val (xtmin, xtmax) = checkAxis(ray.origin.x, ray.direction.x)
-    val (ytmin, ytmax) = checkAxis(ray.origin.y, ray.direction.y)
-    val (ztmin, ztmax) = checkAxis(ray.origin.z, ray.direction.z)
+  private val cubeMath = CubeMath()
 
-    val tmin = List(xtmin, ytmin, ztmin).max
-    val tmax = List(xtmax, ytmax, ztmax).min
+  override def localIntersect(ray: Ray): Intersections =
+    Intersections(cubeMath.intersect(ray).map(i => Intersection(i.t, this, i.u, i.v)))
 
-    if (tmin > tmax) Intersections(Nil)
-    else Intersections(Intersection(tmin, this) :: Intersection(tmax, this) :: Nil)
-  }
-
-  private def checkAxis(origin: Double, direction: Double): (Double, Double) = {
-    val (tmin, tmax) = ((-1 - origin) / direction, (1 - origin) / direction)
-    if (tmin > tmax) (tmax, tmin) else (tmin, tmax)
-  }
-
-  override def localNormalAt(point: Point, intersection: Intersection): Vector = {
-    val maxc = List(point.x, point.y, point.z).map(math.abs).max
-
-    if (maxc == point.x.abs)
-      Vector(point.x, 0, 0)
-    else if (maxc == point.y.abs)
-      Vector(0, point.y, 0)
-    else
-      Vector(0, 0, point.z)
-  }
+  override def localNormalAt(point: Point, intersection: Intersection): Vector =
+    cubeMath.normalAt(point, Option(intersection).map(i => Inter(i.t, i.u, i.v)).orNull)
 
 }
 
