@@ -47,7 +47,7 @@ class SmoothTriangleTest extends FunSuite {
     val i = Intersection(1, tri, 0.45, 0.25)
     val xs = Intersections(i :: Nil)
 
-    val comps = i.prepareComputations(r, xs)
+    val comps = i.prepareComputations(r, xs.findNs(i))
 
     assert(comps.normalv ==~ Vector(-0.5547, 0.83205, 0))
   }

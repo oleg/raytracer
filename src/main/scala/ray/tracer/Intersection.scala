@@ -43,9 +43,8 @@ case class Intersection(t: Double,
       |$obj)
     """.stripMargin
 
-  def prepareComputations(ray: Ray, xs: Intersections): Computation = {
+  def prepareComputations(ray: Ray, ns: (Double, Double)): Computation = {
     val p = implicitly[Precision[Double]]
-    val (n1, n2) = findNs(xs)
     val point = ray.position(t)
     val eyev = -ray.direction
     val normalv = obj.normalAt(point, this)
@@ -55,40 +54,7 @@ case class Intersection(t: Double,
     val underPoint = point - directedNormalv * p.precision
     val reflectv = ray.direction.reflect(directedNormalv)
 
-    Computation(t, obj, point, overPoint, underPoint, eyev, directedNormalv, reflectv, n1, n2, inside)
-  }
-
-  def findNs(xs: Intersections): (Double, Double) = {
-    var n1: Double = 0.0
-    var n2: Double = 0.0
-
-    val containners = ArrayBuffer[Shape]()
-    for (i <- xs) {
-
-      if (i == this) {
-        if (containners.isEmpty) {
-          n1 = 1.0
-        } else {
-          n1 = containners.last.material.refractiveIndex
-        }
-      }
-
-      if (containners.contains(i.obj)) {
-        containners -= i.obj
-      } else {
-        containners += i.obj
-      }
-
-      if (i == this) {
-        if (containners.isEmpty) {
-          n2 = 1.0
-        } else {
-          n2 = containners.last.material.refractiveIndex
-        }
-        return (n1, n2)
-      }
-    }
-    (n1, n2)
+    Computation(t, obj, point, overPoint, underPoint, eyev, directedNormalv, reflectv, ns._1, ns._2, inside)
   }
 
 }
@@ -105,6 +71,40 @@ case class Intersections private(private val is: List[Intersection]) extends Ite
   def :::(other: Intersections): Intersections = Intersections(is ::: other.is)
 
   override def iterator: Iterator[Intersection] = is.iterator
+
+  def findNs(inter: Intersection): (Double, Double) = {
+    var n1: Double = 0.0
+    var n2: Double = 0.0
+
+    val containners = ArrayBuffer[Shape]()
+    for (i <- is) {
+
+      if (i == inter) {
+        if (containners.isEmpty) {
+          n1 = 1.0
+        } else {
+          n1 = containners.last.material.refractiveIndex
+        }
+      }
+
+      if (containners.contains(i.obj)) {
+        containners -= i.obj
+      } else {
+        containners += i.obj
+      }
+
+      if (i == inter) {
+        if (containners.isEmpty) {
+          n2 = 1.0
+        } else {
+          n2 = containners.last.material.refractiveIndex
+        }
+        return (n1, n2)
+      }
+    }
+    (n1, n2)
+  }
+
 }
 
 object Intersections {

@@ -42,7 +42,7 @@ class WorldTest extends FunSuite {
     val shape = w.shapes(0)
     val i = Intersection(4, shape)
 
-    val comps = i.prepareComputations(r, Intersections(i :: Nil))
+    val comps = i.prepareComputations(r, Intersections(i :: Nil).findNs(i))
     val c = w.shadeHit(comps)
 
     assert(c ==~ Color(0.38066, 0.47583, 0.2855))
@@ -68,7 +68,7 @@ class WorldTest extends FunSuite {
     val r = Ray(Point(0, 0, 5), Vector(0, 0, 1))
     val i = Intersection(4, s2)
 
-    val comps = i.prepareComputations(r, Intersections(i :: Nil))
+    val comps = i.prepareComputations(r, Intersections(i :: Nil).findNs(i))
     val c = w.shadeHit(comps)
 
     assert(c == Color(0.1, 0.1, 0.1))
@@ -138,7 +138,7 @@ class WorldTest extends FunSuite {
     val r = Ray(Point(0, 0, 0), Vector(0, 0, 1))
 
     val i = Intersection(1, inner)
-    val comps = i.prepareComputations(r, Intersections(i :: Nil))
+    val comps = i.prepareComputations(r, Intersections(i :: Nil).findNs(i))
     val color = world.reflectedColor(comps, 5)
 
     assert(color ==~ Color.black)
@@ -152,7 +152,7 @@ class WorldTest extends FunSuite {
 
     val ray = Ray(Point(0, 0, -3), Vector(0, -Sqrt2Div2, Sqrt2Div2))
     val i = Intersection(Sqrt2, plane)
-    val comps = i.prepareComputations(ray, Intersections(i :: Nil))
+    val comps = i.prepareComputations(ray, Intersections(i :: Nil).findNs(i))
     val color = world.reflectedColor(comps)
 
     assert(color ==~ Color(0.19033, 0.23791, 0.14274), color)
@@ -166,7 +166,7 @@ class WorldTest extends FunSuite {
 
     val ray = Ray(Point(0, 0, -3), Vector(0, -Sqrt2Div2, Sqrt2Div2))
     val i = Intersection(Sqrt2, plane)
-    val comps = i.prepareComputations(ray, Intersections(i :: Nil))
+    val comps = i.prepareComputations(ray, Intersections(i :: Nil).findNs(i))
     val color = world.shadeHit(comps)
 
     assert(color ==~ Color(0.87675, 0.92434, 0.82917), color)
@@ -187,7 +187,7 @@ class WorldTest extends FunSuite {
     val w = World(PointLight(Point(-10, 10, -10), Color(1, 1, 1)), List(plane))
     val r = Ray(Point(0, 0, -3), Vector(0, -Sqrt2Div2, Sqrt2Div2))
     val i = Intersection(Sqrt2, plane)
-    val comps = i.prepareComputations(r, Intersections(i :: Nil))
+    val comps = i.prepareComputations(r, Intersections(i :: Nil).findNs(i))
     val color = w.reflectedColor(comps, 0)
     assert(color == Color.black)
   }
@@ -198,7 +198,7 @@ class WorldTest extends FunSuite {
     val r = Ray(Point(0, 0, -5), Vector(0, 0, 1))
     val xs = Intersections(Intersection(4, shape) :: Intersection(6, shape) :: Nil)
 
-    val comps = xs(0).prepareComputations(r, xs)
+    val comps = xs(0).prepareComputations(r, xs.findNs(xs(0)))
     val c = w.refractedColor(comps)
 
     assert(c == Color.black)
@@ -220,7 +220,7 @@ class WorldTest extends FunSuite {
     val xs = Intersections(Intersection(4, shape) :: Intersection(6, shape) :: Nil)
     val r = Ray(Point(0, 0, 0), Vector(0, 0, 1))
 
-    val comps = xs(0).prepareComputations(r, xs)
+    val comps = xs(0).prepareComputations(r, xs.findNs(xs(0)))
     val c = w.refractedColor(comps, 0)
 
     assert(c == Color.black)
@@ -242,7 +242,7 @@ class WorldTest extends FunSuite {
     val shape = w.shapes.head
     val xs = Intersections(Intersection(-Sqrt2Div2, shape) :: Intersection(Sqrt2Div2, shape) :: Nil)
 
-    val comps = xs(1).prepareComputations(r, xs)
+    val comps = xs(1).prepareComputations(r, xs.findNs(xs(0)))
     val c = w.refractedColor(comps)
 
     assert(c == Color.black)
@@ -262,7 +262,7 @@ class WorldTest extends FunSuite {
         Intersection(0.9899, a) ::
         Nil)
 
-    val comps = xs(2).prepareComputations(r, xs)
+    val comps = xs(2).prepareComputations(r, xs.findNs(xs(2)))
     val c = w.refractedColor(comps)
 
     assert(c ==~ Color(0, 0.99887, 0.04721), c)
@@ -282,7 +282,7 @@ class WorldTest extends FunSuite {
     val r = Ray(Point(0, 0, -3), Vector(0, -Sqrt2Div2, Sqrt2Div2))
     val xs = Intersections(Intersection(Sqrt2, floor) :: Nil)
 
-    val comps = xs(0).prepareComputations(r, xs)
+    val comps = xs(0).prepareComputations(r, xs.findNs(xs(0)))
     val c = w.shadeHit(comps)
 
     assert(c ==~ Color(0.93642, 0.68642, 0.68642), c)
@@ -305,7 +305,7 @@ class WorldTest extends FunSuite {
     val r = Ray(Point(0, 0, -3), Vector(0, -Sqrt2Div2, Sqrt2Div2))
     val xs = Intersections(Intersection(Sqrt2, floor) :: Nil)
 
-    val comps = xs(0).prepareComputations(r, xs)
+    val comps = xs(0).prepareComputations(r, xs.findNs(xs(0)))
     val c = w.shadeHit(comps)
 
     //todo fix me

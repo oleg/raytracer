@@ -68,7 +68,8 @@ class IntersectionTest extends FunSuite {
     val r = Ray(Point(0, 0, -5), Vector(0, 0, 1))
     val shape = Sphere()
     val i = Intersection(4, shape)
-    val comps = i.prepareComputations(r, Intersections(i :: Nil))
+    val ns = Intersections(i :: Nil).findNs(i)//todo:ns
+    val comps = i.prepareComputations(r, ns)
 
     assert(comps.t == i.t)
     assert(comps.obj == i.obj)
@@ -81,8 +82,8 @@ class IntersectionTest extends FunSuite {
     val r = Ray(Point(0, 0, -5), Vector(0, 0, 1))
     val shape = Sphere()
     val i = Intersection(4, shape)
-
-    val comps = i.prepareComputations(r, Intersections(i :: Nil))
+    val ns = Intersections(i :: Nil).findNs(i)
+    val comps = i.prepareComputations(r, ns)
 
     assert(comps.inside == false)
   }
@@ -91,8 +92,8 @@ class IntersectionTest extends FunSuite {
     val r = Ray(Point(0, 0, 0), Vector(0, 0, 1))
     val shape = Sphere()
     val i = Intersection(1, shape)
-
-    val comps = i.prepareComputations(r, Intersections(i :: Nil))
+    val ns = Intersections(i :: Nil).findNs(i)
+    val comps = i.prepareComputations(r, ns)
     assert(comps.point == Point(0, 0, 1))
     assert(comps.eyev == Vector(0, 0, -1))
     assert(comps.normalv == Vector(0, 0, -1))
@@ -103,8 +104,8 @@ class IntersectionTest extends FunSuite {
     val r = Ray(Point(0, 0, -5), Vector(0, 0, 1))
     val shape = Sphere(Matrix4x4.Identity.translate(0, 0, 1))
     val i = Intersection(5, shape)
-
-    val comps = i.prepareComputations(r, Intersections(i :: Nil))
+    val ns = Intersections(i :: Nil).findNs(i)
+    val comps = i.prepareComputations(r, ns)
 
     assert(comps.overPoint.z < (-p.precision / 2))
     assert(comps.point.z > comps.overPoint.z)
@@ -114,8 +115,8 @@ class IntersectionTest extends FunSuite {
     val shape = Plane()
     val r = Ray(Point(0, 1, -1), Vector(0, -Sqrt2Div2, Sqrt2Div2))
     val i = Intersection(Sqrt2, shape)
-
-    val comps = i.prepareComputations(r, Intersections(i :: Nil))
+    val ns = Intersections(i :: Nil).findNs(i)
+    val comps = i.prepareComputations(r, ns)
 
     assert(comps.reflectv == Vector(0, Sqrt2Div2, Sqrt2Div2))
   }
@@ -126,8 +127,9 @@ class IntersectionTest extends FunSuite {
     val i = Intersection(5, shape)
 
     val xs = Intersections(i :: Nil)
+    val ns = xs.findNs(i)
 
-    val comps = i.prepareComputations(r, xs)
+    val comps = i.prepareComputations(r, ns)
 
     assert(comps.underPoint.z > p.precision / 2)
     assert(comps.point.z < comps.underPoint.z)
@@ -138,7 +140,8 @@ class IntersectionTest extends FunSuite {
     val r = Ray(Point(0, 0, Sqrt2Div2), Vector(0, 1, 0))
     val xs = Intersections(Intersection(-Sqrt2Div2, shape) :: Intersection(Sqrt2Div2, shape) :: Nil)
 
-    val comps = xs(1).prepareComputations(r, xs)
+    val ns = xs.findNs(xs(1))
+    val comps = xs(1).prepareComputations(r, ns)
     val reflectance = comps.schlick()
 
     assert(reflectance == 1.0)
@@ -149,8 +152,8 @@ class IntersectionTest extends FunSuite {
     val r = Ray(Point(0, 0, 0), Vector(0, 1, 0))
     val xs = Intersections(Intersection(-1, shape) :: Intersection(1, shape) :: Nil)
 
-
-    val comps = xs(1).prepareComputations(r, xs)
+    val ns = xs.findNs(xs(1))
+    val comps = xs(1).prepareComputations(r, ns)
     val reflectance = comps.schlick()
 
     assert(p.approximatelyEqual(reflectance, 0.04), reflectance)
@@ -161,8 +164,8 @@ class IntersectionTest extends FunSuite {
     val r = Ray(Point(0, 0.99, -2), Vector(0, 0, 1))
     val xs = Intersections(Intersection(1.8589, shape) :: Nil)
 
-
-    val comps = xs(0).prepareComputations(r, xs)
+    val ns = xs.findNs(xs(0))
+    val comps = xs(0).prepareComputations(r, ns)
     val reflectance = comps.schlick()
 
     assert(p.approximatelyEqual(reflectance, 0.48873), reflectance)
