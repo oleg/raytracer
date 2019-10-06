@@ -8,7 +8,11 @@ case class World(light: PointLight, shapes: List[Shape]) {
     val intersections = intersect(r)
     intersections
       .hit
-      .map(i => shadeHit(i.prepareComputations(r, intersections), leftIterations))
+      .map(i => {
+        val ns = intersections.findNs(i)
+        i.prepareComputations(r, ns)
+      })
+      .map(shadeHit(_, leftIterations))
       .getOrElse(Color.black)
   }
 

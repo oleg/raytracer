@@ -151,12 +151,12 @@ class MaterialTest extends FunSuite {
     //todo fix this test
     val assertNs = (cmp: Computation, n1: Double, n2: Double) => assert((cmp.n1, cmp.n2) == (n1, n2))
 
-    assertNs(xs(0).prepareComputations(r, xs), 1.0, 1.5)
-    assertNs(xs(1).prepareComputations(r, xs), 1.5, 2.0)
-    assertNs(xs(2).prepareComputations(r, xs), 2.0, 2.5)
-    assertNs(xs(3).prepareComputations(r, xs), 2.5, 2.5)
-    assertNs(xs(4).prepareComputations(r, xs), 2.5, 1.5)
-    assertNs(xs(5)prepareComputations(r, xs), 1.5, 1.0)
+    assertNs(xs(0).prepareComputations(r, xs.findNs(xs(0))), 1.0, 1.5)
+    assertNs(xs(1).prepareComputations(r,xs.findNs(xs(1))), 1.5, 2.0)
+    assertNs(xs(2).prepareComputations(r,xs.findNs(xs(2))), 2.0, 2.5)
+    assertNs(xs(3).prepareComputations(r,xs.findNs(xs(3))), 2.5, 2.5)
+    assertNs(xs(4).prepareComputations(r,xs.findNs(xs(4))), 2.5, 1.5)
+    assertNs(xs(5)prepareComputations(r, xs.findNs(xs(5))), 1.5, 1.0)
   }
 
 }
