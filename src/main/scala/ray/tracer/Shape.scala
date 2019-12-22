@@ -19,7 +19,6 @@ trait Shape {
 
   def localIntersect(ray: Ray): Intersections
 
-
   def normalAt(worldPoint: Point, intersection: Intersection): Vector = {
     val localPoint: Point = worldToObject(worldPoint)
     val localNormal: Vector = localNormalAt(localPoint, intersection)
@@ -60,111 +59,57 @@ object ShapeFactory {
 
   def Sphere(transform: Matrix4x4 = Matrix4x4.Identity,
              material: Material = Material(),
-             parent: Shape = null,
-             math: ShapeMath = SphereMath()): Shape =
-    SimpleShape(math, transform, material, parent)
+             parent: Shape = null): Shape =
+    SimpleShape(SphereMath(), transform, material, parent)
 
   def Plane(transform: Matrix4x4 = Matrix4x4.Identity,
             material: Material = Material(),
-            parent: Shape = null,
-            math: ShapeMath = PlaneMath()): Shape =
-    SimpleShape(math, transform, material, parent)
-
+            parent: Shape = null): Shape =
+    SimpleShape(PlaneMath(), transform, material, parent)
 
   def Cube(transform: Matrix4x4 = Matrix4x4.Identity,
            material: Material = Material(),
-           parent: Shape = null,
-           math: ShapeMath = CubeMath()): Shape =
-    SimpleShape(math, transform, material, parent)
+           parent: Shape = null): Shape =
+    SimpleShape(CubeMath(), transform, material, parent)
+
+  def Cylinder(minimum: Double = Double.NegativeInfinity,
+               maximum: Double = Double.PositiveInfinity,
+               closed: Boolean = false,
+               transform: Matrix4x4 = Matrix4x4.Identity,
+               material: Material = Material(),
+               parent: Shape = null): Shape =
+    SimpleShape(CylinderMath(minimum, maximum, closed), transform, material, parent)
+
+  def Cone(minimum: Double = Double.NegativeInfinity,
+           maximum: Double = Double.PositiveInfinity,
+           closed: Boolean = false,
+           transform: Matrix4x4 = Matrix4x4.Identity,
+           material: Material = Material(),
+           parent: Shape = null): Shape =
+    SimpleShape(ConeMath(minimum, maximum, closed), transform, material, parent)
+
+  def Triangle(p1: Point,
+               p2: Point,
+               p3: Point,
+               transform: Matrix4x4 = Matrix4x4.Identity,
+               material: Material = Material(),
+               parent: Shape = null): Shape =
+    SimpleShape(TriangleMath(p1, p2, p3), transform, material, parent)
+
+  def SmoothTriangle(p1: Point,
+                     p2: Point,
+                     p3: Point,
+                     n1: Vector,
+                     n2: Vector,
+                     n3: Vector,
+                     transform: Matrix4x4 = Matrix4x4.Identity,
+                     material: Material = Material(),
+                     parent: Shape = null): Shape =
+    SimpleShape(SmoothTriangleMath(p1, p2, p3, n1, n2, n3), transform, material, parent)
 
 }
 
-case class Cylinder(minimum: Double = Double.NegativeInfinity,
-                    maximum: Double = Double.PositiveInfinity,
-                    closed: Boolean = false,
-                    transform: Matrix4x4 = Matrix4x4.Identity,
-                    material: Material = Material(),
-                    var parent: Shape = null) extends Shape {
 
-  private val math: ShapeMath = CylinderMath(minimum, maximum, closed)
-
-  override def localIntersect(ray: Ray): Intersections =
-    Intersections(math.intersect(ray).map(i => Intersection(i.t, this, i.u, i.v)))
-
-  override def localNormalAt(point: Point, intersection: Intersection): Vector =
-    math.normalAt(point, Option(intersection).map(i => Inter(i.t, i.u, i.v)).orNull)
-
-}
-
-//todo refactor this class it's similar to Cylinder
-case class Cone(minimum: Double = Double.NegativeInfinity,
-                maximum: Double = Double.PositiveInfinity,
-                closed: Boolean = false,
-                transform: Matrix4x4 = Matrix4x4.Identity,
-                material: Material = Material(),
-                var parent: Shape = null) extends Shape {
-
-  private val math: ShapeMath = ConeMath(minimum, maximum, closed)
-
-  override def localIntersect(ray: Ray): Intersections =
-    Intersections(math.intersect(ray).map(i => Intersection(i.t, this, i.u, i.v)))
-
-  override def localNormalAt(point: Point, intersection: Intersection): Vector =
-    math.normalAt(point, Option(intersection).map(i => Inter(i.t, i.u, i.v)).orNull)
-
-}
-
-case class Triangle(p1: Point,
-                    p2: Point,
-                    p3: Point,
-                    transform: Matrix4x4 = Matrix4x4.Identity,
-                    material: Material = Material(),
-                    var parent: Shape = null) extends Shape {
-
-  private val math: TriangleMath = TriangleMath(p1, p2, p3)
-
-  override def localIntersect(ray: Ray): Intersections =
-    Intersections(math.intersect(ray).map(i => Intersection(i.t, this, i.u, i.v)))
-
-
-  override def localNormalAt(point: Point, intersection: Intersection): Vector =
-    math.normalAt(point, Option(intersection).map(i => Inter(i.t, i.u, i.v)).orNull)
-
-}
-
-case class SmoothTriangle(
-                           p1: Point,
-                           p2: Point,
-                           p3: Point,
-                           n1: Vector,
-                           n2: Vector,
-                           n3: Vector,
-                           transform: Matrix4x4 = Matrix4x4.Identity,
-                           material: Material = Material(),
-                           var parent: Shape = null) extends Shape {
-
-  private val math: SmoothTriangleMath = SmoothTriangleMath(p1, p2, p3, n1, n2, n3)
-
-  override def localIntersect(ray: Ray): Intersections =
-    Intersections(math.intersect(ray).map(i => Intersection(i.t, this, i.u, i.v)))
-
-  override def localNormalAt(point: Point, intersection: Intersection): Vector =
-    math.normalAt(point, Option(intersection).map(i => Inter(i.t, i.u, i.v)).orNull)
-
-}
-
-object Operation extends Enumeration {
-  type Operation = Value
-  val union, intersection, difference = Value
-
-  //replace with case classes?
-  def intersectionAllowed(op: Operation, lhit: Boolean, inl: Boolean, inr: Boolean): Boolean =
-    op match {
-      case `union` => (lhit && !inr) || (!lhit && !inl)
-      case `intersection` => (lhit && inr) || (!lhit && inl)
-      case `difference` => (lhit && !inr) || (!lhit && inl)
-    }
-}
 
 //todo implement as immutable, with builder
 case class Group(children: ListBuffer[Shape] = ListBuffer(),
@@ -234,3 +179,15 @@ case class Csg(operation: Operation,
   override def toString: String = s"CSG($operation, left, right)"
 }
 
+object Operation extends Enumeration {
+  type Operation = Value
+  val union, intersection, difference = Value
+
+  //replace with case classes?
+  def intersectionAllowed(op: Operation, lhit: Boolean, inl: Boolean, inr: Boolean): Boolean =
+    op match {
+      case `union` => (lhit && !inr) || (!lhit && !inl)
+      case `intersection` => (lhit && inr) || (!lhit && inl)
+      case `difference` => (lhit && !inr) || (!lhit && inl)
+    }
+}

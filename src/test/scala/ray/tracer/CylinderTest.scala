@@ -2,6 +2,7 @@ package ray.tracer
 
 import ray.tracer.ShapeFactory._
 import org.scalatest.FunSuite
+import ray.tracer.shapemath.CylinderMath
 
 class CylinderTest extends FunSuite {
   val p = implicitly[Precision[Double]] //todo
@@ -80,7 +81,7 @@ class CylinderTest extends FunSuite {
   }
 
   test("The default minimum and maximum for a cylinder") {
-    val cylinder = Cylinder()
+    val cylinder = CylinderMath()
 
     assert(cylinder.minimum == Double.NegativeInfinity)
     assert(cylinder.maximum == Double.PositiveInfinity)
@@ -129,7 +130,7 @@ class CylinderTest extends FunSuite {
   }
 
   test("The default closed value for a cylinder") {
-    val cylinder = Cylinder()
+    val cylinder = CylinderMath()
 
     assert(!cylinder.closed)
   }
