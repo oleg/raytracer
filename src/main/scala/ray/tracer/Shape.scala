@@ -40,7 +40,6 @@ trait Shape {
 
 }
 
-
 case class SimpleShape(math: ShapeMath,
                        transform: Matrix4x4 = Matrix4x4.Identity,
                        material: Material = Material(),
@@ -53,48 +52,30 @@ case class SimpleShape(math: ShapeMath,
     math.normalAt(point, Option(intersection).map(i => Inter(i.t, i.u, i.v)).orNull)
 }
 
-object Shape {
+object ShapeFactory {
+
+  def glassSphere(transform: Matrix4x4 = Matrix4x4.Identity,
+                  material: Material = Material(transparency = 1.0, refractiveIndex = 1.5)): Shape =
+    Sphere(transform, material)
 
   def Sphere(transform: Matrix4x4 = Matrix4x4.Identity,
              material: Material = Material(),
              parent: Shape = null,
              math: ShapeMath = SphereMath()): Shape =
     SimpleShape(math, transform, material, parent)
-}
+
+  def Plane(transform: Matrix4x4 = Matrix4x4.Identity,
+            material: Material = Material(),
+            parent: Shape = null,
+            math: ShapeMath = PlaneMath()): Shape =
+    SimpleShape(math, transform, material, parent)
 
 
-object SphereFactory {
-
-  def glass(transform: Matrix4x4 = Matrix4x4.Identity,
-            material: Material = Material(transparency = 1.0, refractiveIndex = 1.5)): Shape =
-    Shape.Sphere(transform, material)
-}
-
-case class Plane(transform: Matrix4x4 = Matrix4x4.Identity,
-                 material: Material = Material(),
-                 var parent: Shape = null) extends Shape {
-
-  private val math: ShapeMath = PlaneMath()
-
-  override def localIntersect(ray: Ray): Intersections =
-    Intersections(math.intersect(ray).map(i => Intersection(i.t, this, i.u, i.v)))
-
-  override def localNormalAt(point: Point, intersection: Intersection): Vector =
-    math.normalAt(point, Option(intersection).map(i => Inter(i.t, i.u, i.v)).orNull)
-
-}
-
-case class Cube(transform: Matrix4x4 = Matrix4x4.Identity,
-                material: Material = Material(),
-                var parent: Shape = null) extends Shape {
-
-  private val math: ShapeMath = CubeMath()
-
-  override def localIntersect(ray: Ray): Intersections =
-    Intersections(math.intersect(ray).map(i => Intersection(i.t, this, i.u, i.v)))
-
-  override def localNormalAt(point: Point, intersection: Intersection): Vector =
-    math.normalAt(point, Option(intersection).map(i => Inter(i.t, i.u, i.v)).orNull)
+  def Cube(transform: Matrix4x4 = Matrix4x4.Identity,
+           material: Material = Material(),
+           parent: Shape = null,
+           math: ShapeMath = CubeMath()): Shape =
+    SimpleShape(math, transform, material, parent)
 
 }
 

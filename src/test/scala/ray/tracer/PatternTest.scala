@@ -2,7 +2,7 @@ package ray.tracer
 
 import org.scalatest.FunSuite
 import ray.tracer.Matrix4x4.{Scaling, Translation}
-import ray.tracer.Shape.Sphere
+import ray.tracer.ShapeFactory._
 class PatternTest extends FunSuite {
 
   case class TestPattern(transform: Matrix4x4 = Matrix4x4.Identity) extends Pattern {
