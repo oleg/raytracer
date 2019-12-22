@@ -132,35 +132,14 @@ case class Triangle(p1: Point,
                     material: Material = Material(),
                     var parent: Shape = null) extends Shape {
 
-  val e1: Vector = p2 - p1
-  val e2: Vector = p3 - p1
-  val normal: Vector = e2.cross(e1).normalize
+  private val math: TriangleMath = TriangleMath(p1, p2, p3)
 
-  override def localIntersect(ray: Ray): Intersections = {
-    val dirCrossE2 = ray.direction cross e2
-    val det = e1 dot dirCrossE2
-    if (implicitly[Precision[Double]].approximatelyEqual(det, 0.0)) {
-      return Intersections(Nil)
-    }
+  override def localIntersect(ray: Ray): Intersections =
+    Intersections(math.intersect(ray).map(i => Intersection(i.t, this, i.u, i.v)))
 
-    val f = 1.0 / det
-    val p1ToOrigin = ray.origin - p1
-    val u = f * p1ToOrigin.dot(dirCrossE2)
-    if (u < 0 || 1 < u) {
-      return Intersections(Nil)
-    }
 
-    val originCrossE1 = p1ToOrigin cross e1
-    val v = f * ray.direction.dot(originCrossE1)
-    if (v < 0 || 1 < (u + v)) {
-      return Intersections(Nil)
-    }
-
-    val t = f * e2.dot(originCrossE1)
-    Intersections(Intersection(t, this) :: Nil)
-  }
-
-  override def localNormalAt(point: Point, intersection: Intersection): Vector = normal
+  override def localNormalAt(point: Point, intersection: Intersection): Vector =
+    math.normalAt(point, Option(intersection).map(i => Inter(i.t, i.u, i.v)).orNull)
 
 }
 
