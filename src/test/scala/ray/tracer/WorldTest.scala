@@ -2,7 +2,7 @@ package ray.tracer
 
 import org.scalatest.FunSuite
 import ray.tracer.Matrix4x4.Identity
-
+import ray.tracer.Shape.Sphere
 class WorldTest extends FunSuite {
 
   test("Creating a world") {

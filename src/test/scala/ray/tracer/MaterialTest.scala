@@ -2,7 +2,8 @@ package ray.tracer
 
 import org.scalatest.FunSuite
 import ray.tracer.Matrix4x4.Scaling
-
+import ray.tracer.Shape.Sphere
+import ray.tracer.SphereFactory
 class MaterialTest extends FunSuite {
 
   test("The default material") {
@@ -133,16 +134,16 @@ class MaterialTest extends FunSuite {
   }
 
   test("A helper for producing a sphere with a glassy material") {
-    val s = Sphere.glass()
+    val s = SphereFactory.glass()
     assert(s.transform == Matrix4x4.Identity)
     assert(s.material.transparency == 1.0)
     assert(s.material.refractiveIndex == 1.5)
   }
 
   test("Scenario Outline: Finding n1 and n2 at various intersections") {
-    val a = Sphere.glass(transform = Scaling(2, 2, 2), material = Material(refractiveIndex = 1.5))
-    val b = Sphere.glass(transform = Scaling(0, 0, -0.25), material = Material(refractiveIndex = 2.0))
-    val c = Sphere.glass(transform = Scaling(0, 0, 0.25), material = Material(refractiveIndex = 2.5))
+    val a = SphereFactory.glass(transform = Scaling(2, 2, 2), material = Material(refractiveIndex = 1.5))
+    val b = SphereFactory.glass(transform = Scaling(0, 0, -0.25), material = Material(refractiveIndex = 2.0))
+    val c = SphereFactory.glass(transform = Scaling(0, 0, 0.25), material = Material(refractiveIndex = 2.5))
 
     val r = Ray(Point(0, 0, -4), Vector(0, 0, 1))
 

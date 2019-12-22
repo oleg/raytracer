@@ -2,7 +2,7 @@ package ray.tracer
 
 case class World(light: PointLight, shapes: List[Shape]) {
 
-  def contains(sphere: Sphere): Boolean = shapes.contains(sphere)
+  def contains(shape: Shape): Boolean = shapes.contains(shape)
 
   def colorAt(r: Ray, leftIterations: Int = 5): Color = {
     val intersections = intersect(r)
