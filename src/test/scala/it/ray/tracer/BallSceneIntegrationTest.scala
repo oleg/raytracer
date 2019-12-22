@@ -1,5 +1,5 @@
 package it.ray.tracer
-
+import ray.tracer.Shape.Sphere
 import org.scalatest.FunSuite
 import ray.tracer.Matrix4x4.Identity
 import ray.tracer._

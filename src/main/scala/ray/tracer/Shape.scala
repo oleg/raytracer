@@ -40,26 +40,34 @@ trait Shape {
 
 }
 
-case class Sphere(transform: Matrix4x4 = Matrix4x4.Identity,
-                  material: Material = Material(),
-                  var parent: Shape = null) extends Shape {
 
-  private val math: ShapeMath = SphereMath()
+case class SimpleShape(math: ShapeMath,
+                       transform: Matrix4x4 = Matrix4x4.Identity,
+                       material: Material = Material(),
+                       var parent: Shape = null) extends Shape {
 
   override def localIntersect(ray: Ray): Intersections =
     Intersections(math.intersect(ray).map(i => Intersection(i.t, this, i.u, i.v)))
 
   override def localNormalAt(point: Point, intersection: Intersection): Vector =
     math.normalAt(point, Option(intersection).map(i => Inter(i.t, i.u, i.v)).orNull)
-
 }
 
-object Sphere {
+object Shape {
+
+  def Sphere(transform: Matrix4x4 = Matrix4x4.Identity,
+             material: Material = Material(),
+             parent: Shape = null,
+             math: ShapeMath = SphereMath()): Shape =
+    SimpleShape(math, transform, material, parent)
+}
+
+
+object SphereFactory {
 
   def glass(transform: Matrix4x4 = Matrix4x4.Identity,
-            material: Material = Material(transparency = 1.0, refractiveIndex = 1.5)): Sphere =
-    Sphere(transform, material)
-
+            material: Material = Material(transparency = 1.0, refractiveIndex = 1.5)): Shape =
+    Shape.Sphere(transform, material)
 }
 
 case class Plane(transform: Matrix4x4 = Matrix4x4.Identity,

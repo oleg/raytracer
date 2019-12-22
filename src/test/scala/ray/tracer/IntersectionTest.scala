@@ -1,7 +1,6 @@
 package ray.tracer
-
 import org.scalatest.FunSuite
-
+import ray.tracer.Shape.Sphere
 class IntersectionTest extends FunSuite {
   private val p: Precision[Double] = implicitly[Precision[Double]]
   test("An intersection encapsulates t and object") {
@@ -123,7 +122,7 @@ class IntersectionTest extends FunSuite {
 
   test("The under point is offset below the surface") {
     val r = Ray(Point(0, 0, -5), Vector(0, 0, 1))
-    val shape = Sphere.glass(transform = Matrix4x4.Translation(0, 0, 1))
+    val shape = SphereFactory.glass(transform = Matrix4x4.Translation(0, 0, 1))
     val i = Intersection(5, shape)
 
     val xs = Intersections(i :: Nil)
@@ -136,7 +135,7 @@ class IntersectionTest extends FunSuite {
   }
 
   test("The Schlick approximation under total internal reflection") {
-    val shape = Sphere.glass()
+    val shape = SphereFactory.glass()
     val r = Ray(Point(0, 0, Sqrt2Div2), Vector(0, 1, 0))
     val xs = Intersections(Intersection(-Sqrt2Div2, shape) :: Intersection(Sqrt2Div2, shape) :: Nil)
 
@@ -148,7 +147,7 @@ class IntersectionTest extends FunSuite {
   }
 
   test("The Schlick approximation with a perpendicular viewing angle") {
-    val shape = Sphere.glass()
+    val shape = SphereFactory.glass()
     val r = Ray(Point(0, 0, 0), Vector(0, 1, 0))
     val xs = Intersections(Intersection(-1, shape) :: Intersection(1, shape) :: Nil)
 
@@ -160,7 +159,7 @@ class IntersectionTest extends FunSuite {
   }
 
   test("The Schlick approximation with small angle and n2 > n1") {
-    val shape = Sphere.glass()
+    val shape = SphereFactory.glass()
     val r = Ray(Point(0, 0.99, -2), Vector(0, 0, 1))
     val xs = Intersections(Intersection(1.8589, shape) :: Nil)
 

@@ -1,5 +1,5 @@
 package ray.tracer
-
+import ray.tracer.Shape.Sphere
 import org.scalatest.FunSuite
 
 class CsgTest extends FunSuite {
