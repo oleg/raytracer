@@ -1,5 +1,6 @@
 package ray.tracer
 
+import ray.tracer.ShapeFactory._
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
@@ -99,14 +100,14 @@ class ObjFileParser {
     groups.put(items(1), currentGroup)
   }
 
-  private def triangle(i1: Item, i2: Item, i3: Item): Triangle = {
+  private def triangle(i1: Item, i2: Item, i3: Item): Shape = {
     Triangle(
       vertices(i1.vertexIndex),
       vertices(i2.vertexIndex),
       vertices(i3.vertexIndex))
   }
 
-  private def smoothTriangle(i1: Item, i2: Item, i3: Item): SmoothTriangle = {
+  private def smoothTriangle(i1: Item, i2: Item, i3: Item): Shape = {
     SmoothTriangle(
       vertices(i1.vertexIndex),
       vertices(i2.vertexIndex),
