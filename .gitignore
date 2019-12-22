@@ -1,5 +1,5 @@
 project/
 target/
 .idea/
-sclcode.ipr
-sclcode.iws
+*.ipr
+*.iws
