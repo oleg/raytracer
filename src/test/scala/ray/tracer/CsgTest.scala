@@ -1,7 +1,6 @@
 package ray.tracer
-import ray.tracer.Shape.Sphere
 import org.scalatest.FunSuite
-
+import ray.tracer.ShapeFactory._
 class CsgTest extends FunSuite {
 
   test("CSG is created with an operation and two shapes") {

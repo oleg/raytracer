@@ -1,5 +1,5 @@
 package ray.tracer
-import ray.tracer.Shape.Sphere
+import ray.tracer.ShapeFactory._
 import org.scalatest.FunSuite
 
 import scala.math.Pi

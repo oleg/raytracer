@@ -1,5 +1,6 @@
 package ray.tracer
 
+import ray.tracer.ShapeFactory._
 import org.scalatest.FunSuite
 
 class CylinderTest extends FunSuite {

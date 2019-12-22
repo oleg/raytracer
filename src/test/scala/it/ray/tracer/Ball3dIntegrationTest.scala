@@ -1,7 +1,7 @@
 package it.ray.tracer
 
 import org.scalatest.FunSuite
-import ray.tracer.Shape.Sphere
+import ray.tracer.ShapeFactory._
 import ray.tracer._
 import testutil.Sources
 

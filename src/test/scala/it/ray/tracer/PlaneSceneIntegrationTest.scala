@@ -1,10 +1,10 @@
 package it.ray.tracer
-import ray.tracer.Shape.Sphere
+import ray.tracer.ShapeFactory._
 import org.scalatest.FunSuite
 import ray.tracer.Matrix4x4.Identity
 import ray.tracer._
 import testutil.Sources
-
+import ray.tracer.ShapeFactory._
 import scala.math.Pi
 
 class PlaneSceneIntegrationTest extends FunSuite {

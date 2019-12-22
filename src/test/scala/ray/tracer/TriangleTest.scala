@@ -2,6 +2,7 @@ package ray.tracer
 
 import org.scalatest.FunSuite
 import ray.tracer.shapemath.TriangleMath
+import ray.tracer.ShapeFactory._
 
 class TriangleTest extends FunSuite {
 
