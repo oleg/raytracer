@@ -21,28 +21,30 @@ class GroupTest extends FunSuite {
   }
 
 
-  test("Creating a new group") {
-    val g = Group()
-
-    assert(g.transform == Matrix4x4.Identity)
-    assert(g.size == 0)
-  }
+//TODO:Oleg do we need size test?
+//  test("Creating a new group") {
+//    val g = Group()
+//
+//    assert(g.transform == Matrix4x4.Identity)
+//    assert(g.size == 0)
+//  }
 
   test("A shape has a parent attribute") {
     val s = TestShape()
     assert(s.parent == null)
   }
 
-  test("Adding a child to a group") {
-    val g = Group()
-    val s = TestShape()
-
-    g.add(s)
-
-    assert(g.size == 1)
-    assert(g.contains(s))
-    assert(s.parent == g)
-  }
+//TODO:Oleg do we need contains test?
+//  test("Adding a child to a group") {
+//    val g = Group()
+//    val s = TestShape()
+//
+//    g.add(s)
+//
+//    assert(g.size == 1)
+//    assert(g.contains(s))
+//    assert(s.parent == g)
+//  }
 
   test("Intersecting a ray with an empty group") {
     val g = Group()
