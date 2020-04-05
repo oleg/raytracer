@@ -37,6 +37,8 @@ trait Shape {
     if (parent != null) parent.normalToWorld(n) else n
   }
 
+  def incl(b: Shape): Boolean = this == b
+
 }
 
 case class SimpleShape(math: ShapeMath,
@@ -49,6 +51,7 @@ case class SimpleShape(math: ShapeMath,
 
   override def localNormalAt(point: Point, intersection: Intersection): Vector =
     math.normalAt(point, Option(intersection).map(i => Inter(i.t, i.u, i.v)).orNull)
+
 }
 
 //todo implement as immutable, with builder
@@ -68,11 +71,10 @@ case class Group(children: ListBuffer[Shape] = ListBuffer(),
     shape.parent = this //todo refactor
   }
 
-  def contains(shape: Shape): Boolean = children.contains(shape)
-
-  def size: Int = children.length
-
   override def toString: String = s"children: ${children.length}, parent: $parent" //todo fix me
+
+  override def incl(b: Shape): Boolean =
+    children.exists(_.incl(b))
 }
 
 case class Csg(operation: Operation,
@@ -85,13 +87,8 @@ case class Csg(operation: Operation,
   left.parent = this
   right.parent = this
 
-  //todo refactor, replace with polymorphism
-  private def includes(a: Shape, b: Shape): Boolean =
-    a match {
-      case csg: Csg => List(csg.left, csg.right).exists(includes(_, b))
-      case g: Group => g.children.exists(includes(_, b))
-      case _ => a == b
-    }
+  override def incl(b: Shape): Boolean =
+    left.incl(b) || right.incl(b)
 
   override def localIntersect(ray: Ray): Intersections =
     filterIntersections(left.intersect(ray) ::: right.intersect(ray))
@@ -102,7 +99,7 @@ case class Csg(operation: Operation,
 
     val result = intersections
       .filter(i => {
-        val lhit = includes(left, i.obj)
+        val lhit = left.incl(i.obj)
         val allowed = Operation.intersectionAllowed(operation, lhit, inl, inr)
         if (lhit) {
           inl = !inl
