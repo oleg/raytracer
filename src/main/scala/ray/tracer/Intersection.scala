@@ -65,24 +65,17 @@ case class Intersection(t: Double,
   }
 
   def myNormalAt(worldPoint: Point, intersection: Intersection): Vector = {
-    //    val localPoint: Point = worldToObject(worldPoint)
+    val localPoint: Point = worldToObject(worldPoint)
     //    val localNormal: Vector = localNormalAt(localPoint, intersection)
     //    normalToWorld(localNormal)
     return null;
   }
 
-  def worldToObject(point: Point): Point = {
-    ts.map(_.inverse).fold(Matrix4x4.Identity)(_ * _) * point
-  }
+  def worldToObject(point: Point): Point =
+    ts.map(_.inverse).foldLeft(Matrix4x4.Identity)(_ * _) * point
 
-  //  def worldToObject(point: Point): Point = {
-  //    transform.inverse * (if (parent != null) parent.worldToObject(point) else point)
-  //  }
-  //
-  //  def normalToWorld(normal: Vector): Vector = {
-  //    val n = (transform.inverse.transpose * normal).normalize
-  //    if (parent != null) parent.normalToWorld(n) else n
-  //  }
+  def normalToWorld(nr: Vector): Vector =
+    ts.foldLeft(nr)((acc, el) => (el.inverse.transpose * acc).normalize)
 
 }
 
