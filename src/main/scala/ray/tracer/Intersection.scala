@@ -50,7 +50,11 @@ case class Intersection(t: Double,
     val p = implicitly[Precision[Double]]
     val point = ray.position(t)
     val eyev = -ray.direction
+
+
     val normalv = obj.normalAt(point, this)
+
+
     val inside = (normalv dot eyev) < 0
     val directedNormalv = if (inside) -normalv else normalv
     val overPoint = point + directedNormalv * p.precision
@@ -59,6 +63,27 @@ case class Intersection(t: Double,
 
     Computation(t, obj, point, overPoint, underPoint, eyev, directedNormalv, reflectv, ns._1, ns._2, inside)
   }
+
+  def myNormalAt(worldPoint: Point, intersection: Intersection): Vector = {
+    //    val localPoint: Point = worldToObject(worldPoint)
+    //    val localNormal: Vector = localNormalAt(localPoint, intersection)
+    //    normalToWorld(localNormal)
+    return null;
+  }
+
+  def worldToObject(point: Point): Point = {
+    ts.map(_.inverse).fold(Matrix4x4.Identity)(_ * _) * point
+  }
+
+  //  def worldToObject(point: Point): Point = {
+  //    transform.inverse * (if (parent != null) parent.worldToObject(point) else point)
+  //  }
+  //
+  //  def normalToWorld(normal: Vector): Vector = {
+  //    val n = (transform.inverse.transpose * normal).normalize
+  //    if (parent != null) parent.normalToWorld(n) else n
+  //  }
+
 }
 
 
