@@ -1,8 +1,8 @@
 package ray.tracer
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
-class TupleTest extends FunSuite {
+class TupleTest extends AnyFunSuite {
 
   test("A tuple equal to another tuple") {
     val t = Point(4.3, -4.2, 3.1)

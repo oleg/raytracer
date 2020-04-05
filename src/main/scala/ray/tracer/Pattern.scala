@@ -1,5 +1,7 @@
 package ray.tracer
 
+import ray.tracer.shape.Shape
+
 trait Pattern {
 
   val transform: Matrix4x4

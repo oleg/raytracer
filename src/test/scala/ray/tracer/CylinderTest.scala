@@ -1,10 +1,10 @@
 package ray.tracer
 
-import ray.tracer.ShapeFactory._
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
+import ray.tracer.shape.ShapeFactory._
 import ray.tracer.shapemath.CylinderMath
 
-class CylinderTest extends FunSuite {
+class CylinderTest extends AnyFunSuite {
   val p = implicitly[Precision[Double]] //todo
 
   test("A ray misses a cylinder at origin(1,0,0) with direction(0,1,0)") {
@@ -173,11 +173,11 @@ class CylinderTest extends FunSuite {
   test("The normal vector on a cylinder's end caps") {
     val cylinder = Cylinder(minimum = 1, maximum = 2, closed = true)
     //todo split test
-    assert(cylinder.localNormalAt(Point(0, 1, 0  ),null) == Vector(0, -1, 0))
-    assert(cylinder.localNormalAt(Point(0.5, 1, 0),null) == Vector(0, -1, 0))
-    assert(cylinder.localNormalAt(Point(0, 1, 0.5),null) == Vector(0, -1, 0))
-    assert(cylinder.localNormalAt(Point(0, 2, 0  ),null) == Vector(0, 1, 0))
-    assert(cylinder.localNormalAt(Point(0.5, 2, 0),null) == Vector(0, 1, 0))
-    assert(cylinder.localNormalAt(Point(0, 2, 0.5),null) == Vector(0, 1, 0))
+    assert(cylinder.localNormalAt(Point(0, 1, 0), null) == Vector(0, -1, 0))
+    assert(cylinder.localNormalAt(Point(0.5, 1, 0), null) == Vector(0, -1, 0))
+    assert(cylinder.localNormalAt(Point(0, 1, 0.5), null) == Vector(0, -1, 0))
+    assert(cylinder.localNormalAt(Point(0, 2, 0), null) == Vector(0, 1, 0))
+    assert(cylinder.localNormalAt(Point(0.5, 2, 0), null) == Vector(0, 1, 0))
+    assert(cylinder.localNormalAt(Point(0, 2, 0.5), null) == Vector(0, 1, 0))
   }
 }

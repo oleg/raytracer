@@ -1,10 +1,11 @@
 package ray.tracer
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
+import ray.tracer.shape.Shape
 
 import scala.math.Pi
 
-class ShapeTest extends FunSuite {
+class ShapeTest extends AnyFunSuite {
 
   case class TestShape(transform: Matrix4x4 = Matrix4x4.Identity,
                        material: Material = Material(),
@@ -17,7 +18,7 @@ class ShapeTest extends FunSuite {
       null
     }
 
-    override def localNormalAt(localPoint: Point, intersection: Intersection): Vector = localPoint- Point(0,0,0)
+    override def localNormalAt(localPoint: Point, intersection: Intersection): Vector = localPoint - Point(0, 0, 0)
   }
 
   test("The default transformation") {

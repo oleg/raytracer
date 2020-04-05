@@ -1,9 +1,9 @@
 package ray.tracer
 
-import ray.tracer.ShapeFactory._
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
+import ray.tracer.shape.ShapeFactory._
 
-class CubeTest extends FunSuite {
+class CubeTest extends AnyFunSuite {
 
   test("A ray intersects a cube") {
     val c = Cube()

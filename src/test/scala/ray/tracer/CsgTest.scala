@@ -1,7 +1,10 @@
 package ray.tracer
-import org.scalatest.FunSuite
-import ray.tracer.ShapeFactory._
-class CsgTest extends FunSuite {
+
+import org.scalatest.funsuite.AnyFunSuite
+import ray.tracer.shape.ShapeFactory._
+import ray.tracer.shape.{Csg, Operation}
+
+class CsgTest extends AnyFunSuite {
 
   test("CSG is created with an operation and two shapes") {
     val s1 = Sphere()

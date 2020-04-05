@@ -1,9 +1,10 @@
 package ray.tracer
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import ray.tracer.Matrix4x4.{Scaling, Translation}
-import ray.tracer.ShapeFactory._
-class PatternTest extends FunSuite {
+import ray.tracer.shape.ShapeFactory._
+
+class PatternTest extends AnyFunSuite {
 
   case class TestPattern(transform: Matrix4x4 = Matrix4x4.Identity) extends Pattern {
     override def patternAt(point: Point): Color = Color(point.x, point.y, point.z)

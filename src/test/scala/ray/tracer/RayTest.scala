@@ -1,8 +1,8 @@
 package ray.tracer
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
-class RayTest extends FunSuite {
+class RayTest extends AnyFunSuite {
 
   test("Creating and querying a ray") {
     val origin = Point(1, 2, 3)

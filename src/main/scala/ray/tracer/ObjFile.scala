@@ -1,6 +1,8 @@
 package ray.tracer
 
-import ray.tracer.ShapeFactory._
+import ray.tracer.shape.ShapeFactory._
+import ray.tracer.shape.{Group, Shape}
+
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source

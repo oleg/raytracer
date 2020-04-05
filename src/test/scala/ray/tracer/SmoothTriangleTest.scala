@@ -1,10 +1,11 @@
 package ray.tracer
 
-import org.scalatest.FunSuite
-import ray.tracer.ShapeFactory._
+import org.scalatest.funsuite.AnyFunSuite
+import ray.tracer.shape.ShapeFactory._
+import ray.tracer.shape.{Shape, SimpleShape}
 import ray.tracer.shapemath.SmoothTriangleMath
 
-class SmoothTriangleTest extends FunSuite {
+class SmoothTriangleTest extends AnyFunSuite {
   val p = implicitly[Precision[Double]]
   test("Constructing a smooth triangle") {
     val tri = smoothTriangle().asInstanceOf[SimpleShape].math.asInstanceOf[SmoothTriangleMath]

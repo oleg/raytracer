@@ -1,8 +1,8 @@
 package ray.tracer
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
-class LightTest extends FunSuite {
+class LightTest extends AnyFunSuite {
 
   test("A point light has a position and intensity") {
     val intensity = Color(1, 1, 1)

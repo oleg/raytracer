@@ -1,11 +1,12 @@
 package ray.tracer
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
+import ray.tracer.shape.{Group, SimpleShape}
 import ray.tracer.shapemath.{SmoothTriangleMath, TriangleMath}
 
 import scala.io.Source
 
-class ObjFileTest extends FunSuite {
+class ObjFileTest extends AnyFunSuite {
 
   test("Ignoring unrecognized lines") {
     val gibberish =

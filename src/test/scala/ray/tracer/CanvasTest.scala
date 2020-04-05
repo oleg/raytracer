@@ -1,8 +1,8 @@
 package ray.tracer
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
-class CanvasTest extends FunSuite {
+class CanvasTest extends AnyFunSuite {
 
   test("Creating a canvas") {
     val c = Canvas(10, 20)

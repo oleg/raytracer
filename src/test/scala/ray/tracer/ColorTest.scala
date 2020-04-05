@@ -1,8 +1,8 @@
 package ray.tracer
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
-class ColorTest extends FunSuite {
+class ColorTest extends AnyFunSuite {
 
   test("Colors are (red, green, blue) tuples") {
     val c = Color(-0.5, 0.4, 1.7)
