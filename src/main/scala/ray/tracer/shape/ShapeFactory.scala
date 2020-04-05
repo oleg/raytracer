@@ -1,6 +1,7 @@
-package ray.tracer
+package ray.tracer.shape
 
 import ray.tracer.shapemath._
+import ray.tracer.{Material, Matrix4x4, Point, Vector, shape}
 
 object ShapeFactory {
 
@@ -16,12 +17,12 @@ object ShapeFactory {
   def Plane(transform: Matrix4x4 = Matrix4x4.Identity,
             material: Material = Material(),
             parent: Shape = null): Shape =
-    SimpleShape(PlaneMath(), transform, material, parent)
+    shape.SimpleShape(PlaneMath(), transform, material, parent)
 
   def Cube(transform: Matrix4x4 = Matrix4x4.Identity,
            material: Material = Material(),
            parent: Shape = null): Shape =
-    SimpleShape(CubeMath(), transform, material, parent)
+    shape.SimpleShape(CubeMath(), transform, material, parent)
 
   def Cylinder(minimum: Double = Double.NegativeInfinity,
                maximum: Double = Double.PositiveInfinity,
@@ -29,7 +30,7 @@ object ShapeFactory {
                transform: Matrix4x4 = Matrix4x4.Identity,
                material: Material = Material(),
                parent: Shape = null): Shape =
-    SimpleShape(CylinderMath(minimum, maximum, closed), transform, material, parent)
+    shape.SimpleShape(CylinderMath(minimum, maximum, closed), transform, material, parent)
 
   def Cone(minimum: Double = Double.NegativeInfinity,
            maximum: Double = Double.PositiveInfinity,
@@ -37,7 +38,7 @@ object ShapeFactory {
            transform: Matrix4x4 = Matrix4x4.Identity,
            material: Material = Material(),
            parent: Shape = null): Shape =
-    SimpleShape(ConeMath(minimum, maximum, closed), transform, material, parent)
+    shape.SimpleShape(ConeMath(minimum, maximum, closed), transform, material, parent)
 
   def Triangle(p1: Point,
                p2: Point,
@@ -45,7 +46,7 @@ object ShapeFactory {
                transform: Matrix4x4 = Matrix4x4.Identity,
                material: Material = Material(),
                parent: Shape = null): Shape =
-    SimpleShape(TriangleMath(p1, p2, p3), transform, material, parent)
+    shape.SimpleShape(TriangleMath(p1, p2, p3), transform, material, parent)
 
   def SmoothTriangle(p1: Point,
                      p2: Point,
@@ -56,6 +57,6 @@ object ShapeFactory {
                      transform: Matrix4x4 = Matrix4x4.Identity,
                      material: Material = Material(),
                      parent: Shape = null): Shape =
-    SimpleShape(SmoothTriangleMath(p1, p2, p3, n1, n2, n3), transform, material, parent)
+    shape.SimpleShape(SmoothTriangleMath(p1, p2, p3, n1, n2, n3), transform, material, parent)
 
 }

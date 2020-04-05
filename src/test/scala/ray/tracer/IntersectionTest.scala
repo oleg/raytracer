@@ -1,7 +1,9 @@
 package ray.tracer
-import org.scalatest.FunSuite
-import ray.tracer.ShapeFactory._
-class IntersectionTest extends FunSuite {
+
+import org.scalatest.funsuite.AnyFunSuite
+import ray.tracer.shape.ShapeFactory._
+
+class IntersectionTest extends AnyFunSuite {
   private val p: Precision[Double] = implicitly[Precision[Double]]
   test("An intersection encapsulates t and object") {
     val ray = Ray(Point(0, 0, -5), Vector(0, 0, 1))
@@ -67,7 +69,7 @@ class IntersectionTest extends FunSuite {
     val r = Ray(Point(0, 0, -5), Vector(0, 0, 1))
     val shape = Sphere()
     val i = Intersection(4, shape)
-    val ns = Intersections(i :: Nil).findNs(i)//todo:ns
+    val ns = Intersections(i :: Nil).findNs(i) //todo:ns
     val comps = i.prepareComputations(r, ns)
 
     assert(comps.t == i.t)

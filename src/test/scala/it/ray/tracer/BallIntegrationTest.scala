@@ -1,5 +1,5 @@
 package it.ray.tracer
-import ray.tracer.ShapeFactory._
+import ray.tracer.shape.ShapeFactory._
 import org.scalatest.FunSuite
 import ray.tracer._
 import testutil.Sources

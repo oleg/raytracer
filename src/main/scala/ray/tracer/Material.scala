@@ -1,5 +1,7 @@
 package ray.tracer
 
+import ray.tracer.shape.Shape
+
 //todo add validation for min 0, max 1
 case class Material(color: Color = Color(1, 1, 1),
                     ambient: Double = 0.1,

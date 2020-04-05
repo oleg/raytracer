@@ -1,10 +1,10 @@
 package ray.tracer
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
-import scala.math.{Pi, sqrt}
+import scala.math.Pi
 
-class TransformationTest extends FunSuite {
+class TransformationTest extends AnyFunSuite {
 
   test("Multiplying by a translation matrix") {
     val transform = Matrix4x4.Translation(5, -3, 2)

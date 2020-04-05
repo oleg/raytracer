@@ -1,9 +1,11 @@
 package ray.tracer
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import ray.tracer.Matrix4x4.Identity
-import ray.tracer.ShapeFactory._
-class WorldTest extends FunSuite {
+import ray.tracer.shape.Shape
+import ray.tracer.shape.ShapeFactory._
+
+class WorldTest extends AnyFunSuite {
 
   test("Creating a world") {
     val w = World(null, null)
@@ -48,18 +50,18 @@ class WorldTest extends FunSuite {
     assert(c ==~ Color(0.38066, 0.47583, 0.2855))
   }
 
-//TODO fix me
-//broken after changing
-//`val overPoint = point + normalv * EPSILON` to `val overPoint = point + directedNormalv * EPSILON`
-//  test("Shading an intersection from the inside") {
-//    val w = defaultWorld().copy(light = PointLight(Point(0, 0.25, 0), Color(1, 1, 1)))
-//    val r = Ray(Point(0, 0, 0), Vector(0, 0, 1))
-//    val shape = w.shapes(1)
-//    val i = Intersection(0.5, shape)
-//    val comps = i.prepareComputations(r, Intersections(i :: Nil))
-//    val c = w.shadeHit(comps)
-//    assert(c ==~ Color(0.1, 0.1, 0.1), c)
-//  }
+  //TODO fix me
+  //broken after changing
+  //`val overPoint = point + normalv * EPSILON` to `val overPoint = point + directedNormalv * EPSILON`
+  //  test("Shading an intersection from the inside") {
+  //    val w = defaultWorld().copy(light = PointLight(Point(0, 0.25, 0), Color(1, 1, 1)))
+  //    val r = Ray(Point(0, 0, 0), Vector(0, 0, 1))
+  //    val shape = w.shapes(1)
+  //    val i = Intersection(0.5, shape)
+  //    val comps = i.prepareComputations(r, Intersections(i :: Nil))
+  //    val c = w.shadeHit(comps)
+  //    assert(c ==~ Color(0.1, 0.1, 0.1), c)
+  //  }
 
   test("shade_hit() is given an intersection in shadow") {
     val s1 = Sphere()

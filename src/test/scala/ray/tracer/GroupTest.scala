@@ -1,10 +1,12 @@
 package ray.tracer
-import ray.tracer.ShapeFactory._
-import org.scalatest.FunSuite
+
+import org.scalatest.funsuite.AnyFunSuite
+import ray.tracer.shape.ShapeFactory._
+import ray.tracer.shape.{Group, Shape}
 
 import scala.math.Pi
 
-class GroupTest extends FunSuite {
+class GroupTest extends AnyFunSuite {
 
   case class TestShape(transform: Matrix4x4 = Matrix4x4.Identity,
                        material: Material = Material(),
@@ -17,34 +19,34 @@ class GroupTest extends FunSuite {
       null
     }
 
-    override def localNormalAt(localPoint: Point, intersection: Intersection): Vector = localPoint - Point(0,0,0)
+    override def localNormalAt(localPoint: Point, intersection: Intersection): Vector = localPoint - Point(0, 0, 0)
   }
 
 
-//TODO:Oleg do we need size test?
-//  test("Creating a new group") {
-//    val g = Group()
-//
-//    assert(g.transform == Matrix4x4.Identity)
-//    assert(g.size == 0)
-//  }
+  //TODO:Oleg do we need size test?
+  //  test("Creating a new group") {
+  //    val g = Group()
+  //
+  //    assert(g.transform == Matrix4x4.Identity)
+  //    assert(g.size == 0)
+  //  }
 
   test("A shape has a parent attribute") {
     val s = TestShape()
     assert(s.parent == null)
   }
 
-//TODO:Oleg do we need contains test?
-//  test("Adding a child to a group") {
-//    val g = Group()
-//    val s = TestShape()
-//
-//    g.add(s)
-//
-//    assert(g.size == 1)
-//    assert(g.contains(s))
-//    assert(s.parent == g)
-//  }
+  //TODO:Oleg do we need contains test?
+  //  test("Adding a child to a group") {
+  //    val g = Group()
+  //    val s = TestShape()
+  //
+  //    g.add(s)
+  //
+  //    assert(g.size == 1)
+  //    assert(g.contains(s))
+  //    assert(s.parent == g)
+  //  }
 
   test("Intersecting a ray with an empty group") {
     val g = Group()
@@ -77,7 +79,7 @@ class GroupTest extends FunSuite {
   }
 
   test("Intersecting a transformed group") {
-    val g = Group(transform = Matrix4x4.Scaling(2, 2, 2))
+    val g = shape.Group(transform = Matrix4x4.Scaling(2, 2, 2))
     val s = Sphere(transform = Matrix4x4.Translation(5, 0, 0))
 
     g.add(s)
@@ -90,8 +92,8 @@ class GroupTest extends FunSuite {
   }
 
   test("Converting a point from world to object space") {
-    val g1 = Group(transform = Matrix4x4.RotationY(Pi / 2.0))
-    val g2 = Group(transform = Matrix4x4.Scaling(2, 2, 2))
+    val g1 = shape.Group(transform = Matrix4x4.RotationY(Pi / 2.0))
+    val g2 = shape.Group(transform = Matrix4x4.Scaling(2, 2, 2))
     val s = Sphere(transform = Matrix4x4.Translation(5, 0, 0))
 
     g1.add(g2)
@@ -103,8 +105,8 @@ class GroupTest extends FunSuite {
   }
 
   test("Converting a normal from object to world space") {
-    val g1 = Group(transform = Matrix4x4.RotationY(Pi / 2))
-    val g2 = Group(transform = Matrix4x4.Scaling(1, 2, 3))
+    val g1 = shape.Group(transform = Matrix4x4.RotationY(Pi / 2))
+    val g2 = shape.Group(transform = Matrix4x4.Scaling(1, 2, 3))
     val s = Sphere(transform = Matrix4x4.Translation(5, 0, 0))
 
     g2.add(s)
@@ -118,8 +120,8 @@ class GroupTest extends FunSuite {
   }
 
   test("Finding the normal on a child object") {
-    val g1 = Group(transform = Matrix4x4.RotationY(Pi / 2))
-    val g2 = Group(transform = Matrix4x4.Scaling(1, 2, 3))
+    val g1 = shape.Group(transform = Matrix4x4.RotationY(Pi / 2))
+    val g2 = shape.Group(transform = Matrix4x4.Scaling(1, 2, 3))
     val s = Sphere(transform = Matrix4x4.Translation(5, 0, 0))
 
     g1.add(g2)

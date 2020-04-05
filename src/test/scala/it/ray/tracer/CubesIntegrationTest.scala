@@ -6,7 +6,7 @@ import ray.tracer._
 import testutil.Sources
 
 import scala.math.Pi
-import ray.tracer.ShapeFactory._
+import ray.tracer.shape.ShapeFactory._
 
 class CubesIntegrationTest extends FunSuite {
 

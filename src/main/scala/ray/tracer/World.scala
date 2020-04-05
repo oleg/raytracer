@@ -1,5 +1,7 @@
 package ray.tracer
 
+import ray.tracer.shape.Shape
+
 case class World(light: PointLight, shapes: List[Shape]) {
 
   def contains(shape: Shape): Boolean = shapes.contains(shape)

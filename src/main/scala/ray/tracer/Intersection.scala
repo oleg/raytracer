@@ -1,5 +1,7 @@
 package ray.tracer
 
+import ray.tracer.shape.Shape
+
 import scala.collection.mutable.ArrayBuffer
 
 case class Computation(t: Double,
@@ -38,9 +40,9 @@ case class Intersection(t: Double,
 
   override def toString: String =
     s"""
-      |Intersection(
-      |$t, $u, $v
-      |$obj)
+       |Intersection(
+       |$t, $u, $v
+       |$obj)
     """.stripMargin
 
   def prepareComputations(ray: Ray, ns: (Double, Double)): Computation = {
@@ -56,21 +58,33 @@ case class Intersection(t: Double,
 
     Computation(t, obj, point, overPoint, underPoint, eyev, directedNormalv, reflectv, ns._1, ns._2, inside)
   }
+}
 
+
+object Intersections {
+  //val EMPTY: Intersections = Intersections(Nil)
+  private val vectorOrdering = Ordering.by((_: Intersection).t)
+
+  def apply(is: List[Intersection]): Intersections = new Intersections(is.sorted(vectorOrdering))
 }
 
 
 case class Intersections private(private val is: List[Intersection]) extends Iterable[Intersection] {
 
-  def apply(i: Int): Intersection = is(i)
+  def apply(i: Int): Intersection =
+    is(i)
 
-  def length: Int = is.length
+  def length: Int =
+    is.length
 
-  def hit: Option[Intersection] = is.find(_.t >= 0)
+  def hit: Option[Intersection] =
+    is.find(_.t >= 0)
 
-  def :::(other: Intersections): Intersections = Intersections(is ::: other.is)
+  def :::(other: Intersections): Intersections =
+    Intersections(is ::: other.is)
 
-  override def iterator: Iterator[Intersection] = is.iterator
+  override def iterator: Iterator[Intersection] =
+    is.iterator
 
   def findNs(inter: Intersection): (Double, Double) = {
     var n1: Double = 0.0
@@ -105,11 +119,4 @@ case class Intersections private(private val is: List[Intersection]) extends Ite
     (n1, n2)
   }
 
-}
-
-object Intersections {
-  val EMPTY: Intersections = Intersections(Nil)
-  private val vectorOrdering = Ordering.by((_: Intersection).t)
-
-  def apply(is: List[Intersection]): Intersections = new Intersections(is.sorted(vectorOrdering))
 }

@@ -1,10 +1,10 @@
 package ray.tracer
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
+import ray.tracer.shape.ShapeFactory._
 import ray.tracer.shapemath.TriangleMath
-import ray.tracer.ShapeFactory._
 
-class TriangleTest extends FunSuite {
+class TriangleTest extends AnyFunSuite {
 
   test("Constructing a triangle") {
     val p1 = Point(0, 1, 0)
@@ -26,9 +26,9 @@ class TriangleTest extends FunSuite {
     val t = Triangle(Point(0, 1, 0), Point(-1, 0, 0), Point(1, 0, 0))
     val tm = TriangleMath(Point(0, 1, 0), Point(-1, 0, 0), Point(1, 0, 0))
 
-    assert(t.localNormalAt(Point(0, 0.5, 0),null) == tm.normal)
-    assert(t.localNormalAt(Point(-0.5, 0.75, 0),null) == tm.normal)
-    assert(t.localNormalAt(Point(0.5, 0.25, 0),null) == tm.normal)
+    assert(t.localNormalAt(Point(0, 0.5, 0), null) == tm.normal)
+    assert(t.localNormalAt(Point(-0.5, 0.75, 0), null) == tm.normal)
+    assert(t.localNormalAt(Point(0.5, 0.25, 0), null) == tm.normal)
   }
 
   test("Intersecting a ray parallel to the triangle") {

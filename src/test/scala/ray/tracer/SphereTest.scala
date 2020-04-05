@@ -1,10 +1,11 @@
 package ray.tracer
-import ray.tracer.ShapeFactory._
-import org.scalatest.FunSuite
+
+import org.scalatest.funsuite.AnyFunSuite
+import ray.tracer.shape.ShapeFactory._
 
 import scala.math.Pi
 
-class SphereTest extends FunSuite {
+class SphereTest extends AnyFunSuite {
 
   test("A ray intersects a sphere at two points") {
     val ray = Ray(Point(0, 0, -5), Vector(0, 0, 1))
@@ -103,13 +104,13 @@ class SphereTest extends FunSuite {
 
   test("The normal on a sphere at a point on the y axis") {
     val s = Sphere()
-    val n = s.normalAt(Point(0, 1, 0),null)
+    val n = s.normalAt(Point(0, 1, 0), null)
     assert(n == Vector(0, 1, 0))
   }
 
   test("The normal on a sphere at a point on the z axis") {
     val s = Sphere()
-    val n = s.normalAt(Point(0, 0, 1),null)
+    val n = s.normalAt(Point(0, 0, 1), null)
     assert(n == Vector(0, 0, 1))
   }
 
@@ -117,7 +118,7 @@ class SphereTest extends FunSuite {
     val s = Sphere()
     val v = math.sqrt(3) / 3
 
-    val n = s.normalAt(Point(v, v, v),null)
+    val n = s.normalAt(Point(v, v, v), null)
 
     assert(n == Vector(v, v, v))
   }
@@ -126,7 +127,7 @@ class SphereTest extends FunSuite {
     val s = Sphere()
     val v = math.sqrt(3) / 3
 
-    val n = s.normalAt(Point(v, v, v),null)
+    val n = s.normalAt(Point(v, v, v), null)
 
     assert(n == n.normalize)
   }
@@ -134,14 +135,14 @@ class SphereTest extends FunSuite {
   test("Computing the normal on a translated sphere") {
     val s = Sphere(transform = Matrix4x4.Translation(0, 1, 0))
 
-    val n = s.normalAt(Point(0, 1.70711, -0.70711),null)
+    val n = s.normalAt(Point(0, 1.70711, -0.70711), null)
 
     assert(n ==~ Vector(0, 0.70711, -0.70711))
   }
 
   test("Computing the normal on a transformed sphere") {
     val s = Sphere(transform = Matrix4x4.Scaling(1, 0.5, 1) * Matrix4x4.RotationZ(Pi / 5))
-    val n = s.normalAt(Point(0, Sqrt2Div2, -Sqrt2Div2),null)
+    val n = s.normalAt(Point(0, Sqrt2Div2, -Sqrt2Div2), null)
 
     assert(n ==~ Vector(0, 0.97014, -0.24254))
   }
