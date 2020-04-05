@@ -10,7 +10,12 @@ trait Shape {
 
   def intersect(worldRay: Ray): Intersections = {
     val ray = worldRay.transform(transform.inverse)
-    localIntersect(ray)
+    val xs = localIntersect(ray)
+    val xxs =
+      xs
+        .map(i => Intersection(i.t, i.obj, i.u, i.v, transform :: i.ts))
+        .toList
+    Intersections(xxs)
   }
 
   def localIntersect(ray: Ray): Intersections

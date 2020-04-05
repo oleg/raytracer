@@ -15,7 +15,7 @@ class ShapeTest extends AnyFunSuite {
     //todo replace with mocks
     override def localIntersect(localRay: Ray): Intersections = {
       savedRay = localRay
-      null
+      Intersections(Nil)
     }
 
     override def localNormalAt(localPoint: Point, intersection: Intersection): Vector = localPoint - Point(0, 0, 0)

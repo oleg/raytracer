@@ -36,7 +36,8 @@ case class Computation(t: Double,
 case class Intersection(t: Double,
                         obj: Shape,
                         u: Double = Double.NaN,
-                        v: Double = Double.NaN) {
+                        v: Double = Double.NaN,
+                        ts: List[Matrix4x4] = Nil) {
 
   override def toString: String =
     s"""
