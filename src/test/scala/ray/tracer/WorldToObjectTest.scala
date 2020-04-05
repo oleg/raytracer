@@ -2,7 +2,7 @@ package ray.tracer
 
 import org.scalatest.funsuite.AnyFunSuite
 
-class TempTest extends AnyFunSuite {
+class WorldToObjectTest extends AnyFunSuite {
 
   val t1 = Matrix4x4.Identity
   val t2 = Matrix4x4.RotationX(0.5)
@@ -13,12 +13,12 @@ class TempTest extends AnyFunSuite {
 
 
   case class Box(transform: Matrix4x4, parent: Box) {
-    def trans(point: Point): Point = {
-      transform.inverse * (if (parent != null) parent.trans(point) else point)
+    def worldToObject(point: Point): Point = {
+      transform.inverse * (if (parent != null) parent.worldToObject(point) else point)
     }
   }
 
-  def transList(point: Point, ts: List[Matrix4x4]): Point = {
+  def worldToObjectList(point: Point, ts: List[Matrix4x4]): Point = {
     ts.map(_.inverse).fold(Matrix4x4.Identity)(_ * _) * point
   }
 
@@ -33,13 +33,13 @@ class TempTest extends AnyFunSuite {
     val b2 = Box(transform = t2, parent = b1)
     val b3 = Box(transform = t3, parent = b2)
 
-    val res = b3.trans(p)
+    val res = b3.worldToObject(p)
 
     assert(res ==~ expected, res)
   }
 
   test("list of transformations") {
-    val res = transList(p, t3 :: t2 :: t1 :: Nil)
+    val res = worldToObjectList(p, t3 :: t2 :: t1 :: Nil)
 
     assert(res ==~ expected, res)
   }
