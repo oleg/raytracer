@@ -79,7 +79,7 @@ class GroupTest extends AnyFunSuite {
   }
 
   test("Intersecting a transformed group") {
-    val g = shape.Group(transform = Matrix4x4.Scaling(2, 2, 2))
+    val g = Group(transform = Matrix4x4.Scaling(2, 2, 2))
     val s = Sphere(transform = Matrix4x4.Translation(5, 0, 0))
 
     g.add(s)
@@ -91,9 +91,26 @@ class GroupTest extends AnyFunSuite {
     assert(xs.length == 2)
   }
 
+  test("Intersecting a transformed group tracks transforms") {
+    val groupTs = Matrix4x4.Scaling(2, 2, 2)
+    val shapeTs = Matrix4x4.Translation(5, 0, 0)
+
+    val g = Group(transform = groupTs)
+    val s = Sphere(transform = shapeTs)
+
+    g.add(s)
+
+    val r = Ray(Point(10, 0, -10), Vector(0, 0, 1))
+
+    val xs = g.intersect(r).toList
+
+    assert(xs.head.ts == groupTs :: shapeTs :: Nil)
+    assert(xs.tail.head.ts == groupTs :: shapeTs :: Nil)
+  }
+
   test("Converting a point from world to object space") {
-    val g1 = shape.Group(transform = Matrix4x4.RotationY(Pi / 2.0))
-    val g2 = shape.Group(transform = Matrix4x4.Scaling(2, 2, 2))
+    val g1 = Group(transform = Matrix4x4.RotationY(Pi / 2.0))
+    val g2 = Group(transform = Matrix4x4.Scaling(2, 2, 2))
     val s = Sphere(transform = Matrix4x4.Translation(5, 0, 0))
 
     g1.add(g2)
@@ -105,8 +122,8 @@ class GroupTest extends AnyFunSuite {
   }
 
   test("Converting a normal from object to world space") {
-    val g1 = shape.Group(transform = Matrix4x4.RotationY(Pi / 2))
-    val g2 = shape.Group(transform = Matrix4x4.Scaling(1, 2, 3))
+    val g1 = Group(transform = Matrix4x4.RotationY(Pi / 2))
+    val g2 = Group(transform = Matrix4x4.Scaling(1, 2, 3))
     val s = Sphere(transform = Matrix4x4.Translation(5, 0, 0))
 
     g2.add(s)
@@ -120,8 +137,8 @@ class GroupTest extends AnyFunSuite {
   }
 
   test("Finding the normal on a child object") {
-    val g1 = shape.Group(transform = Matrix4x4.RotationY(Pi / 2))
-    val g2 = shape.Group(transform = Matrix4x4.Scaling(1, 2, 3))
+    val g1 = Group(transform = Matrix4x4.RotationY(Pi / 2))
+    val g2 = Group(transform = Matrix4x4.Scaling(1, 2, 3))
     val s = Sphere(transform = Matrix4x4.Translation(5, 0, 0))
 
     g1.add(g2)
