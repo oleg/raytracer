@@ -16,22 +16,10 @@ trait Shape {
 
   def localIntersect(ray: Ray): Intersections
 
-//  def normalAt(worldPoint: Point, intersection: Intersection): Vector = {
-//    val localPoint: Point = worldToObject(worldPoint)
-//    val localNormal: Vector = localNormalAt(localPoint, intersection)
-//    normalToWorld(localNormal)
-//  }
-
   def localNormalAt(point: Point, intersection: Intersection): Vector
-
 
   def worldToObject(point: Point): Point = {
     transform.inverse * (if (parent != null) parent.worldToObject(point) else point)
-  }
-
-  def normalToWorld(normal: Vector): Vector = {
-    val n = (transform.inverse.transpose * normal).normalize
-    if (parent != null) parent.normalToWorld(n) else n
   }
 
   def incl(b: Shape): Boolean = this == b

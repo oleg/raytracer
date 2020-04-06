@@ -131,7 +131,8 @@ class GroupTest extends AnyFunSuite {
 
     val normal = Vector(math.sqrt(3) / 3.0, math.sqrt(3) / 3.0, math.sqrt(3) / 3.0)
 
-    val n = s.normalToWorld(normal)
+//    val n = s.normalToWorld(normal)
+    val n = Intersection(Double.NaN, s, g1.transform :: g2.transform :: s.transform :: Nil).normalToWorld(normal)
 
     assert(n ==~ Vector(0.28571, 0.42857, -0.85714), n)
   }

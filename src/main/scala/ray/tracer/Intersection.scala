@@ -50,28 +50,7 @@ case class Intersection(t: Double,
     val p = implicitly[Precision[Double]]
     val point = ray.position(t)
     val eyev = -ray.direction
-
-
-    val mynormalv = myNormalAt(obj, point)
-    val normalv =  mynormalv//obj.normalAt(point, this)
-//    val same = normalv.==~(mynormalv)(Precision.CustomPrecisionDouble(0.00000000000001))
-//    if (!same && normalv.toList.exists(!_.isNaN)) {
-//      println(s"normalv != mynormalv\n$normalv\n$mynormalv")
-//      println("===> worl to obj")
-//      println(obj.worldToObject(point))
-//      println("===> point")
-//      println(point)
-//      println("===> intersection")
-//      println(this)
-//      println("===> ts")
-//      println(ts)
-//      println("===> obj")
-//      println(obj)
-//      println("===> parent")
-//      println(obj.parent)
-//      assert(normalv == mynormalv)
-//    }
-
+    val normalv = myNormalAt(obj, point)
     val inside = (normalv dot eyev) < 0
     val directedNormalv = if (inside) -normalv else normalv
     val overPoint = point + directedNormalv * p.precision
