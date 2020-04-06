@@ -35,9 +35,9 @@ case class Computation(t: Double,
 
 case class Intersection(t: Double,
                         obj: Shape,
+                        ts: List[Matrix4x4] = Nil,
                         u: Double = Double.NaN,
-                        v: Double = Double.NaN,
-                        ts: List[Matrix4x4] = Nil) {
+                        v: Double = Double.NaN) {
 
   override def toString: String =
     s"""
@@ -53,7 +53,24 @@ case class Intersection(t: Double,
 
 
     val normalv = obj.normalAt(point, this)
-
+    val mynormalv = myNormalAt(obj, point, this)
+    val same = normalv.==~(mynormalv)(Precision.CustomPrecisionDouble(0.00000000000001))
+    if (!same && normalv.toList.exists(!_.isNaN)) {
+      println(s"normalv != mynormalv\n$normalv\n$mynormalv")
+      println("===> worl to obj")
+      println(obj.worldToObject(point))
+      println("===> point")
+      println(point)
+      println("===> intersection")
+      println(this)
+      println("===> ts")
+      println(ts)
+      println("===> obj")
+      println(obj)
+      println("===> parent")
+      println(obj.parent)
+      assert(normalv == mynormalv)
+    }
 
     val inside = (normalv dot eyev) < 0
     val directedNormalv = if (inside) -normalv else normalv
@@ -64,18 +81,22 @@ case class Intersection(t: Double,
     Computation(t, obj, point, overPoint, underPoint, eyev, directedNormalv, reflectv, ns._1, ns._2, inside)
   }
 
-  def myNormalAt(worldPoint: Point, intersection: Intersection): Vector = {
+  def myNormalAt(obj: Shape, worldPoint: Point, intersection: Intersection): Vector = {
     val localPoint: Point = worldToObject(worldPoint)
-    //    val localNormal: Vector = localNormalAt(localPoint, intersection)
-    //    normalToWorld(localNormal)
-    return null;
+    val localNormal: Vector = obj.localNormalAt(localPoint, intersection)
+    normalToWorld(localNormal)
   }
 
+  //private?
   def worldToObject(point: Point): Point =
-    ts.map(_.inverse).foldLeft(Matrix4x4.Identity)(_ * _) * point
-
+    ts.reverse.map(_.inverse).foldLeft(Matrix4x4.Identity)(_ * _) * point
+//    ts.map(_.inverse).foldLeft(Matrix4x4.Identity)(_ * _) * point
+//todo reverse!
+  //private?
   def normalToWorld(nr: Vector): Vector =
-    ts.foldLeft(nr)((acc, el) => (el.inverse.transpose * acc).normalize)
+//todo: reverse?
+//    ts.reverse.foldLeft(nr)((acc, el) => (el.inverse.transpose * acc).normalize)
+    ts.reverse.foldLeft(nr)((acc, el) => (el.inverse.transpose * acc).normalize)
 
 }
 

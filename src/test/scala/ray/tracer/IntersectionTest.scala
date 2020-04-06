@@ -104,7 +104,7 @@ class IntersectionTest extends AnyFunSuite {
   test("The hit should offset the point") {
     val r = Ray(Point(0, 0, -5), Vector(0, 0, 1))
     val shape = Sphere(Matrix4x4.Identity.translate(0, 0, 1))
-    val i = Intersection(5, shape)
+    val i = Intersection(5, shape, shape.transform :: Nil)
     val ns = Intersections(i :: Nil).findNs(i)
     val comps = i.prepareComputations(r, ns)
 
@@ -125,7 +125,7 @@ class IntersectionTest extends AnyFunSuite {
   test("The under point is offset below the surface") {
     val r = Ray(Point(0, 0, -5), Vector(0, 0, 1))
     val shape = glassSphere(transform = Matrix4x4.Translation(0, 0, 1))
-    val i = Intersection(5, shape)
+    val i = Intersection(5, shape, shape.transform :: Nil)
 
     val xs = Intersections(i :: Nil)
     val ns = xs.findNs(i)
@@ -163,7 +163,7 @@ class IntersectionTest extends AnyFunSuite {
   test("The Schlick approximation with small angle and n2 > n1") {
     val shape = glassSphere()
     val r = Ray(Point(0, 0.99, -2), Vector(0, 0, 1))
-    val xs = Intersections(Intersection(1.8589, shape) :: Nil)
+    val xs = Intersections(Intersection(1.8589, shape, shape.transform :: Nil) :: Nil)
 
     val ns = xs.findNs(xs(0))
     val comps = xs(0).prepareComputations(r, ns)

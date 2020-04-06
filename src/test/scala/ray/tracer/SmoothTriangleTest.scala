@@ -21,7 +21,7 @@ class SmoothTriangleTest extends AnyFunSuite {
     val s = Triangle(Point(0, 1, 0), Point(-1, 0, 0), Point(1, 0, 0))
 
 
-    val i = Intersection(3.5, s, 0.2, 0.4)
+    val i = Intersection(3.5, s, Nil, 0.2, 0.4)
     assert(i.u == 0.2)
     assert(i.v == 0.4)
   }
@@ -37,7 +37,7 @@ class SmoothTriangleTest extends AnyFunSuite {
 
   test("A smooth triangle uses u/v to interpolate the normal") {
     val tri = smoothTriangle()
-    val i = Intersection(1, tri, 0.45, 0.25)
+    val i = Intersection(1, tri, Nil, 0.45, 0.25)
 
     val n = tri.normalAt(Point(0, 0, 0), i)
 
@@ -47,7 +47,7 @@ class SmoothTriangleTest extends AnyFunSuite {
   test("Preparing the normal on a smooth triangle") {
     val tri = smoothTriangle()
     val r = Ray(Point(-0.2, 0.3, -2), Vector(0, 0, 1))
-    val i = Intersection(1, tri, 0.45, 0.25)
+    val i = Intersection(1, tri, tri.transform :: Nil, 0.45, 0.25)
     val xs = Intersections(i :: Nil)
 
     val comps = i.prepareComputations(r, xs.findNs(i))

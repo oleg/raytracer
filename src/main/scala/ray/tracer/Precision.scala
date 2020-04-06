@@ -15,16 +15,32 @@ trait Precision[T] {
 
 object Precision {
 
-  implicit object PrecisionDouble extends Precision[Double] {
+  implicit val PrecisionDouble: Precision[Double] = CustomPrecisionDouble(0.00001)
 
-    override val precision: Double = 0.00001
+  case class CustomPrecisionDouble(precision: Double) extends Precision[Double] {
 
-    override def approximatelyEqual(x: Double, y: Double): Boolean = math.abs(x - y) < precision
+    override def approximatelyEqual(x: Double, y: Double): Boolean =
+      math.abs(x - y) < precision
 
-    override def approximatelyLess(x: Double, y: Double): Boolean = x <= y + precision
+    override def approximatelyLess(x: Double, y: Double): Boolean =
+      x <= y + precision
 
-    override def approximatelyGreater(x: Double, y: Double): Boolean = x >= y - precision
+    override def approximatelyGreater(x: Double, y: Double): Boolean =
+      x >= y - precision
 
   }
+
+
+  //  implicit object PrecisionDouble extends Precision[Double] {
+  //
+  //    override val precision: Double = 0.00001
+  //
+  //    override def approximatelyEqual(x: Double, y: Double): Boolean = math.abs(x - y) < precision
+  //
+  //    override def approximatelyLess(x: Double, y: Double): Boolean = x <= y + precision
+  //
+  //    override def approximatelyGreater(x: Double, y: Double): Boolean = x >= y - precision
+  //
+  //  }
 
 }

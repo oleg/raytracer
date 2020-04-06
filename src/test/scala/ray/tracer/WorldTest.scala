@@ -68,7 +68,7 @@ class WorldTest extends AnyFunSuite {
     val s2 = Sphere(transform = Identity.translate(0, 0, 10))
     val w = World(PointLight(Point(0, 0, -10), Color(1, 1, 1)), s1 :: s2 :: Nil)
     val r = Ray(Point(0, 0, 5), Vector(0, 0, 1))
-    val i = Intersection(4, s2)
+    val i = Intersection(4, s2, s2.transform :: Nil)
 
     val comps = i.prepareComputations(r, Intersections(i :: Nil).findNs(i))
     val c = w.shadeHit(comps)
@@ -219,7 +219,10 @@ class WorldTest extends AnyFunSuite {
         Sphere(transform = Identity.scale(0.5, 0.5, 0.5))))
 
     val shape = w.shapes(0)
-    val xs = Intersections(Intersection(4, shape) :: Intersection(6, shape) :: Nil)
+    val xs = Intersections(
+      Intersection(4, shape, shape.transform :: Nil) ::
+      Intersection(6, shape, shape.transform :: Nil) ::
+      Nil)
     val r = Ray(Point(0, 0, 0), Vector(0, 0, 1))
 
     val comps = xs(0).prepareComputations(r, xs.findNs(xs(0)))
@@ -258,10 +261,10 @@ class WorldTest extends AnyFunSuite {
 
     val r = Ray(Point(0, 0, 0.1), Vector(0, 1, 0))
     val xs = Intersections(
-      Intersection(-0.9899, a) ::
-        Intersection(-0.4899, b) ::
-        Intersection(0.4899, b) ::
-        Intersection(0.9899, a) ::
+        Intersection(-0.9899, a, a.transform :: Nil) ::
+        Intersection(-0.4899, b, b.transform :: Nil) ::
+        Intersection(0.4899, b, b.transform :: Nil) ::
+        Intersection(0.9899, a, a.transform :: Nil) ::
         Nil)
 
     val comps = xs(2).prepareComputations(r, xs.findNs(xs(2)))
