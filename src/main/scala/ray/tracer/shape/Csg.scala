@@ -7,11 +7,7 @@ case class Csg(operation: Operation,
                left: Shape,
                right: Shape,
                transform: Matrix4x4 = Matrix4x4.Identity,
-               material: Material = Material(),
-               var parent: Shape = null) extends Shape {
-
-  left.parent = this
-  right.parent = this
+               material: Material = Material()) extends Shape {
 
   override def incl(b: Shape): Boolean =
     left.incl(b) || right.incl(b)

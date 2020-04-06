@@ -6,7 +6,6 @@ trait Shape {
 
   val transform: Matrix4x4
   val material: Material
-  var parent: Shape //todo should not return Group
 
   def intersect(worldRay: Ray): Intersections = {
     val ray = worldRay.transform(transform.inverse)
@@ -17,10 +16,6 @@ trait Shape {
   def localIntersect(ray: Ray): Intersections
 
   def localNormalAt(point: Point, intersection: Intersection): Vector
-
-  def worldToObject(point: Point): Point = {
-    transform.inverse * (if (parent != null) parent.worldToObject(point) else point)
-  }
 
   def incl(b: Shape): Boolean = this == b
 
