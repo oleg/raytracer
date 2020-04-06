@@ -52,25 +52,25 @@ case class Intersection(t: Double,
     val eyev = -ray.direction
 
 
-    val normalv = obj.normalAt(point, this)
     val mynormalv = myNormalAt(obj, point, this)
-    val same = normalv.==~(mynormalv)(Precision.CustomPrecisionDouble(0.00000000000001))
-    if (!same && normalv.toList.exists(!_.isNaN)) {
-      println(s"normalv != mynormalv\n$normalv\n$mynormalv")
-      println("===> worl to obj")
-      println(obj.worldToObject(point))
-      println("===> point")
-      println(point)
-      println("===> intersection")
-      println(this)
-      println("===> ts")
-      println(ts)
-      println("===> obj")
-      println(obj)
-      println("===> parent")
-      println(obj.parent)
-      assert(normalv == mynormalv)
-    }
+    val normalv =  mynormalv//obj.normalAt(point, this)
+//    val same = normalv.==~(mynormalv)(Precision.CustomPrecisionDouble(0.00000000000001))
+//    if (!same && normalv.toList.exists(!_.isNaN)) {
+//      println(s"normalv != mynormalv\n$normalv\n$mynormalv")
+//      println("===> worl to obj")
+//      println(obj.worldToObject(point))
+//      println("===> point")
+//      println(point)
+//      println("===> intersection")
+//      println(this)
+//      println("===> ts")
+//      println(ts)
+//      println("===> obj")
+//      println(obj)
+//      println("===> parent")
+//      println(obj.parent)
+//      assert(normalv == mynormalv)
+//    }
 
     val inside = (normalv dot eyev) < 0
     val directedNormalv = if (inside) -normalv else normalv
