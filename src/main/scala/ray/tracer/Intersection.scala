@@ -52,7 +52,7 @@ case class Intersection(t: Double,
     val eyev = -ray.direction
 
 
-    val mynormalv = myNormalAt(obj, point, this)
+    val mynormalv = myNormalAt(obj, point)
     val normalv =  mynormalv//obj.normalAt(point, this)
 //    val same = normalv.==~(mynormalv)(Precision.CustomPrecisionDouble(0.00000000000001))
 //    if (!same && normalv.toList.exists(!_.isNaN)) {
@@ -81,9 +81,9 @@ case class Intersection(t: Double,
     Computation(t, obj, point, overPoint, underPoint, eyev, directedNormalv, reflectv, ns._1, ns._2, inside)
   }
 
-  def myNormalAt(obj: Shape, worldPoint: Point, intersection: Intersection): Vector = {
+  def myNormalAt(obj: Shape, worldPoint: Point): Vector = {
     val localPoint: Point = worldToObject(worldPoint)
-    val localNormal: Vector = obj.localNormalAt(localPoint, intersection)
+    val localNormal: Vector = obj.localNormalAt(localPoint, this)
     normalToWorld(localNormal)
   }
 

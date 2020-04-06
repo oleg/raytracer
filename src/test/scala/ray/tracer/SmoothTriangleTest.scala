@@ -37,9 +37,9 @@ class SmoothTriangleTest extends AnyFunSuite {
 
   test("A smooth triangle uses u/v to interpolate the normal") {
     val tri = smoothTriangle()
-    val i = Intersection(1, tri, Nil, 0.45, 0.25)
+    val i = Intersection(1, tri, tri.transform :: Nil, 0.45, 0.25)
 
-    val n = tri.normalAt(Point(0, 0, 0), i)
+    val n = i.myNormalAt(tri, Point(0,0,0))
 
     assert(n ==~ Vector(-0.5547, 0.83205, 0))
   }

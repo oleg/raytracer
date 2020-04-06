@@ -144,7 +144,9 @@ class GroupTest extends AnyFunSuite {
     g1.add(g2)
     g2.add(s)
 
-    val n = s.normalAt(Point(1.7321, 1.1547, -5.5774), null)
+    val p = Point(1.7321, 1.1547, -5.5774)
+    //    val n = s.normalAt(, null)
+    val n = Intersection(Double.NaN, s, g1.transform :: g2.transform :: s.transform :: Nil).myNormalAt(s, p)
 
     assert(n ==~ Vector(0.28571, 0.42854, -0.85716), n)
   }
