@@ -16,11 +16,11 @@ trait Shape {
 
   def localIntersect(ray: Ray): Intersections
 
-  def normalAt(worldPoint: Point, intersection: Intersection): Vector = {
-    val localPoint: Point = worldToObject(worldPoint)
-    val localNormal: Vector = localNormalAt(localPoint, intersection)
-    normalToWorld(localNormal)
-  }
+//  def normalAt(worldPoint: Point, intersection: Intersection): Vector = {
+//    val localPoint: Point = worldToObject(worldPoint)
+//    val localNormal: Vector = localNormalAt(localPoint, intersection)
+//    normalToWorld(localNormal)
+//  }
 
   def localNormalAt(point: Point, intersection: Intersection): Vector
 

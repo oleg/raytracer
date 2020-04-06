@@ -1,8 +1,8 @@
 package it.ray.tracer
 
 import org.scalatest.FunSuite
-import ray.tracer.shape.ShapeFactory._
 import ray.tracer._
+import ray.tracer.shape.ShapeFactory._
 import testutil.Sources
 
 class Ball3dIntegrationTest extends FunSuite {
@@ -39,7 +39,9 @@ class Ball3dIntegrationTest extends FunSuite {
           .hit
           .foreach({ h =>
             val point = ray.position(h.t)
-            val normal = h.obj.normalAt(point, null)
+//            val normal = h.obj.normalAt(point, null)
+            val i = Intersection(h.t, h.obj, h.obj.transform :: Nil)
+            val normal = i.myNormalAt(h.obj, point)
             val eye = -ray.direction
 
             canvas(x, y) = h.obj.material.lighting(light, h.obj, point, eye, normal, false)

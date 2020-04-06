@@ -70,7 +70,9 @@ class ShapeTest extends AnyFunSuite {
   test("Computing the normal on a translated shape") {
     val s = TestShape(transform = Matrix4x4.Translation(0, 1, 0))
 
-    val n = s.normalAt(Point(0, 1.70711, -0.70711), null)
+    val point = Point(0, 1.70711, -0.70711)
+//    val n = s.normalAt(point, null)
+    val n = Intersection(Double.NaN, s, s.transform :: Nil).myNormalAt(s, point)
 
     assert(n ==~ Vector(0, 0.70711, -0.70711))
   }
@@ -78,7 +80,9 @@ class ShapeTest extends AnyFunSuite {
   test("Computing the normal on a transformed shape") {
     val s = TestShape(transform = Matrix4x4.Scaling(1, 0.5, 1) * Matrix4x4.RotationZ(Pi / 5))
 
-    val n = s.normalAt(Point(0, Sqrt2Div2, -Sqrt2Div2), null)
+    val point = Point(0, Sqrt2Div2, -Sqrt2Div2)
+//    val n = s.normalAt(point, null)
+    val n = Intersection(Double.NaN, s, s.transform :: Nil).myNormalAt(s, point)
 
     assert(n ==~ Vector(0, 0.97014, -0.24254))
   }
