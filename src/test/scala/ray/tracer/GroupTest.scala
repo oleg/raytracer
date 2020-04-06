@@ -10,7 +10,6 @@ class GroupTest extends AnyFunSuite {
 
   case class TestShape(transform: Matrix4x4 = Matrix4x4.Identity,
                        material: Material = Material(),
-                       var parent: Shape = null,
                        var savedRay: Ray = null) extends Shape {
 
     //todo replace with mocks
@@ -30,11 +29,6 @@ class GroupTest extends AnyFunSuite {
   //    assert(g.transform == Matrix4x4.Identity)
   //    assert(g.size == 0)
   //  }
-
-  test("A shape has a parent attribute") {
-    val s = TestShape()
-    assert(s.parent == null)
-  }
 
   //TODO:Oleg do we need contains test?
   //  test("Adding a child to a group") {

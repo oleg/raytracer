@@ -15,8 +15,6 @@ class CsgTest extends AnyFunSuite {
     assert(c.operation == Operation.union)
     assert(c.left == s1)
     assert(c.right == s2)
-    assert(s1.parent == c)
-    assert(s2.parent == c)
   }
 
   test("Evaluating the rule for a CSG union") {
