@@ -25,7 +25,8 @@ class MaterialTest extends AnyFunSuite {
     val light = PointLight(Point(0, 0, -10), Color(1, 1, 1))
     val inShadow = false
 
-    val result = material.lighting(light, sphere, position, eyev, normalv, inShadow)
+    val objPoint = Intersection(Double.NaN, sphere, sphere.transform :: Nil).worldToObject(position)
+    val result = material.lighting(light, sphere, position, eyev, normalv, inShadow, objPoint)
 
     assert(result ==~ Color(1.9, 1.9, 1.9), result)
   }
@@ -39,7 +40,8 @@ class MaterialTest extends AnyFunSuite {
     val light = PointLight(Point(0, 0, -10), Color(1, 1, 1))
     val inShadow = false
 
-    val result = material.lighting(light, sphere, position, eyev, normalv, inShadow)
+    val objPoint = Intersection(Double.NaN, sphere, sphere.transform :: Nil).worldToObject(position)
+    val result = material.lighting(light, sphere, position, eyev, normalv, inShadow, objPoint)
 
     assert(result ==~ Color(1.0, 1.0, 1.0), result)
   }
@@ -53,7 +55,8 @@ class MaterialTest extends AnyFunSuite {
     val light = PointLight(Point(0, 10, -10), Color(1, 1, 1))
     val inShadow = false
 
-    val result = material.lighting(light, sphere, position, eyev, normalv, inShadow)
+    val objPoint = Intersection(Double.NaN, sphere, sphere.transform :: Nil).worldToObject(position)
+    val result = material.lighting(light, sphere, position, eyev, normalv, inShadow, objPoint)
 
     assert(result ==~ Color(0.7364, 0.7364, 0.7364), result)
   }
@@ -67,7 +70,8 @@ class MaterialTest extends AnyFunSuite {
     val light = PointLight(Point(0, 10, -10), Color(1, 1, 1))
     val inShadow = false
 
-    val result = material.lighting(light, sphere, position, eyev, normalv, inShadow)
+    val objPoint = Intersection(Double.NaN, sphere, sphere.transform :: Nil).worldToObject(position)
+    val result = material.lighting(light, sphere, position, eyev, normalv, inShadow, objPoint)
 
     assert(result ==~ Color(1.6364, 1.6364, 1.6364), result)
   }
@@ -81,7 +85,8 @@ class MaterialTest extends AnyFunSuite {
     val light = PointLight(Point(0, 0, 10), Color(1, 1, 1))
     val inShadow = false
 
-    val result = material.lighting(light, sphere, position, eyev, normalv, inShadow)
+    val objPoint = Intersection(Double.NaN, sphere, sphere.transform :: Nil).worldToObject(position)
+    val result = material.lighting(light, sphere, position, eyev, normalv, inShadow, objPoint)
 
     assert(result ==~ Color(0.1, 0.1, 0.1), result)
   }
@@ -95,7 +100,8 @@ class MaterialTest extends AnyFunSuite {
     val light = PointLight(Point(0, 0, -10), Color(1, 1, 1))
     val inShadow = true
 
-    val result = material.lighting(light, sphere, position, eyev, normalv, inShadow)
+    val objPoint = Intersection(Double.NaN, sphere, sphere.transform :: Nil).worldToObject(position)
+    val result = material.lighting(light, sphere, position, eyev, normalv, inShadow, objPoint)
 
     assert(result ==~ Color(0.1, 0.1, 0.1), result)
   }
@@ -103,13 +109,14 @@ class MaterialTest extends AnyFunSuite {
   test("Lighting with a pattern applied") {
     val sphere = Sphere()
     val material = Material(ambient = 1, diffuse = 0, specular = 0, pattern = StripePattern(Color.white, Color.black))
-    val position = Point(0, 0, 0)
     val eyev = Vector(0, 0, -1)
     val normalv = Vector(0, 0, -1)
     val light = PointLight(Point(0, 0, -10), Color(1, 1, 1))
 
-    val c1 = material.lighting(light, sphere, Point(0.9, 0, 0), eyev, normalv, false)
-    val c2 = material.lighting(light, sphere, Point(1.1, 0, 0), eyev, normalv, false)
+    val objPoint1 = Intersection(Double.NaN, sphere, sphere.transform :: Nil).worldToObject(Point(0.9, 0, 0))
+    val c1 = material.lighting(light, sphere, Point(0.9, 0, 0), eyev, normalv, false, objPoint1)
+    val objPoint2 = Intersection(Double.NaN, sphere, sphere.transform :: Nil).worldToObject(Point(1.1, 0, 0))
+    val c2 = material.lighting(light, sphere, Point(1.1, 0, 0), eyev, normalv, false, objPoint2)
 
     assert(c1 == Color.white)
     assert(c2 == Color.black)

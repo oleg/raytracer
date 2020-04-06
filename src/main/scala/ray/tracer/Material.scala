@@ -18,10 +18,11 @@ case class Material(color: Color = Color(1, 1, 1),
                point: Point,
                eyev: Vector,
                normalv: Vector,
-               inShadow: Boolean): Color = {
+               inShadow: Boolean,
+               objPoint: Point): Color = {
     val material = this
 
-    val color = Option(pattern).map(_.patternAtShape(shape, point)).getOrElse(material.color)
+    val color = Option(pattern).map(_.patternAtShape(objPoint)).getOrElse(material.color)
     val efectiveColor = color * light.intensity
     val lightv = (light.position - point).normalize
     val ambient = efectiveColor * material.ambient

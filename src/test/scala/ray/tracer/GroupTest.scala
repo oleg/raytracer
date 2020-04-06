@@ -116,7 +116,7 @@ class GroupTest extends AnyFunSuite {
     g1.add(g2)
     g2.add(s)
 
-    val p = s.worldToObject(Point(-2, 0, -10))
+    val p = Intersection(Double.NaN, s, g1.transform :: g2.transform :: s.transform :: Nil).worldToObject(Point(-2, 0, -10))
 
     assert(p ==~ Point(0, 0, -1))
   }
@@ -131,7 +131,6 @@ class GroupTest extends AnyFunSuite {
 
     val normal = Vector(math.sqrt(3) / 3.0, math.sqrt(3) / 3.0, math.sqrt(3) / 3.0)
 
-//    val n = s.normalToWorld(normal)
     val n = Intersection(Double.NaN, s, g1.transform :: g2.transform :: s.transform :: Nil).normalToWorld(normal)
 
     assert(n ==~ Vector(0.28571, 0.42857, -0.85714), n)
