@@ -24,7 +24,8 @@ class PatternTest extends AnyFunSuite {
     val shape = Sphere(transform = Scaling(2, 2, 2))
     val pattern = TestPattern()
 
-    val c = pattern.patternAtShape(shape, Point(2, 3, 4))
+    val objPoint = Intersection(Double.NaN, shape, shape.transform :: Nil).worldToObject(Point(2, 3, 4))
+    val c = pattern.patternAtShape(objPoint)
 
     assert(c == Color(1, 1.5, 2))
   }
@@ -33,7 +34,8 @@ class PatternTest extends AnyFunSuite {
     val shape = Sphere()
     val pattern = TestPattern(transform = Scaling(2, 2, 2))
 
-    val c = pattern.patternAtShape(shape, Point(2, 3, 4))
+    val objPoint = Intersection(Double.NaN, shape, shape.transform :: Nil).worldToObject(Point(2, 3, 4))
+    val c = pattern.patternAtShape(objPoint)
 
     assert(c == Color(1, 1.5, 2))
   }
@@ -42,7 +44,8 @@ class PatternTest extends AnyFunSuite {
     val shape = Sphere(transform = Scaling(2, 2, 2))
     val pattern = TestPattern(transform = Translation(0.5, 1, 1.5))
 
-    val c = pattern.patternAtShape(shape, Point(2.5, 3, 3.5))
+    val objPoint = Intersection(Double.NaN, shape, shape.transform :: Nil).worldToObject(Point(2.5, 3, 3.5))
+    val c = pattern.patternAtShape(objPoint)
 
     assert(c == Color(0.75, 0.5, 0.25))
   }
@@ -87,7 +90,8 @@ class PatternTest extends AnyFunSuite {
     val obj = Sphere(transform = Scaling(2, 2, 2))
     val pattern = StripePattern(Color.white, Color.black)
 
-    val c = pattern.patternAtShape(obj, Point(1.5, 0, 0))
+    val objPoint = Intersection(Double.NaN, obj, obj.transform :: Nil).worldToObject(Point(1.5, 0, 0))
+    val c = pattern.patternAtShape(objPoint)
 
     assert(c == Color.white)
   }
@@ -96,7 +100,8 @@ class PatternTest extends AnyFunSuite {
     val obj = Sphere()
     val pattern = StripePattern(Color.white, Color.black, transform = Scaling(2, 2, 2))
 
-    val c = pattern.patternAtShape(obj, Point(1.5, 0, 0))
+    val objPoint = Intersection(Double.NaN, obj, obj.transform :: Nil).worldToObject(Point(1.5, 0, 0))
+    val c = pattern.patternAtShape(objPoint)
 
     assert(c == Color.white)
   }
@@ -105,7 +110,8 @@ class PatternTest extends AnyFunSuite {
     val obj = Sphere(transform = Scaling(2, 2, 2))
     val pattern = StripePattern(Color.white, Color.black, transform = Translation(0.5, 0, 0))
 
-    val c = pattern.patternAtShape(obj, Point(2.5, 0, 0))
+    val objPoint = Intersection(Double.NaN, obj, obj.transform :: Nil).worldToObject(Point(2.5, 0, 0))
+    val c = pattern.patternAtShape(objPoint)
 
     assert(c == Color.white)
   }

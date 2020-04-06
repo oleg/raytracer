@@ -270,7 +270,7 @@ class WorldTest extends AnyFunSuite {
     val comps = xs(2).prepareComputations(r, xs.findNs(xs(2)))
     val c = w.refractedColor(comps)
 
-    assert(c ==~ Color(0, 0.99887, 0.04721), c)
+    assert(c ==~ Color(0, 0.99888, 0.04721), c)
   }
 
   test("shade_hit() with a transparent material") {

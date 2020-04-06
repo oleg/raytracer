@@ -14,7 +14,8 @@ case class Computation(t: Double,
                        reflectv: Vector,
                        n1: Double,
                        n2: Double,
-                       inside: Boolean) {
+                       inside: Boolean,
+                       objPoint: Point) {
 
   def schlick(): Double = {
     var cos = eyev dot normalv
@@ -57,7 +58,8 @@ case class Intersection(t: Double,
     val underPoint = point - directedNormalv * p.precision
     val reflectv = ray.direction.reflect(directedNormalv)
 
-    Computation(t, obj, point, overPoint, underPoint, eyev, directedNormalv, reflectv, ns._1, ns._2, inside)
+    val objPoint = worldToObject(overPoint) //todo invoked two times
+    Computation(t, obj, point, overPoint, underPoint, eyev, directedNormalv, reflectv, ns._1, ns._2, inside, objPoint)
   }
 
   def myNormalAt(obj: Shape, worldPoint: Point): Vector = {
