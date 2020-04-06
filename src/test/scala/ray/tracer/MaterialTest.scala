@@ -147,8 +147,13 @@ class MaterialTest extends AnyFunSuite {
 
     val r = Ray(Point(0, 0, -4), Vector(0, 0, 1))
 
-    val xs = Intersections(Intersection(2, a) :: Intersection(2.75, b) :: Intersection(3.25, c) ::
-      Intersection(4.75, b) :: Intersection(5.25, c) :: Intersection(6, a) :: Nil)
+    val xs = Intersections(List(
+      Intersection(2, a, a.transform :: Nil),
+      Intersection(2.75, b, b.transform :: Nil),
+      Intersection(3.25, c, c.transform :: Nil),
+      Intersection(4.75, b, b.transform :: Nil),
+      Intersection(5.25, c, c.transform :: Nil),
+      Intersection(6, a, a.transform :: Nil)))
     //todo fix this test
     val assertNs = (cmp: Computation, n1: Double, n2: Double) => assert((cmp.n1, cmp.n2) == (n1, n2))
 
