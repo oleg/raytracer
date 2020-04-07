@@ -4,6 +4,7 @@ import ray.tracer.shape.Shape
 
 import scala.collection.mutable.ArrayBuffer
 
+//todo oleg use material instead of obj
 case class Computation(t: Double,
                        obj: Shape,
                        point: Point,

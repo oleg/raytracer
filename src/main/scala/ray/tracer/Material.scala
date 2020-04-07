@@ -14,7 +14,6 @@ case class Material(color: Color = Color(1, 1, 1),
                     pattern: Pattern = null) {
 
   def lighting(light: PointLight,
-               shape: Shape,
                point: Point,
                eyev: Vector,
                normalv: Vector,
