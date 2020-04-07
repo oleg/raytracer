@@ -1,23 +1,23 @@
 package ray.tracer
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
+import ray.tracer.shape.Shape
 
 import scala.math.Pi
 
-class ShapeTest extends FunSuite {
+class ShapeTest extends AnyFunSuite {
 
   case class TestShape(transform: Matrix4x4 = Matrix4x4.Identity,
                        material: Material = Material(),
-                       var parent: Shape = null,
                        var savedRay: Ray = null) extends Shape {
 
     //todo replace with mocks
     override def localIntersect(localRay: Ray): Intersections = {
       savedRay = localRay
-      null
+      Intersections(Nil)
     }
 
-    override def localNormalAt(localPoint: Point, intersection: Intersection): Vector = localPoint- Point(0,0,0)
+    override def localNormalAt(localPoint: Point, intersection: Intersection): Vector = localPoint - Point(0, 0, 0)
   }
 
   test("The default transformation") {
@@ -69,7 +69,9 @@ class ShapeTest extends FunSuite {
   test("Computing the normal on a translated shape") {
     val s = TestShape(transform = Matrix4x4.Translation(0, 1, 0))
 
-    val n = s.normalAt(Point(0, 1.70711, -0.70711), null)
+    val point = Point(0, 1.70711, -0.70711)
+//    val n = s.normalAt(point, null)
+    val n = Intersection(Double.NaN, s, s.transform :: Nil).myNormalAt(s, point)
 
     assert(n ==~ Vector(0, 0.70711, -0.70711))
   }
@@ -77,7 +79,9 @@ class ShapeTest extends FunSuite {
   test("Computing the normal on a transformed shape") {
     val s = TestShape(transform = Matrix4x4.Scaling(1, 0.5, 1) * Matrix4x4.RotationZ(Pi / 5))
 
-    val n = s.normalAt(Point(0, Sqrt2Div2, -Sqrt2Div2), null)
+    val point = Point(0, Sqrt2Div2, -Sqrt2Div2)
+//    val n = s.normalAt(point, null)
+    val n = Intersection(Double.NaN, s, s.transform :: Nil).myNormalAt(s, point)
 
     assert(n ==~ Vector(0, 0.97014, -0.24254))
   }

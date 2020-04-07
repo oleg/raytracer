@@ -2,11 +2,12 @@ package it.ray.tracer
 
 import org.scalatest.FunSuite
 import ray.tracer.Matrix4x4.Identity
-import ray.tracer._
+import ray.tracer.{shape, _}
 import testutil.Sources
 
 import scala.math.Pi
-
+import ray.tracer.shape.ShapeFactory._
+import ray.tracer.shape.Group
 class GroupSceneIntegrationTest extends FunSuite {
 
   test("generate group scene") {
@@ -65,7 +66,7 @@ class GroupSceneIntegrationTest extends FunSuite {
     g1.add(b1)
     g1.add(b2)
 
-    val g = Group(transform = Identity.translate(-2, 0, 0))
+    val g = shape.Group(transform = Identity.translate(-2, 0, 0))
     g.add(g1)
 
     val light = PointLight(Point(10, 10, -10), Color(1, 1, 1))

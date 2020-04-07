@@ -1,7 +1,10 @@
 package ray.tracer
 
+import ray.tracer.shape.Shape
+
 import scala.collection.mutable.ArrayBuffer
 
+//todo oleg use material instead of obj
 case class Computation(t: Double,
                        obj: Shape,
                        point: Point,
@@ -12,7 +15,8 @@ case class Computation(t: Double,
                        reflectv: Vector,
                        n1: Double,
                        n2: Double,
-                       inside: Boolean) {
+                       inside: Boolean,
+                       objPoint: Point) {
 
   def schlick(): Double = {
     var cos = eyev dot normalv
@@ -33,39 +37,85 @@ case class Computation(t: Double,
 
 case class Intersection(t: Double,
                         obj: Shape,
+                        ts: List[Matrix4x4] = Nil,
                         u: Double = Double.NaN,
                         v: Double = Double.NaN) {
 
   override def toString: String =
     s"""
-      |Intersection(
-      |$t, $u, $v
-      |$obj)
+       |Intersection(
+       |$t, $u, $v
+       |$obj)
     """.stripMargin
 
-  def prepareComputations(ray: Ray, xs: Intersections): Computation = {
+  def prepareComputations(ray: Ray, ns: (Double, Double)): Computation = {
     val p = implicitly[Precision[Double]]
-    val (n1, n2) = findNs(xs)
     val point = ray.position(t)
     val eyev = -ray.direction
-    val normalv = obj.normalAt(point, this)
+    val normalv = myNormalAt(obj, point)
     val inside = (normalv dot eyev) < 0
     val directedNormalv = if (inside) -normalv else normalv
     val overPoint = point + directedNormalv * p.precision
     val underPoint = point - directedNormalv * p.precision
     val reflectv = ray.direction.reflect(directedNormalv)
 
-    Computation(t, obj, point, overPoint, underPoint, eyev, directedNormalv, reflectv, n1, n2, inside)
+    val objPoint = worldToObject(overPoint) //todo invoked two times
+    Computation(t, obj, point, overPoint, underPoint, eyev, directedNormalv, reflectv, ns._1, ns._2, inside, objPoint)
   }
 
-  def findNs(xs: Intersections): (Double, Double) = {
+  def myNormalAt(obj: Shape, worldPoint: Point): Vector = {
+    val localPoint: Point = worldToObject(worldPoint)
+    val localNormal: Vector = obj.localNormalAt(localPoint, this)
+    normalToWorld(localNormal)
+  }
+
+  //private?
+  def worldToObject(point: Point): Point =
+    ts.reverse.map(_.inverse).foldLeft(Matrix4x4.Identity)(_ * _) * point
+//    ts.map(_.inverse).foldLeft(Matrix4x4.Identity)(_ * _) * point
+//todo reverse!
+  //private?
+  def normalToWorld(nr: Vector): Vector =
+//todo: reverse?
+//    ts.reverse.foldLeft(nr)((acc, el) => (el.inverse.transpose * acc).normalize)
+    ts.reverse.foldLeft(nr)((acc, el) => (el.inverse.transpose * acc).normalize)
+
+}
+
+
+object Intersections {
+  //val EMPTY: Intersections = Intersections(Nil)
+  private val vectorOrdering = Ordering.by((_: Intersection).t)
+
+  def apply(is: List[Intersection]): Intersections = new Intersections(is.sorted(vectorOrdering))
+}
+
+
+case class Intersections private(private val is: List[Intersection]) extends Iterable[Intersection] {
+
+  def apply(i: Int): Intersection =
+    is(i)
+
+  def length: Int =
+    is.length
+
+  def hit: Option[Intersection] =
+    is.find(_.t >= 0)
+
+  def :::(other: Intersections): Intersections =
+    Intersections(is ::: other.is)
+
+  override def iterator: Iterator[Intersection] =
+    is.iterator
+
+  def findNs(inter: Intersection): (Double, Double) = {
     var n1: Double = 0.0
     var n2: Double = 0.0
 
     val containners = ArrayBuffer[Shape]()
-    for (i <- xs) {
+    for (i <- is) {
 
-      if (i == this) {
+      if (i == inter) {
         if (containners.isEmpty) {
           n1 = 1.0
         } else {
@@ -79,7 +129,7 @@ case class Intersection(t: Double,
         containners += i.obj
       }
 
-      if (i == this) {
+      if (i == inter) {
         if (containners.isEmpty) {
           n2 = 1.0
         } else {
@@ -91,25 +141,4 @@ case class Intersection(t: Double,
     (n1, n2)
   }
 
-}
-
-
-case class Intersections private(private val is: List[Intersection]) extends Iterable[Intersection] {
-
-  def apply(i: Int): Intersection = is(i)
-
-  def length: Int = is.length
-
-  def hit: Option[Intersection] = is.find(_.t >= 0)
-
-  def :::(other: Intersections): Intersections = Intersections(is ::: other.is)
-
-  override def iterator: Iterator[Intersection] = is.iterator
-}
-
-object Intersections {
-  val EMPTY: Intersections = Intersections(Nil)
-  private val vectorOrdering = Ordering.by((_: Intersection).t)
-
-  def apply(is: List[Intersection]): Intersections = new Intersections(is.sorted(vectorOrdering))
 }

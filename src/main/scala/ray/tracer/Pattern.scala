@@ -1,13 +1,13 @@
 package ray.tracer
 
+import ray.tracer.shape.Shape
+
 trait Pattern {
 
   val transform: Matrix4x4
 
-  def patternAtShape(shape: Shape, point: Point): Color = {
-    val objPoint = shape.worldToObject(point)
-    val patternPoint = this.transform.inverse * objPoint
-    patternAt(patternPoint)
+  def patternAtShape(objPoint: Point): Color = {
+    patternAt(this.transform.inverse * objPoint)
   }
 
   def patternAt(point: Point): Color

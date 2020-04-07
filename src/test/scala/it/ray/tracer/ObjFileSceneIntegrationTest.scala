@@ -2,6 +2,7 @@ package it.ray.tracer
 
 import org.scalatest.FunSuite
 import ray.tracer._
+import ray.tracer.shape.Group
 
 import scala.io.Source
 import scala.math.Pi

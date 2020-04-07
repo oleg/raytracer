@@ -1,11 +1,14 @@
 package ray.tracer
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
+import ray.tracer.shape.ShapeFactory._
+import ray.tracer.shape.{Shape, SimpleShape}
+import ray.tracer.shapemath.SmoothTriangleMath
 
-class SmoothTriangleTest extends FunSuite {
+class SmoothTriangleTest extends AnyFunSuite {
   val p = implicitly[Precision[Double]]
   test("Constructing a smooth triangle") {
-    val tri = smoothTriangle()
+    val tri = smoothTriangle().asInstanceOf[SimpleShape].math.asInstanceOf[SmoothTriangleMath]
     assert(tri.p1 == Point(0, 1, 0))
     assert(tri.p2 == Point(-1, 0, 0))
     assert(tri.p3 == Point(1, 0, 0))
@@ -18,7 +21,7 @@ class SmoothTriangleTest extends FunSuite {
     val s = Triangle(Point(0, 1, 0), Point(-1, 0, 0), Point(1, 0, 0))
 
 
-    val i = Intersection(3.5, s, 0.2, 0.4)
+    val i = Intersection(3.5, s, Nil, 0.2, 0.4)
     assert(i.u == 0.2)
     assert(i.v == 0.4)
   }
@@ -34,9 +37,9 @@ class SmoothTriangleTest extends FunSuite {
 
   test("A smooth triangle uses u/v to interpolate the normal") {
     val tri = smoothTriangle()
-    val i = Intersection(1, tri, 0.45, 0.25)
+    val i = Intersection(1, tri, tri.transform :: Nil, 0.45, 0.25)
 
-    val n = tri.normalAt(Point(0, 0, 0), i)
+    val n = i.myNormalAt(tri, Point(0,0,0))
 
     assert(n ==~ Vector(-0.5547, 0.83205, 0))
   }
@@ -44,16 +47,16 @@ class SmoothTriangleTest extends FunSuite {
   test("Preparing the normal on a smooth triangle") {
     val tri = smoothTriangle()
     val r = Ray(Point(-0.2, 0.3, -2), Vector(0, 0, 1))
-    val i = Intersection(1, tri, 0.45, 0.25)
+    val i = Intersection(1, tri, tri.transform :: Nil, 0.45, 0.25)
     val xs = Intersections(i :: Nil)
 
-    val comps = i.prepareComputations(r, xs)
+    val comps = i.prepareComputations(r, xs.findNs(i))
 
     assert(comps.normalv ==~ Vector(-0.5547, 0.83205, 0))
   }
 
 
-  private def smoothTriangle(): SmoothTriangle = {
+  private def smoothTriangle(): Shape = {
     SmoothTriangle(
       Point(0, 1, 0),
       Point(-1, 0, 0),

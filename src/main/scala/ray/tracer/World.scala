@@ -1,14 +1,20 @@
 package ray.tracer
 
+import ray.tracer.shape.Shape
+
 case class World(light: PointLight, shapes: List[Shape]) {
 
-  def contains(sphere: Sphere): Boolean = shapes.contains(sphere)
+  def contains(shape: Shape): Boolean = shapes.contains(shape)
 
   def colorAt(r: Ray, leftIterations: Int = 5): Color = {
     val intersections = intersect(r)
     intersections
       .hit
-      .map(i => shadeHit(i.prepareComputations(r, intersections), leftIterations))
+      .map(i => {
+        val ns = intersections.findNs(i)
+        i.prepareComputations(r, ns)
+      })
+      .map(shadeHit(_, leftIterations))
       .getOrElse(Color.black)
   }
 
@@ -16,7 +22,7 @@ case class World(light: PointLight, shapes: List[Shape]) {
     val shadowed = isShadowed(comps.overPoint)
 
     val surface = comps.obj.material.lighting(
-      light, comps.obj, comps.overPoint, comps.eyev, comps.normalv, shadowed)
+      light, comps.overPoint, comps.eyev, comps.normalv, shadowed, comps.objPoint)
 
     val reflected = reflectedColor(comps, leftIterations)
     val refracted = refractedColor(comps, leftIterations)

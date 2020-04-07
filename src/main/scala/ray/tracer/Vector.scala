@@ -36,6 +36,8 @@ case class Vector(x: Double, y: Double, z: Double) {
       p.approximatelyEqual(y, other.y) &&
       p.approximatelyEqual(z, other.z)
   }
+  def toList: List[Double] =
+    x :: y :: z :: Nil
 }
 
 object Vector {

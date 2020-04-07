@@ -1,8 +1,8 @@
 package ray.tracer
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
-class Matrix4x4Test extends FunSuite {
+class Matrix4x4Test extends AnyFunSuite {
 
   test("A 4x4 matrix ought to have 4 columns and 4 rows") {
     val exception = intercept[IllegalArgumentException] {

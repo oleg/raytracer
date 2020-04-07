@@ -1,10 +1,11 @@
 package ray.tracer
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
+import ray.tracer.shape.ShapeFactory._
 
 import scala.math.Pi
 
-class CameraTest extends FunSuite {
+class CameraTest extends AnyFunSuite {
   val p = implicitly[Precision[Double]]
 
   test("Constructing a camera") {

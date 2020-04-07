@@ -1,8 +1,9 @@
 package ray.tracer
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
+import ray.tracer.shape.ShapeFactory._
 
-class ConeTest extends FunSuite {
+class ConeTest extends AnyFunSuite {
   val p = implicitly[Precision[Double]]
   test("Intersecting a cone with a ray, 5;5") {
     val ray = Ray(Point(0, 0, -5), Vector(0, 0, 1).normalize)

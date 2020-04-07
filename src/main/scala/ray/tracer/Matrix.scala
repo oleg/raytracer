@@ -109,7 +109,7 @@ class Matrix(private val points: Array[Array[Double]]) {
   override def toString: String = {
     val leftPad = (s: String, len: Int) => " " * (len - s.length()) + s
     val max: Int = points.flatMap((x: Array[Double]) => x.map(y => y.toString.length)).max
-    points.map(row => row.map(e => leftPad(e.toString, max)).mkString(" | ")).map(e => "| " + e + " |").mkString("\n")
+    "\n" + points.map(row => row.map(e => leftPad(e.toString, max)).mkString(" | ")).map(e => "| " + e + " |").mkString("\n")
   }
 }
 

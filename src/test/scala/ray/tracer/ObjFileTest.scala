@@ -1,10 +1,12 @@
 package ray.tracer
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
+import ray.tracer.shape.{Group, SimpleShape}
+import ray.tracer.shapemath.{SmoothTriangleMath, TriangleMath}
 
 import scala.io.Source
 
-class ObjFileTest extends FunSuite {
+class ObjFileTest extends AnyFunSuite {
 
   test("Ignoring unrecognized lines") {
     val gibberish =
@@ -49,8 +51,8 @@ class ObjFileTest extends FunSuite {
 
     val objFile = new ObjFileParser().parse(Source.fromString(file))
     val g: Group = objFile.groups("default")
-    val t1 = g.children(0).asInstanceOf[Triangle]
-    val t2 = g.children(1).asInstanceOf[Triangle]
+    val t1 = g.children(0).asInstanceOf[SimpleShape].math.asInstanceOf[TriangleMath]
+    val t2 = g.children(1).asInstanceOf[SimpleShape].math.asInstanceOf[TriangleMath]
 
     assert(t1.p1 == objFile.vertices(1))
     assert(t1.p2 == objFile.vertices(2))
@@ -75,9 +77,9 @@ class ObjFileTest extends FunSuite {
 
     val objFile = new ObjFileParser().parse(Source.fromString(file))
     val g: Group = objFile.groups("default")
-    val t1 = g.children(0).asInstanceOf[Triangle]
-    val t2 = g.children(1).asInstanceOf[Triangle]
-    val t3 = g.children(2).asInstanceOf[Triangle]
+    val t1 = g.children(0).asInstanceOf[SimpleShape].math.asInstanceOf[TriangleMath]
+    val t2 = g.children(1).asInstanceOf[SimpleShape].math.asInstanceOf[TriangleMath]
+    val t3 = g.children(2).asInstanceOf[SimpleShape].math.asInstanceOf[TriangleMath]
 
     assert(t1.p1 == objFile.vertices(1))
     assert(t1.p2 == objFile.vertices(2))
@@ -96,8 +98,8 @@ class ObjFileTest extends FunSuite {
     val objFile = new ObjFileParser().parse(Source.fromResource("triangles.obj"))
     val g1 = objFile.groups("FirstGroup")
     val g2 = objFile.groups("SecondGroup")
-    val t1 = g1.children.head.asInstanceOf[Triangle]
-    val t2 = g2.children.head.asInstanceOf[Triangle]
+    val t1 = g1.children.head.asInstanceOf[SimpleShape].math.asInstanceOf[TriangleMath]
+    val t2 = g2.children.head.asInstanceOf[SimpleShape].math.asInstanceOf[TriangleMath]
 
     assert(t1.p1 == objFile.vertices(1))
     assert(t1.p2 == objFile.vertices(2))
@@ -150,8 +152,8 @@ class ObjFileTest extends FunSuite {
 
     val objFile = new ObjFileParser().parse(Source.fromString(file))
     val g = objFile.groups("default")
-    val t1 = g.children(0).asInstanceOf[SmoothTriangle]
-    val t2 = g.children(1).asInstanceOf[SmoothTriangle]
+    val t1 = g.children(0).asInstanceOf[SimpleShape].math.asInstanceOf[SmoothTriangleMath]
+    val t2 = g.children(1).asInstanceOf[SimpleShape].math.asInstanceOf[SmoothTriangleMath]
 
     assert(t1.p1 == objFile.vertices(1))
     assert(t1.p2 == objFile.vertices(2))

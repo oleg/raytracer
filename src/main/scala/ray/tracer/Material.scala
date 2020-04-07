@@ -1,5 +1,7 @@
 package ray.tracer
 
+import ray.tracer.shape.Shape
+
 //todo add validation for min 0, max 1
 case class Material(color: Color = Color(1, 1, 1),
                     ambient: Double = 0.1,
@@ -12,14 +14,14 @@ case class Material(color: Color = Color(1, 1, 1),
                     pattern: Pattern = null) {
 
   def lighting(light: PointLight,
-               shape: Shape,
                point: Point,
                eyev: Vector,
                normalv: Vector,
-               inShadow: Boolean): Color = {
+               inShadow: Boolean,
+               objPoint: Point): Color = {
     val material = this
 
-    val color = Option(pattern).map(_.patternAtShape(shape, point)).getOrElse(material.color)
+    val color = Option(pattern).map(_.patternAtShape(objPoint)).getOrElse(material.color)
     val efectiveColor = color * light.intensity
     val lightv = (light.position - point).normalize
     val ambient = efectiveColor * material.ambient

@@ -1,8 +1,10 @@
 package ray.tracer
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
+import ray.tracer.shape.ShapeFactory._
+import ray.tracer.shapemath.CylinderMath
 
-class CylinderTest extends FunSuite {
+class CylinderTest extends AnyFunSuite {
   val p = implicitly[Precision[Double]] //todo
 
   test("A ray misses a cylinder at origin(1,0,0) with direction(0,1,0)") {
@@ -79,7 +81,7 @@ class CylinderTest extends FunSuite {
   }
 
   test("The default minimum and maximum for a cylinder") {
-    val cylinder = Cylinder()
+    val cylinder = CylinderMath()
 
     assert(cylinder.minimum == Double.NegativeInfinity)
     assert(cylinder.maximum == Double.PositiveInfinity)
@@ -128,7 +130,7 @@ class CylinderTest extends FunSuite {
   }
 
   test("The default closed value for a cylinder") {
-    val cylinder = Cylinder()
+    val cylinder = CylinderMath()
 
     assert(!cylinder.closed)
   }
@@ -171,11 +173,11 @@ class CylinderTest extends FunSuite {
   test("The normal vector on a cylinder's end caps") {
     val cylinder = Cylinder(minimum = 1, maximum = 2, closed = true)
     //todo split test
-    assert(cylinder.localNormalAt(Point(0, 1, 0  ),null) == Vector(0, -1, 0))
-    assert(cylinder.localNormalAt(Point(0.5, 1, 0),null) == Vector(0, -1, 0))
-    assert(cylinder.localNormalAt(Point(0, 1, 0.5),null) == Vector(0, -1, 0))
-    assert(cylinder.localNormalAt(Point(0, 2, 0  ),null) == Vector(0, 1, 0))
-    assert(cylinder.localNormalAt(Point(0.5, 2, 0),null) == Vector(0, 1, 0))
-    assert(cylinder.localNormalAt(Point(0, 2, 0.5),null) == Vector(0, 1, 0))
+    assert(cylinder.localNormalAt(Point(0, 1, 0), null) == Vector(0, -1, 0))
+    assert(cylinder.localNormalAt(Point(0.5, 1, 0), null) == Vector(0, -1, 0))
+    assert(cylinder.localNormalAt(Point(0, 1, 0.5), null) == Vector(0, -1, 0))
+    assert(cylinder.localNormalAt(Point(0, 2, 0), null) == Vector(0, 1, 0))
+    assert(cylinder.localNormalAt(Point(0.5, 2, 0), null) == Vector(0, 1, 0))
+    assert(cylinder.localNormalAt(Point(0, 2, 0.5), null) == Vector(0, 1, 0))
   }
 }

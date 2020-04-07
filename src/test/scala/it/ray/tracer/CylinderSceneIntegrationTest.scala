@@ -6,7 +6,7 @@ import ray.tracer._
 import testutil.Sources
 
 import scala.math.Pi
-
+import ray.tracer.shape.ShapeFactory._
 class CylinderSceneIntegrationTest extends FunSuite {
 
   test("generate cylinders") {

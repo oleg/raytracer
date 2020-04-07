@@ -1,8 +1,10 @@
 package ray.tracer
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
+import ray.tracer.shape.ShapeFactory._
+import ray.tracer.shape.{Csg, Operation}
 
-class CsgTest extends FunSuite {
+class CsgTest extends AnyFunSuite {
 
   test("CSG is created with an operation and two shapes") {
     val s1 = Sphere()
@@ -13,8 +15,6 @@ class CsgTest extends FunSuite {
     assert(c.operation == Operation.union)
     assert(c.left == s1)
     assert(c.right == s2)
-    assert(s1.parent == c)
-    assert(s2.parent == c)
   }
 
   test("Evaluating the rule for a CSG union") {

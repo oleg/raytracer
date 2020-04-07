@@ -1,8 +1,9 @@
 package ray.tracer
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
+import ray.tracer.shape.ShapeFactory._
 
-class PlaneTest extends FunSuite {
+class PlaneTest extends AnyFunSuite {
 
   test("The normal of a plane is constant everywhere") {
     val p = Plane()

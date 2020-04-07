@@ -1,8 +1,9 @@
 package it.ray.tracer
-
+import ray.tracer.shape.ShapeFactory._
 import org.scalatest.FunSuite
 import ray.tracer.Matrix4x4.Identity
-import ray.tracer._
+import ray.tracer.{shape, _}
+import ray.tracer.shape.{Csg, Operation}
 import testutil.Sources
 
 import scala.math.Pi
@@ -37,7 +38,7 @@ class CsgSceneIntegrationTest extends FunSuite {
       transform = Identity.scale(5, 5, 5),
       material = Material(color = Color(0.3, 0.3, 1)))
 
-    val csg2 = Csg(Operation.difference, s2, c2,
+    val csg2 = shape.Csg(Operation.difference, s2, c2,
       transform = Identity.rotateX(Pi/6).rotateZ(Pi/6).rotateY(Pi/6).translate(7, 0, 0))
 
     val light = PointLight(Point(4, 18, -10), Color(1, 1, 1))
