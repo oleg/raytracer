@@ -1,11 +1,11 @@
 package it.ray.tracer
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import ray.tracer._
 import ray.tracer.shape.ShapeFactory._
 import testutil.Sources
 
-class Ball3dIntegrationTest extends FunSuite {
+class Ball3dIntegrationTest extends AnyFunSuite {
   test("generate 3d ball") {
     val rayOrigin = Point(0, 0, -5)
     val wallZ = 10

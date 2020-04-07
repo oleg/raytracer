@@ -2,7 +2,7 @@ package ray.tracer
 
 import org.scalatest.funsuite.AnyFunSuite
 import ray.tracer.Matrix4x4.Identity
-import ray.tracer.shape.Shape
+import ray.tracer.shape.{Shape, SimpleShape}
 import ray.tracer.shape.ShapeFactory._
 
 class WorldTest extends AnyFunSuite {
@@ -41,7 +41,7 @@ class WorldTest extends AnyFunSuite {
   test("Shading an intersection") {
     val w = defaultWorld()
     val r = Ray(Point(0, 0, -5), Vector(0, 0, 1))
-    val shape = w.shapes(0)
+    val shape = w.shapes.head.asInstanceOf[SimpleShape] //TODO:oleg refactor
     val i = Intersection(4, shape)
 
     val comps = i.prepareComputations(r, Intersections(i :: Nil).findNs(i))
@@ -134,8 +134,8 @@ class WorldTest extends AnyFunSuite {
   }
 
   test("The reflected color for a nonreflective material") {
-    val outer: Shape = Sphere(material = Material(color = Color(0.8, 1.0, 0.6), diffuse = 0.7, specular = 0.2))
-    val inner: Shape = Sphere(transform = Identity.scale(0.5, 0.5, 0.5), material = Material(ambient = 1))
+    val outer = Sphere(material = Material(color = Color(0.8, 1.0, 0.6), diffuse = 0.7, specular = 0.2))
+    val inner = Sphere(transform = Identity.scale(0.5, 0.5, 0.5), material = Material(ambient = 1))
     val world: World = World(PointLight(Point(-10, 10, -10), Color(1, 1, 1)), List(outer, inner))
     val r = Ray(Point(0, 0, 0), Vector(0, 0, 1))
 
@@ -147,9 +147,9 @@ class WorldTest extends AnyFunSuite {
   }
 
   test("The reflected color for a reflective material") {
-    val outer: Shape = Sphere(material = Material(color = Color(0.8, 1.0, 0.6), diffuse = 0.7, specular = 0.2))
-    val inner: Shape = Sphere(transform = Identity.scale(0.5, 0.5, 0.5), material = Material(ambient = 1))
-    val plane: Shape = Plane(material = Material(reflective = 0.5), transform = Identity.translate(0, -1, 0))
+    val outer = Sphere(material = Material(color = Color(0.8, 1.0, 0.6), diffuse = 0.7, specular = 0.2))
+    val inner = Sphere(transform = Identity.scale(0.5, 0.5, 0.5), material = Material(ambient = 1))
+    val plane = Plane(material = Material(reflective = 0.5), transform = Identity.translate(0, -1, 0))
     val world: World = World(PointLight(Point(-10, 10, -10), Color(1, 1, 1)), List(outer, inner, plane))
 
     val ray = Ray(Point(0, 0, -3), Vector(0, -Sqrt2Div2, Sqrt2Div2))
@@ -161,9 +161,9 @@ class WorldTest extends AnyFunSuite {
   }
 
   test("shade_hit() with a reflective material") {
-    val outer: Shape = Sphere(material = Material(color = Color(0.8, 1.0, 0.6), diffuse = 0.7, specular = 0.2))
-    val inner: Shape = Sphere(transform = Identity.scale(0.5, 0.5, 0.5), material = Material(ambient = 1))
-    val plane: Shape = Plane(material = Material(reflective = 0.5), transform = Identity.translate(0, -1, 0))
+    val outer = Sphere(material = Material(color = Color(0.8, 1.0, 0.6), diffuse = 0.7, specular = 0.2))
+    val inner = Sphere(transform = Identity.scale(0.5, 0.5, 0.5), material = Material(ambient = 1))
+    val plane = Plane(material = Material(reflective = 0.5), transform = Identity.translate(0, -1, 0))
     val world: World = World(PointLight(Point(-10, 10, -10), Color(1, 1, 1)), List(outer, inner, plane))
 
     val ray = Ray(Point(0, 0, -3), Vector(0, -Sqrt2Div2, Sqrt2Div2))
@@ -196,7 +196,7 @@ class WorldTest extends AnyFunSuite {
 
   test("The refracted color with an opaque surface") {
     val w = defaultWorld()
-    val shape = w.shapes.head
+    val shape = w.shapes.head.asInstanceOf[SimpleShape] //TODO:oleg refactor
     val r = Ray(Point(0, 0, -5), Vector(0, 0, 1))
     val xs = Intersections(Intersection(4, shape) :: Intersection(6, shape) :: Nil)
 
@@ -218,7 +218,7 @@ class WorldTest extends AnyFunSuite {
           refractiveIndex = 1.5)),
         Sphere(transform = Identity.scale(0.5, 0.5, 0.5))))
 
-    val shape = w.shapes(0)
+    val shape = w.shapes.head.asInstanceOf[SimpleShape] //TODO:oleg refactor
     val xs = Intersections(
       Intersection(4, shape, shape.transform :: Nil) ::
       Intersection(6, shape, shape.transform :: Nil) ::
@@ -244,7 +244,7 @@ class WorldTest extends AnyFunSuite {
         Sphere(transform = Identity.scale(0.5, 0.5, 0.5))))
 
     val r = Ray(Point(0, 0, Sqrt2Div2), Vector(0, 1, 0))
-    val shape = w.shapes.head
+    val shape = w.shapes.head.asInstanceOf[SimpleShape] //todo:oleg fix
     val xs = Intersections(Intersection(-Sqrt2Div2, shape) :: Intersection(Sqrt2Div2, shape) :: Nil)
 
     val comps = xs(1).prepareComputations(r, xs.findNs(xs(0)))

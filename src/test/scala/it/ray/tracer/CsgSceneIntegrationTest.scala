@@ -1,6 +1,6 @@
 package it.ray.tracer
 import ray.tracer.shape.ShapeFactory._
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import ray.tracer.Matrix4x4.Identity
 import ray.tracer.{shape, _}
 import ray.tracer.shape.{Csg, Operation}
@@ -8,7 +8,7 @@ import testutil.Sources
 
 import scala.math.Pi
 
-class CsgSceneIntegrationTest extends FunSuite {
+class CsgSceneIntegrationTest extends AnyFunSuite {
 
   test("generate csg scene") {
     val floor = Plane(

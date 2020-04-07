@@ -1,6 +1,6 @@
 package it.ray.tracer
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import ray.tracer.Matrix4x4.Identity
 import ray.tracer._
 import testutil.Sources
@@ -8,7 +8,7 @@ import testutil.Sources
 import scala.math.Pi
 import ray.tracer.shape.ShapeFactory._
 
-class CubesIntegrationTest extends FunSuite {
+class CubesIntegrationTest extends AnyFunSuite {
 
   test("generate cubes") {
 

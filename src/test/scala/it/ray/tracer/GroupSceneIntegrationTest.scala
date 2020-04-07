@@ -1,6 +1,6 @@
 package it.ray.tracer
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import ray.tracer.Matrix4x4.Identity
 import ray.tracer.{shape, _}
 import testutil.Sources
@@ -8,7 +8,7 @@ import testutil.Sources
 import scala.math.Pi
 import ray.tracer.shape.ShapeFactory._
 import ray.tracer.shape.Group
-class GroupSceneIntegrationTest extends FunSuite {
+class GroupSceneIntegrationTest extends AnyFunSuite {
 
   test("generate group scene") {
 

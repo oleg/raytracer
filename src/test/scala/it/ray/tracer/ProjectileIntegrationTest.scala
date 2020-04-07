@@ -1,10 +1,10 @@
 package it.ray.tracer
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import ray.tracer.{Canvas, Color, Point, Vector}
 import testutil.Sources
 
-class ProjectileIntegrationTest extends FunSuite {
+class ProjectileIntegrationTest extends AnyFunSuite {
 
   class Environment(val gravity: Vector, val wind: Vector)
 

@@ -56,7 +56,7 @@ class SmoothTriangleTest extends AnyFunSuite {
   }
 
 
-  private def smoothTriangle(): Shape = {
+  private def smoothTriangle(): SimpleShape = {
     SmoothTriangle(
       Point(0, 1, 0),
       Point(-1, 0, 0),

@@ -1,12 +1,12 @@
 package it.ray.tracer
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import ray.tracer.{Canvas, Color, Matrix4x4, Point}
 import testutil.Sources
 
 import scala.math.Pi
 
-class ClockIntegrationTest extends FunSuite {
+class ClockIntegrationTest extends AnyFunSuite {
 
   test("generate clock") {
     val width = 500

@@ -1,13 +1,13 @@
 package it.ray.tracer
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import ray.tracer._
 import ray.tracer.shape.Group
 
 import scala.io.Source
 import scala.math.Pi
 
-class ObjFileSceneIntegrationTest extends FunSuite {
+class ObjFileSceneIntegrationTest extends AnyFunSuite {
 
   //todo takes too long ≈30 seconds
   ignore("generate scene from object file") {

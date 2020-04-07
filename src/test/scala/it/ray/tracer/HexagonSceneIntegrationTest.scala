@@ -1,6 +1,6 @@
 package it.ray.tracer
 import ray.tracer.shape.ShapeFactory._
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import ray.tracer.Matrix4x4.Identity
 import ray.tracer._
 import ray.tracer.shape.{Group, Shape}
@@ -8,7 +8,7 @@ import testutil.Sources
 
 import scala.math.Pi
 
-class HexagonSceneIntegrationTest extends FunSuite {
+class HexagonSceneIntegrationTest extends AnyFunSuite {
 
   test("generate hexagons") {
 

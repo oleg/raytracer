@@ -1,13 +1,13 @@
 package it.ray.tracer
 import ray.tracer.shape.ShapeFactory._
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import ray.tracer.Matrix4x4.Identity
 import ray.tracer._
 import testutil.Sources
 import ray.tracer.shape.ShapeFactory._
 import scala.math.Pi
 
-class PlaneSceneIntegrationTest extends FunSuite {
+class PlaneSceneIntegrationTest extends AnyFunSuite {
 
   test("generate planes") {
 

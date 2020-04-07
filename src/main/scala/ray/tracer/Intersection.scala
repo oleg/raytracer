@@ -1,6 +1,6 @@
 package ray.tracer
 
-import ray.tracer.shape.Shape
+import ray.tracer.shape.{Shape, SimpleShape}
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -36,7 +36,7 @@ case class Computation(t: Double,
 }
 
 case class Intersection(t: Double,
-                        obj: Shape,
+                        obj: SimpleShape,
                         ts: List[Matrix4x4] = Nil,
                         u: Double = Double.NaN,
                         v: Double = Double.NaN) {
@@ -72,19 +72,15 @@ case class Intersection(t: Double,
   //private?
   def worldToObject(point: Point): Point =
     ts.reverse.map(_.inverse).foldLeft(Matrix4x4.Identity)(_ * _) * point
-//    ts.map(_.inverse).foldLeft(Matrix4x4.Identity)(_ * _) * point
-//todo reverse!
+
   //private?
   def normalToWorld(nr: Vector): Vector =
-//todo: reverse?
-//    ts.reverse.foldLeft(nr)((acc, el) => (el.inverse.transpose * acc).normalize)
     ts.reverse.foldLeft(nr)((acc, el) => (el.inverse.transpose * acc).normalize)
 
 }
 
 
 object Intersections {
-  //val EMPTY: Intersections = Intersections(Nil)
   private val vectorOrdering = Ordering.by((_: Intersection).t)
 
   def apply(is: List[Intersection]): Intersections = new Intersections(is.sorted(vectorOrdering))

@@ -1,13 +1,13 @@
 package it.ray.tracer
 import ray.tracer.shape.ShapeFactory._
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import ray.tracer.Matrix4x4.Identity
 import ray.tracer._
 import testutil.Sources
 
 import scala.math.Pi
 
-class BallSceneIntegrationTest extends FunSuite {
+class BallSceneIntegrationTest extends AnyFunSuite {
   test("generate ball scene") {
 
     val floor = Sphere(
