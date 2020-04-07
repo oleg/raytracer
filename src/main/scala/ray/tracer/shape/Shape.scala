@@ -16,9 +16,6 @@ trait Shape {
 
   def localIntersect(ray: Ray): Intersections
 
-  //only for SimpleShape
-  def localNormalAt(point: Point, intersection: Intersection): Vector
-
   def incl(b: Shape): Boolean = this == b
 
 }

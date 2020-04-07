@@ -10,7 +10,4 @@ case class SimpleShape(math: ShapeMath,
   override def localIntersect(ray: Ray): Intersections =
     Intersections(math.intersect(ray).map(i => Intersection(i.t, this, Nil, i.u, i.v)))
 
-  override def localNormalAt(point: Point, intersection: Intersection): Vector =
-    math.normalAt(point, Option(intersection).map(i => Inter(i.t, i.u, i.v)).orNull)
-
 }

@@ -2,6 +2,7 @@ package ray.tracer
 
 import org.scalatest.funsuite.AnyFunSuite
 import ray.tracer.shape.ShapeFactory._
+import ray.tracer.shapemath.ConeMath
 
 class ConeTest extends AnyFunSuite {
   val p = implicitly[Precision[Double]]
@@ -65,14 +66,14 @@ class ConeTest extends AnyFunSuite {
   }
 
   test("Computing the normal vector on a cone, 0") {
-    assert(Cone().localNormalAt(Point(0, 0, 0), null) == Vector(0, 0, 0))
+    assert(ConeMath().normalAt(Point(0, 0, 0), null) == Vector(0, 0, 0))
   }
 
   test("Computing the normal vector on a cone, 1") {
-    assert(Cone().localNormalAt(Point(1, 1, 1), null) == Vector(1, -Sqrt2, 1))
+    assert(ConeMath().normalAt(Point(1, 1, 1), null) == Vector(1, -Sqrt2, 1))
   }
 
   test("Computing the normal vector on a cone, -1") {
-    assert(Cone().localNormalAt(Point(-1, -1, 0), null) == Vector(-1, 1, 0))
+    assert(ConeMath().normalAt(Point(-1, -1, 0), null) == Vector(-1, 1, 0))
   }
 }

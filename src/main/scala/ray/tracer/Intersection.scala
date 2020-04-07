@@ -1,6 +1,7 @@
 package ray.tracer
 
 import ray.tracer.shape.{Shape, SimpleShape}
+import ray.tracer.shapemath.Inter
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -63,9 +64,9 @@ case class Intersection(t: Double,
     Computation(t, obj, point, overPoint, underPoint, eyev, directedNormalv, reflectv, ns._1, ns._2, inside, objPoint)
   }
 
-  def myNormalAt(obj: Shape, worldPoint: Point): Vector = {
+  def myNormalAt(obj: SimpleShape, worldPoint: Point): Vector = {
     val localPoint: Point = worldToObject(worldPoint)
-    val localNormal: Vector = obj.localNormalAt(localPoint, this)
+    val localNormal: Vector = obj.math.normalAt(localPoint, Inter(t, u, v))
     normalToWorld(localNormal)
   }
 

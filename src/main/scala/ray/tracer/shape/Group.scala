@@ -12,9 +12,6 @@ case class Group(children: ListBuffer[Shape] = ListBuffer(),
   override def localIntersect(ray: Ray): Intersections =
     children.foldLeft(Intersections(Nil))((acc, s) => acc ::: s.intersect(ray))
 
-
-  override def localNormalAt(point: Point, intersection: Intersection): Vector = ???
-
   def add(shape: Shape): Unit =
     children += shape
 

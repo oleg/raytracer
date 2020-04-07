@@ -65,19 +65,19 @@ class CylinderTest extends AnyFunSuite {
   }
 
   test("Normal vector on a cylinder at +x") {
-    assert(Cylinder().localNormalAt(Point(1, 0, 0), null) == Vector(1, 0, 0))
+    assert(CylinderMath().normalAt(Point(1, 0, 0), null) == Vector(1, 0, 0))
   }
 
   test("Normal vector on a cylinder at -x") {
-    assert(Cylinder().localNormalAt(Point(0, 5, -1), null) == Vector(0, 0, -1))
+    assert(CylinderMath().normalAt(Point(0, 5, -1), null) == Vector(0, 0, -1))
   }
 
   test("Normal vector on a cylinder at +z") {
-    assert(Cylinder().localNormalAt(Point(0, -2, 1), null) == Vector(0, 0, 1))
+    assert(CylinderMath().normalAt(Point(0, -2, 1), null) == Vector(0, 0, 1))
   }
 
   test("Normal vector on a cylinder at -z") {
-    assert(Cylinder().localNormalAt(Point(-1, 1, 0), null) == Vector(-1, 0, 0))
+    assert(CylinderMath().normalAt(Point(-1, 1, 0), null) == Vector(-1, 0, 0))
   }
 
   test("The default minimum and maximum for a cylinder") {
@@ -171,13 +171,13 @@ class CylinderTest extends AnyFunSuite {
   }
 
   test("The normal vector on a cylinder's end caps") {
-    val cylinder = Cylinder(minimum = 1, maximum = 2, closed = true)
+    val cylinder = CylinderMath(minimum = 1, maximum = 2, closed = true)
     //todo split test
-    assert(cylinder.localNormalAt(Point(0, 1, 0), null) == Vector(0, -1, 0))
-    assert(cylinder.localNormalAt(Point(0.5, 1, 0), null) == Vector(0, -1, 0))
-    assert(cylinder.localNormalAt(Point(0, 1, 0.5), null) == Vector(0, -1, 0))
-    assert(cylinder.localNormalAt(Point(0, 2, 0), null) == Vector(0, 1, 0))
-    assert(cylinder.localNormalAt(Point(0.5, 2, 0), null) == Vector(0, 1, 0))
-    assert(cylinder.localNormalAt(Point(0, 2, 0.5), null) == Vector(0, 1, 0))
+    assert(cylinder.normalAt(Point(0, 1, 0), null) == Vector(0, -1, 0))
+    assert(cylinder.normalAt(Point(0.5, 1, 0), null) == Vector(0, -1, 0))
+    assert(cylinder.normalAt(Point(0, 1, 0.5), null) == Vector(0, -1, 0))
+    assert(cylinder.normalAt(Point(0, 2, 0), null) == Vector(0, 1, 0))
+    assert(cylinder.normalAt(Point(0.5, 2, 0), null) == Vector(0, 1, 0))
+    assert(cylinder.normalAt(Point(0, 2, 0.5), null) == Vector(0, 1, 0))
   }
 }

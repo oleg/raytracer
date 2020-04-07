@@ -2,6 +2,7 @@ package ray.tracer
 
 import org.scalatest.funsuite.AnyFunSuite
 import ray.tracer.shape.ShapeFactory._
+import ray.tracer.shapemath.SphereMath
 
 import scala.math.Pi
 
@@ -97,37 +98,37 @@ class SphereTest extends AnyFunSuite {
   }
 
   test("The normal on a sphere at a point on the x axis") {
-    val s = Sphere()
-    val n = s.localNormalAt(Point(1, 0, 0), null)
+    val s = SphereMath()
+    val n = s.normalAt(Point(1, 0, 0), null)
     assert(n == Vector(1, 0, 0))
   }
 
   test("The normal on a sphere at a point on the y axis") {
-    val s = Sphere()
-    val n = s.localNormalAt(Point(0, 1, 0), null)
+    val s = SphereMath()
+    val n = s.normalAt(Point(0, 1, 0), null)
     assert(n == Vector(0, 1, 0))
   }
 
   test("The normal on a sphere at a point on the z axis") {
-    val s = Sphere()
-    val n = s.localNormalAt(Point(0, 0, 1), null)
+    val s = SphereMath()
+    val n = s.normalAt(Point(0, 0, 1), null)
     assert(n == Vector(0, 0, 1))
   }
 
   test("The normal on a sphere at a nonaxial point") {
-    val s = Sphere()
+    val s = SphereMath()
     val v = math.sqrt(3) / 3
 
-    val n = s.localNormalAt(Point(v, v, v), null)
+    val n = s.normalAt(Point(v, v, v), null)
 
     assert(n == Vector(v, v, v))
   }
 
   test("The normal is a normalized vector") {
-    val s = Sphere()
+    val s = SphereMath()
     val v = math.sqrt(3) / 3
 
-    val n = s.localNormalAt(Point(v, v, v), null)
+    val n = s.normalAt(Point(v, v, v), null)
 
     assert(n == n.normalize)
   }

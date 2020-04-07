@@ -33,8 +33,6 @@ case class Csg(operation: Operation,
     Intersections(result.toList)
   }
 
-  override def localNormalAt(point: Point, hit: Intersection): Vector = ???
-
   override def toString: String = s"CSG($operation, left, right)"
 }
 

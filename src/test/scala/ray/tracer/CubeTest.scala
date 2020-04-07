@@ -2,6 +2,7 @@ package ray.tracer
 
 import org.scalatest.funsuite.AnyFunSuite
 import ray.tracer.shape.ShapeFactory._
+import ray.tracer.shapemath.CubeMath
 
 class CubeTest extends AnyFunSuite {
 
@@ -28,15 +29,15 @@ class CubeTest extends AnyFunSuite {
   }
 
   test("The normal on the surface of a cube") {
-    val c = Cube()
-    assert(c.localNormalAt(Point(1, 0.5, -0.8), null) == Vector(1, 0, 0))
-    assert(c.localNormalAt(Point(-1, -0.2, 0.9), null) == Vector(-1, 0, 0))
-    assert(c.localNormalAt(Point(-0.4, 1, -0.1), null) == Vector(0, 1, 0))
-    assert(c.localNormalAt(Point(0.3, -1, -0.7), null) == Vector(0, -1, 0))
-    assert(c.localNormalAt(Point(-0.6, 0.3, 1), null) == Vector(0, 0, 1))
-    assert(c.localNormalAt(Point(0.4, 0.4, -1), null) == Vector(0, 0, -1))
-    assert(c.localNormalAt(Point(1, 1, 1), null) == Vector(1, 0, 0))
-    assert(c.localNormalAt(Point(-1, -1, -1), null) == Vector(-1, 0, 0))
+    val c = CubeMath()
+    assert(c.normalAt(Point(1, 0.5, -0.8), null) == Vector(1, 0, 0))
+    assert(c.normalAt(Point(-1, -0.2, 0.9), null) == Vector(-1, 0, 0))
+    assert(c.normalAt(Point(-0.4, 1, -0.1), null) == Vector(0, 1, 0))
+    assert(c.normalAt(Point(0.3, -1, -0.7), null) == Vector(0, -1, 0))
+    assert(c.normalAt(Point(-0.6, 0.3, 1), null) == Vector(0, 0, 1))
+    assert(c.normalAt(Point(0.4, 0.4, -1), null) == Vector(0, 0, -1))
+    assert(c.normalAt(Point(1, 1, 1), null) == Vector(1, 0, 0))
+    assert(c.normalAt(Point(-1, -1, -1), null) == Vector(-1, 0, 0))
   }
 
   private def assertIntersection(intersections: Intersections, t1: Int, t2: Int): Unit = {

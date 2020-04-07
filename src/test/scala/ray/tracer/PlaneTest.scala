@@ -2,15 +2,16 @@ package ray.tracer
 
 import org.scalatest.funsuite.AnyFunSuite
 import ray.tracer.shape.ShapeFactory._
+import ray.tracer.shapemath.PlaneMath
 
 class PlaneTest extends AnyFunSuite {
 
   test("The normal of a plane is constant everywhere") {
-    val p = Plane()
+    val p = PlaneMath()
 
-    val n1 = p.localNormalAt(Point(0, 0, 0), null)
-    val n2 = p.localNormalAt(Point(10, 0, -10), null)
-    val n3 = p.localNormalAt(Point(-5, 0, 150), null)
+    val n1 = p.normalAt(Point(0, 0, 0), null)
+    val n2 = p.normalAt(Point(10, 0, -10), null)
+    val n3 = p.normalAt(Point(-5, 0, 150), null)
 
     assert(n1 == Vector(0, 1, 0))
     assert(n2 == Vector(0, 1, 0))
