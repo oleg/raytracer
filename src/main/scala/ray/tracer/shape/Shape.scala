@@ -5,6 +5,7 @@ import ray.tracer.{Intersection, Intersections, Material, Matrix4x4, Point, Ray,
 trait Shape {
 
   val transform: Matrix4x4
+  //only for SimpleShape
   val material: Material
 
   def intersect(worldRay: Ray): Intersections = {
@@ -15,6 +16,7 @@ trait Shape {
 
   def localIntersect(ray: Ray): Intersections
 
+  //only for SimpleShape
   def localNormalAt(point: Point, intersection: Intersection): Vector
 
   def incl(b: Shape): Boolean = this == b

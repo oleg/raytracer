@@ -44,7 +44,7 @@ class Ball3dIntegrationTest extends FunSuite {
             val objPoint = i.worldToObject(point)
             val eye = -ray.direction
 
-            canvas(x, y) = h.obj.material.lighting(light, h.obj, point, eye, normal, false, objPoint)
+            canvas(x, y) = h.obj.material.lighting(light, point, eye, normal, false, objPoint)
           })
       }
     }

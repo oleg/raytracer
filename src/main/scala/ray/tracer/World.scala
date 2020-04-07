@@ -22,7 +22,7 @@ case class World(light: PointLight, shapes: List[Shape]) {
     val shadowed = isShadowed(comps.overPoint)
 
     val surface = comps.obj.material.lighting(
-      light, comps.obj, comps.overPoint, comps.eyev, comps.normalv, shadowed, comps.objPoint)
+      light, comps.overPoint, comps.eyev, comps.normalv, shadowed, comps.objPoint)
 
     val reflected = reflectedColor(comps, leftIterations)
     val refracted = refractedColor(comps, leftIterations)
