@@ -8,20 +8,6 @@ import scala.math.Pi
 
 class GroupTest extends AnyFunSuite {
 
-  case class TestShape(transform: Matrix4x4 = Matrix4x4.Identity,
-                       material: Material = Material(),
-                       var savedRay: Ray = null) extends Shape {
-
-    //todo replace with mocks
-    override def localIntersect(localRay: Ray): Intersections = {
-      savedRay = localRay
-      null
-    }
-
-    override def localNormalAt(localPoint: Point, intersection: Intersection): Vector = localPoint - Point(0, 0, 0)
-  }
-
-
   //TODO:Oleg do we need size test?
   //  test("Creating a new group") {
   //    val g = Group()
