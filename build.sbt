@@ -1,4 +1,4 @@
-name := "sclcode"
+name := "raytracer"
 
 version := "0.1"
 
