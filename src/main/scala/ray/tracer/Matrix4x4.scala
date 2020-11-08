@@ -7,7 +7,7 @@ class Matrix4x4(private val matrix: Matrix) {
   if (matrix.width != 4 || matrix.height != 4)
     throw new IllegalArgumentException(s"Expected 4x4 matrix, but found ${matrix.height}x${matrix.width}")
 
-  def this(array: Array[Array[Double]]) {
+  def this(array: Array[Array[Double]]) = {
     this(Matrix(array))
   }
 
@@ -15,14 +15,14 @@ class Matrix4x4(private val matrix: Matrix) {
 
   //todo add size checks
   def *(other: Point): Point = { //todo :scary: fix me
-    val m = this.matrix * Matrix(Array(Array(other.x), Array(other.y), Array(other.z), Array(1)))
+    val m = this.matrix * Matrix(Array(Array(other.x), Array(other.y), Array(other.z), Array(1.0)))
     //todo: fix me
     Point(m(0, 0), m(1, 0), m(2, 0))
   }
 
   //todo add size checks
   def *(other: Vector): Vector = { //todo :scary: fix me
-    val m = this.matrix * Matrix(Array(Array(other.x), Array(other.y), Array(other.z), Array(0)))
+    val m = this.matrix * Matrix(Array(Array(other.x), Array(other.y), Array(other.z), Array(0.0)))
     //todo: fix me
      Vector(m(0, 0), m(1, 0), m(2, 0))
   }
@@ -73,36 +73,36 @@ object Matrix4x4 {
   def Identity: Matrix4x4 =
     Matrix4x4(
       Array(
-        Array(1, 0, 0, 0),
-        Array(0, 1, 0, 0),
-        Array(0, 0, 1, 0),
-        Array(0, 0, 0, 1)))
+        Array(1.0, 0.0, 0.0, 0.0),
+        Array(0.0, 1.0, 0.0, 0.0),
+        Array(0.0, 0.0, 1.0, 0.0),
+        Array(0.0, 0.0, 0.0, 1.0)))
 
   def Translation(x: Double, y: Double, z: Double): Matrix4x4 =
     Matrix4x4(
       Array(
-        Array(1, 0, 0, x),
-        Array(0, 1, 0, y),
-        Array(0, 0, 1, z),
-        Array(0, 0, 0, 1)))
+        Array(1.0, 0.0, 0.0, x),
+        Array(0.0, 1.0, 0.0, y),
+        Array(0.0, 0.0, 1.0, z),
+        Array(0.0, 0.0, 0.0, 1.0)))
 
   def Scaling(x: Double, y: Double, z: Double): Matrix4x4 =
     Matrix4x4(
       Array(
-        Array(x, 0, 0, 0),
-        Array(0, y, 0, 0),
-        Array(0, 0, z, 0),
-        Array(0, 0, 0, 1)))
+        Array(x, 0.0, 0.0, 0.0),
+        Array(0.0, y, 0.0, 0.0),
+        Array(0.0, 0.0, z, 0.0),
+        Array(0.0, 0.0, 0.0, 1.0)))
 
   def RotationX(radian: Double): Matrix4x4 = {
     val cr = math.cos(radian)
     val sr = math.sin(radian)
     Matrix4x4(
       Array(
-        Array(1, 0, 0, 0),
-        Array(0, cr, -sr, 0),
-        Array(0, sr, cr, 0),
-        Array(0, 0, 0, 1)))
+        Array(1.0, 0.0, 0.0, 0.0),
+        Array(0.0, cr, -sr, 0.0),
+        Array(0.0, sr, cr, 0.0),
+        Array(0.0, 0.0, 0.0, 1.0)))
   }
 
   def RotationY(radian: Double): Matrix4x4 = {
@@ -110,10 +110,10 @@ object Matrix4x4 {
     val sr = math.sin(radian)
     Matrix4x4(
       Array(
-        Array(cr, 0, sr, 0),
-        Array(0, 1, 0, 0),
-        Array(-sr, 0, cr, 0),
-        Array(0, 0, 0, 1)))
+        Array(cr, 0.0, sr, 0.0),
+        Array(0.0, 1.0, 0.0, 0.0),
+        Array(-sr, 0.0, cr, 0.0),
+        Array(0.0, 0.0, 0.0, 1.0)))
 
   }
 
@@ -122,10 +122,10 @@ object Matrix4x4 {
     val sr = math.sin(radian)
     Matrix4x4(
       Array(
-        Array(cr, -sr, 0, 0),
-        Array(sr, cr, 0, 0),
-        Array(0, 0, 1, 0),
-        Array(0, 0, 0, 1)))
+        Array(cr, -sr, 0.0, 0.0),
+        Array(sr, cr, 0.0, 0.0),
+        Array(0.0, 0.0, 1.0, 0.0),
+        Array(0.0, 0.0, 0.0, 1.0)))
   }
 
   def Shearing(xy: Double, xz: Double,
@@ -133,10 +133,10 @@ object Matrix4x4 {
                zx: Double, zy: Double): Matrix4x4 =
     Matrix4x4(
       Array(
-        Array(1, xy, xz, 0),
-        Array(yx, 1, yz, 0),
-        Array(zx, zy, 1, 0),
-        Array(0, 0, 0, 1)))
+        Array(1.0, xy, xz, 0.0),
+        Array(yx, 1.0, yz, 0.0),
+        Array(zx, zy, 1.0, 0.0),
+        Array(0.0, 0.0, 0.0, 1.0)))
 
   def viewTransform(from: Point, to: Point, up: Vector): Matrix4x4 = {
     val forward = (to - from).normalize
@@ -144,10 +144,10 @@ object Matrix4x4 {
     val trueUp = left.cross(forward)
 
     val orientation = Matrix4x4(Array(
-      Array(left.x, left.y, left.z, 0),
-      Array(trueUp.x, trueUp.y, trueUp.z, 0),
-      Array(-forward.x, -forward.y, -forward.z, 0),
-      Array(0, 0, 0, 1)))
+      Array(left.x, left.y, left.z, 0.0),
+      Array(trueUp.x, trueUp.y, trueUp.z, 0.0),
+      Array(-forward.x, -forward.y, -forward.z, 0.0),
+      Array(0.0, 0.0, 0.0, 1.0)))
 
     orientation * Translation(-from.x, -from.y, -from.z)
   }
