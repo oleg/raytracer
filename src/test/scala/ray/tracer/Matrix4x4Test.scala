@@ -6,7 +6,7 @@ class Matrix4x4Test extends AnyFunSuite {
 
   test("A 4x4 matrix ought to have 4 columns and 4 rows") {
     val exception = intercept[IllegalArgumentException] {
-      Matrix4x4(Array(Array(1, 2), Array(3, 4)))
+      Matrix4x4(Array(Array(1.0, 2.0), Array(3.0, 4.0)))
     }
     assert(exception.getMessage == "Expected 4x4 matrix, but found 2x2")
   }

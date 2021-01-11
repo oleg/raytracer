@@ -1,10 +1,8 @@
-name := "sclcode"
+name := "raytracer"
 
 version := "0.1"
 
-scalaVersion := "3.0.0-M1"
+scalaVersion := "3.0.0-M3"
 
-scalacOptions ++= Seq("-deprecation")
-
-libraryDependencies += ("org.scalactic" %% "scalactic" % "3.2.2").withDottyCompat(scalaVersion.value)
-libraryDependencies += ("org.scalatest" %% "scalatest" % "3.2.2" % "test").withDottyCompat(scalaVersion.value)
+libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.3"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.3" % "test"
