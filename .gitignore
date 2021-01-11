@@ -1,6 +1,9 @@
-project/
+project/target/
+project/project/
 target/
+out/
 .idea/
+.bsp/
 *.ipr
 *.iws
 .java-version

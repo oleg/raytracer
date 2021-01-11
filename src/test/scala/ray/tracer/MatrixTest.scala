@@ -12,7 +12,7 @@ class MatrixTest extends AnyFunSuite {
   }
 
   test("A 1x1 matrix ought to have correct width and height") {
-    val m = Matrix(Array(Array(5)))
+    val m = Matrix(Array(Array(5.0)))
 
     assert(m.width == 1)
     assert(m.height == 1)
@@ -50,8 +50,8 @@ class MatrixTest extends AnyFunSuite {
 
   test("May have null") { //todo: think about it
     val m = Matrix(Array(
-      Array(1, 2, 3),
-      Array(null.asInstanceOf[Double], null.asInstanceOf[Double], 3)))
+      Array(1.0, 2.0, 3.0),
+      Array(null.asInstanceOf[Double], null.asInstanceOf[Double], 3.0)))
     assert(m.width == 3)
     assert(m.height == 2)
   }

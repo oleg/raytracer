@@ -12,7 +12,7 @@ case class Vector(x: Double, y: Double, z: Double) {
 
   def /(scalar: Double): Vector = Vector(x / scalar, y / scalar, z / scalar)
 
-  def unary_-(): Vector = Vector(-x, -y, -z) // mergeScalar(0, (a, b) => b - a)
+  def unary_- : Vector = Vector(-x, -y, -z) // mergeScalar(0, (a, b) => b - a)
 
   def normalize: Vector = this / magnitude
 
