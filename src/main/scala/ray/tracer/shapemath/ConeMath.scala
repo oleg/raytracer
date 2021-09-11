@@ -1,6 +1,6 @@
 package ray.tracer.shapemath
 
-import ray.tracer.{Point, Precision, Ray, Vector}
+import ray.tracer.{Point, Precision, Ray, Vector, PrecisionDouble}
 
 case class ConeMath(minimum: Double = Double.NegativeInfinity,
                     maximum: Double = Double.PositiveInfinity,
@@ -12,7 +12,7 @@ case class ConeMath(minimum: Double = Double.NegativeInfinity,
     val b = 2 * ray.origin.x * ray.direction.x - 2 * ray.origin.y * ray.direction.y + 2 * ray.origin.z * ray.direction.z
     val c = ray.origin.x * ray.origin.x - ray.origin.y * ray.origin.y + ray.origin.z * ray.origin.z
 
-    val p = implicitly[Precision[Double]]
+    val p = summon[Precision[Double]]
     if (p.approximatelyEqual(a, 0.0) && !p.approximatelyEqual(b, 0.0)) {
       val t = -c / (2 * b)
       val y0 = ray.origin.y + (t * ray.direction.y)
@@ -44,7 +44,7 @@ case class ConeMath(minimum: Double = Double.NegativeInfinity,
   override def normalAt(point: Point, inter: Inter): Vector = {
     val dist = point.x * point.x + point.z * point.z
     //p.approximatelyLess(point.y, minimum)
-    val p = implicitly[Precision[Double]]
+    val p = summon[Precision[Double]]
     if (dist < 1 && p.approximatelyGreater(point.y, maximum)) { //todo remove reference to epsilon
       Vector(0, 1, 0)
     } else if (dist < 1 && p.approximatelyLess(point.y, minimum)) {
@@ -59,7 +59,7 @@ case class ConeMath(minimum: Double = Double.NegativeInfinity,
   private def intersectCaps(ray: Ray): List[Inter] = {
     var result: List[Inter] = Nil //todo refactor
 
-    val p = implicitly[Precision[Double]]
+    val p = summon[Precision[Double]]
     if (!closed || p.approximatelyEqual(ray.direction.y, 0.0)) {
       return result
     }

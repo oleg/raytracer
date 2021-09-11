@@ -1,7 +1,7 @@
 package ray.tracer.shapemath
 
 import ray.tracer
-import ray.tracer.{Point, Precision, Ray, Vector}
+import ray.tracer.{Point, Precision, Ray, Vector, PrecisionDouble}
 
 case class TriangleMath(p1: Point,
                         p2: Point,
@@ -14,7 +14,7 @@ case class TriangleMath(p1: Point,
   override def intersect(ray: Ray): List[Inter] = {
     val dirCrossE2 = ray.direction cross e2
     val det = e1 dot dirCrossE2
-    if (implicitly[Precision[Double]].approximatelyEqual(det, 0.0)) {
+    if (summon[Precision[Double]].approximatelyEqual(det, 0.0)) {
       return Nil
     }
 

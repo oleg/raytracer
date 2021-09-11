@@ -1,6 +1,6 @@
 package ray.tracer.shapemath
 
-import ray.tracer.{Point, Precision, Ray, Vector}
+import ray.tracer.{Point, Precision, Ray, Vector, PrecisionDouble}
 
 case class CylinderMath(minimum: Double = Double.NegativeInfinity,
                         maximum: Double = Double.PositiveInfinity,
@@ -13,7 +13,7 @@ case class CylinderMath(minimum: Double = Double.NegativeInfinity,
     val c = ray.origin.x * ray.origin.x + ray.origin.z * ray.origin.z - 1
 
     val xsCaps = intersectCaps(ray)
-    if (implicitly[Precision[Double]].approximatelyEqual(a, 0.0)) {
+    if (summon[Precision[Double]].approximatelyEqual(a, 0.0)) {
       return xsCaps //todo refactor
     }
 
@@ -37,7 +37,7 @@ case class CylinderMath(minimum: Double = Double.NegativeInfinity,
 
   override def normalAt(point: Point, inter: Inter): Vector = {
     val dist = point.x * point.x + point.z * point.z
-    val p = implicitly[Precision[Double]] //todo fix me
+    val p = summon[Precision[Double]] //todo fix me
     if (dist < 1 && p.approximatelyGreater(point.y, maximum)) {
       Vector(0, 1, 0)
     } else if (dist < 1 && p.approximatelyLess(point.y, minimum)) {
@@ -50,7 +50,7 @@ case class CylinderMath(minimum: Double = Double.NegativeInfinity,
   private def intersectCaps(ray: Ray): List[Inter] = {
     var result: List[Inter] = Nil //todo refactor
 
-    if (!closed || implicitly[Precision[Double]].approximatelyEqual(ray.direction.y, 0.0)) {
+    if (!closed || summon[Precision[Double]].approximatelyEqual(ray.direction.y, 0.0)) {
       return result
     }
 

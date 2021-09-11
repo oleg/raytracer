@@ -5,7 +5,7 @@ import ray.tracer.shape.ShapeFactory._
 import ray.tracer.shapemath.CylinderMath
 
 class CylinderTest extends AnyFunSuite {
-  val p = implicitly[Precision[Double]] //todo
+  val p = summon[Precision[Double]] //todo
 
   test("A ray misses a cylinder at origin(1,0,0) with direction(0,1,0)") {
     val origin = Point(1, 0, 0)

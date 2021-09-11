@@ -4,7 +4,7 @@ import org.scalatest.funsuite.AnyFunSuite
 import ray.tracer.shape.ShapeFactory._
 
 class IntersectionTest extends AnyFunSuite {
-  private val p: Precision[Double] = implicitly[Precision[Double]]
+  private val p: Precision[Double] = summon[Precision[Double]]
   test("An intersection encapsulates t and object") {
     val ray = Ray(Point(0, 0, -5), Vector(0, 0, 1))
     val sphere = Sphere()

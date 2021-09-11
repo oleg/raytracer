@@ -12,9 +12,9 @@ case class Point(x: Double, y: Double, z: Double) {
 
   def /(scalar: Double): Point = Point(x / scalar, y / scalar, z / scalar) //todo test me
 
-  def unary_-(): Point = Point(-x, -y, -z) //todo test me
+  def unary_- : Point = Point(-x, -y, -z) //todo test me
 
-  def ==~(other: Point)(implicit p: Precision[Double]): Boolean = {
+  def ==~(other: Point)(using p: Precision[Double]): Boolean = {
     p.approximatelyEqual(x, other.x) &&
       p.approximatelyEqual(y, other.y) &&
       p.approximatelyEqual(z, other.z)

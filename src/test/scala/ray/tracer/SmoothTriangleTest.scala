@@ -6,7 +6,7 @@ import ray.tracer.shape.{Shape, SimpleShape}
 import ray.tracer.shapemath.SmoothTriangleMath
 
 class SmoothTriangleTest extends AnyFunSuite {
-  val p = implicitly[Precision[Double]]
+  val p = summon[Precision[Double]]
   test("Constructing a smooth triangle") {
     val tri = smoothTriangle().asInstanceOf[SimpleShape].math.asInstanceOf[SmoothTriangleMath]
     assert(tri.p1 == Point(0, 1, 0))

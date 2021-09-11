@@ -50,7 +50,7 @@ case class Intersection(t: Double,
     """.stripMargin
 
   def prepareComputations(ray: Ray, ns: (Double, Double)): Computation = {
-    val p = implicitly[Precision[Double]]
+    val p = summon[Precision[Double]]
     val point = ray.position(t)
     val eyev = -ray.direction
     val normalv = myNormalAt(obj, point)

@@ -1,6 +1,7 @@
 package ray.tracer
+import ray.tracer.{PrecisionDouble, Precision}
 
-case class Vector(x: Double, y: Double, z: Double) {
+case class Vector(val x: Double, val y: Double, val z: Double) {
 
   def sum: Double = x + y + z //todo: val?
 
@@ -31,7 +32,7 @@ case class Vector(x: Double, y: Double, z: Double) {
     (thisInstance - vector)
   }
 
-  def ==~(other: Vector)(implicit p: Precision[Double]): Boolean = {
+  def ==~(other: Vector)(using p: Precision[Double]): Boolean = {
     p.approximatelyEqual(x, other.x) &&
       p.approximatelyEqual(y, other.y) &&
       p.approximatelyEqual(z, other.z)

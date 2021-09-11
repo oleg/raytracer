@@ -5,7 +5,7 @@ import ray.tracer.shape.ShapeFactory._
 import ray.tracer.shapemath.ConeMath
 
 class ConeTest extends AnyFunSuite {
-  val p = implicitly[Precision[Double]]
+  val p = summon[Precision[Double]]
   test("Intersecting a cone with a ray, 5;5") {
     val ray = Ray(Point(0, 0, -5), Vector(0, 0, 1).normalize)
 

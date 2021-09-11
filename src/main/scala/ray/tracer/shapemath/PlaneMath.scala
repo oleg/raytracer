@@ -1,11 +1,11 @@
 package ray.tracer.shapemath
 
-import ray.tracer.{Point, Precision, Ray, Vector}
+import ray.tracer.{Point, Precision, Ray, Vector, PrecisionDouble}
 
 case class PlaneMath() extends ShapeMath {
 
   override def intersect(ray: Ray): List[Inter] = {
-    val p = implicitly[Precision[Double]]
+    val p = summon[Precision[Double]]
     if (!p.approximatelyEqual(ray.direction.y, 0.0)) {
       val t = -ray.origin.y / ray.direction.y
       Inter(t) :: Nil

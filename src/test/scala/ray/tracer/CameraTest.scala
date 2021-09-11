@@ -6,7 +6,7 @@ import ray.tracer.shape.ShapeFactory._
 import scala.math.Pi
 
 class CameraTest extends AnyFunSuite {
-  val p = implicitly[Precision[Double]]
+  val p = summon[Precision[Double]]
 
   test("Constructing a camera") {
     val c = Camera(160, 120, Pi / 2)
